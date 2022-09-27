@@ -1,0 +1,85 @@
+nav.uk-light {
+    color: rgba(255,255,255,.9);
+    .uk-background-secondary {
+        background-color: var(--color-blue-dark);
+        -background-image: var(--gradient-primary);
+        .uk-navbar-item, .uk-navbar-nav>li>a, .uk-navbar-toggle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            column-gap: 0.25em;
+            box-sizing: border-box;
+            min-height: 80px;
+            padding: 0 15px;
+            font-size: .875rem;
+            font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+            text-decoration: none;
+        }
+        .uk-navbar {
+            display: flex;
+            position: relative;
+            .uk-navbar-left, .uk-navbar-right {
+                flex-wrap: wrap;
+                display: flex;
+                align-items: center;
+            }
+            .uk-navbar-nav {
+                display: flex;
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                li>a{
+                    color: white;
+                    font-weight: 500;
+                    font-size: 1rem;
+                    font-family: 'Montserrat', sans-serif;
+                    text-transform: inherit;
+                    transition: .1s ease-in-out;
+                    transition-property: color,background-color;
+                }
+                &.uk-text-small > li > a {
+                    font-size: .875rem;
+                }
+            }
+            .uk-navbar-left{
+                .uk-navbar-nav {
+                    li:hover {
+                        background-color: var(--color-blue-medium);
+                    }
+                }
+            }
+            .uk-navbar-right{
+                &>.uk-text-small > li:not(.uk-active):hover * {
+                    color: var(--color-orange) !important;
+                }
+            }
+            li.uk-active {
+                background-color: white;
+            }
+            li.uk-active > a {
+                color: var(--color-blue-dark) !important;
+            }
+            &::selection {
+                background: #39f;
+                color: #fff;
+                text-shadow: none;
+            }
+            .uk-navbar-right {
+                margin-left: auto;
+            }
+            .uk-text-large{
+                font-size: 1.5rem;
+                line-height: 1.5;
+            }
+            .uk-text-small {
+                font-size: .875rem;
+                line-height: 1.5;
+            }
+        }
+    }
+}
+nav.uk-navbar-container{
+    .uk-light {
+        color: rgba(255,255,255,.9);
+    }
+}

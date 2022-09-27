@@ -1,0 +1,12 @@
+.input-phone {
+  &>.PhoneInput{
+    height      : 100%;
+    width       : 100%;
+    input{
+      letter-spacing: 2px;
+    }
+    .PhoneInputCountry .PhoneInputCountryIcon--border{
+      box-shadow: none;
+    }
+  } 
+}
