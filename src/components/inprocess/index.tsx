@@ -1,8 +1,8 @@
 import React from "react";
 import "../../assets/scss/inprocess.scss";
-import { Button } from "../../components/widgets";
+import { Button } from "../widgets";
 import { useNavigate } from "react-router-dom";
-export const InprocessPage: React.FC = () => {
+export const Inprocess: React.FC = () => {
   const navigate = useNavigate();
   return (
     <div className="inprocessing-page">
@@ -14,4 +14,4 @@ export const InprocessPage: React.FC = () => {
   );
 };
 
-export default InprocessPage;
+export default Inprocess;

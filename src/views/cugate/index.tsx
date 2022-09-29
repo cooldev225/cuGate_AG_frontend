@@ -4,14 +4,13 @@ import { SplashPage } from "../splash";
 import React, { useLayoutEffect,useEffect,useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { StoreState } from "../../types/models/store";
-import { Header } from "../../components";
 import { featureList, menuList, officeList } from "./contents";
 import { motion } from "framer-motion";
 export const CugatePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [activeItem, setActiveItem] = useState(0);
-  const { user,mobilemenu_toggle } = useSelector((state:StoreState) => state.auth);
+  const { mobilemenu_toggle } = useSelector((state:StoreState) => state.auth);
   const [scrollPosition, setScrollPosition] = useState(0);
   const isMounted = useRef(true);
 
@@ -53,7 +52,6 @@ export const CugatePage: React.FC = () => {
     <SplashPage />
   ):(
     <div className={"page page-cugate"+(isMobile?" mobile-size":"")+(mobilemenu_toggle?" offcanvas-menu":"")}>
-      <Header/>
       <section className={"-uk-section uk-section-default uk-visible@l "+(scrollPosition>80?"uk-sticky":"")}>
         <div className="uk-container uk-container-large">
           <div className="cg-menu">
