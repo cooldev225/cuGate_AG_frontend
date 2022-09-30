@@ -1,13 +1,11 @@
-import styled from "styled-components";
 import "../../assets/scss/header.scss";
 import { menuList, menuRightList } from "./contents";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import icons from '../../assets/images/menu';
 
 export const Header: React.FC = () => {
-  const Container = styled.nav``;
   const [activeItem, setActiveItem] = useState('cugate');
   const location = useLocation();
   const navigate = useNavigate();
@@ -20,7 +18,7 @@ export const Header: React.FC = () => {
     });
   }, []);
   return (
-    <Container id="navbar" className="uk-navbar-container uk-navbar-transparent uk-light">
+    <nav id="navbar" className="uk-navbar-container uk-navbar-transparent uk-light">
       <div className="uk-background-secondary">
         <div className="uk-container uk-container-large">
           <div className="uk-navbar">
@@ -30,12 +28,12 @@ export const Header: React.FC = () => {
                 {
                   menuList.map((value,index)=>(
                     <li key={index} className={activeItem===value.key?"uk-active":""} onClick={()=>setActiveItem(value.key)}>
-                      <a href="javascript:;" onClick={()=>navigate(value.url)}>
+                      <Link onClick={(e)=>{e.preventDefault();navigate(value.url);}} to={""}>
                         <img alt={value.text} src={icons[value.icon]} style={{width:'32px'}}/>
                         <span className="uk-margin-small-left uk-visible@m"> 
                           {value.text}
                         </span>
-                      </a>
+                      </Link>
                     </li>
                   ))
                 }
@@ -47,9 +45,9 @@ export const Header: React.FC = () => {
                 {
                   menuRightList.map((value,index)=>(
                     <li key={index} className={activeItem===value.key?"uk-active":""} onClick={()=>setActiveItem(value.key)}>
-                      <a href={value.url}>
+                      <Link onClick={(e)=>{e.preventDefault();navigate(value.url);}} to={""}>
                         {value.text}
-                      </a>
+                      </Link>
                     </li>
                   ))
                 }
@@ -58,6 +56,6 @@ export const Header: React.FC = () => {
           </div>
         </div>
       </div>
-    </Container>
+    </nav>
   );
 };

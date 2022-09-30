@@ -50,16 +50,16 @@ export const menuRightList: {
     {
         key: "our_team",
         text: "Our Team",
-        url: "/",
+        url: "/our-team",
     },
     {
         key: "impressum",
         text: "Impressum",
-        url: "/",
+        url: "/impressum",
     },
     {
         key: "privacy_policy",
         text: "Privacy Policy",
-        url: "/",
+        url: "/privacy-policy",
     },
 ];

@@ -4,5 +4,8 @@ export { CuviewPage } from "./cuview";
 export { CuradioPage } from "./curadio";
 export { CutrackPage } from "./cutrack";
 export { PlaylistsPage } from "./playlists";
+export { OurTeamPage } from "./our-team";
+export { ImpressumPage } from "./impressum";
+export { PrivacyPolicyPage } from "./privacy-policy";
 export { SplashPage } from "./splash";
 export { AuthPage } from "./auth";
