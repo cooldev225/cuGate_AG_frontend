@@ -15,7 +15,7 @@ const initState = {
     account_type: 0,
     interesting: "",
   },
-  stage: 0,
+  page: 0,
   mobilemenu_toggle:0,
 };
   
@@ -23,8 +23,8 @@ const initState = {
     switch (action.type) {
       case "SET_USER":
         return { ...state, user: action.payload };
-      case "SET_STAGE":
-        return { ...state, stage: action.payload };
+      case "SET_PAGE":
+        return { ...state, page: action.payload };
       case "SET_MOBILEMENU_TOGGLE":
         return { ...state, mobilemenu_toggle: action.payload };
       default:

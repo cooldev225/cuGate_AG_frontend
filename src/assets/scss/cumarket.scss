@@ -1,0 +1,31 @@
+.page.page-cumarket{
+    &>div.caption{
+        margin-top:3px;
+    }
+    &>div#albums_frame{
+        .special_carousel{
+            display: flex;
+            margin: 0 auto;
+            width: 1200px;
+            margin-top: 25px;
+            font-size: 14px;
+            .collapse:not(.show) {
+                display: none;
+            }
+            #charts_title {
+                color: #00cbd8;
+                font-size: 42px;
+                font-weight: bold;
+                text-align: center;
+            }
+            #charts_collapserow{
+                a#charts_collapsebtn{
+                    img{
+                        width: 30px;
+                        margin-right: 10px;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -4,11 +4,14 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
 import icons from '../../assets/images/menu';
+import { useSelector } from "react-redux";
+import { StoreState } from "../../types/models/store";
 
 export const Header: React.FC = () => {
-  const [activeItem, setActiveItem] = useState('cugate');
   const location = useLocation();
   const navigate = useNavigate();
+  const [activeItem, setActiveItem] = useState('cugate');
+  const { page } = useSelector((state:StoreState) => state.auth);
   useEffect(() => {
     menuList.map((value,index)=>{
       if(location.pathname.indexOf(value.url)>-1){
@@ -16,13 +19,18 @@ export const Header: React.FC = () => {
         return index;
       }
     });
-  }, []);
+    menuRightList.map((value,index)=>{
+      if(location.pathname.indexOf(value.url)>-1){
+        setActiveItem(value.key);
+        return index;
+      }
+    });
+  }, [location.pathname]);
   return (
     <nav id="navbar" className="uk-navbar-container uk-navbar-transparent uk-light">
       <div className="uk-background-secondary">
         <div className="uk-container uk-container-large">
           <div className="uk-navbar">
-
             <div className="uk-navbar-left">
               <ul className="uk-navbar-nav uk-text-large">
                 {
@@ -39,7 +47,6 @@ export const Header: React.FC = () => {
                 }
               </ul>
             </div>
-
             <div className="uk-navbar-right uk-visible@m">
               <ul className="uk-navbar-nav uk-text-small">
                 {

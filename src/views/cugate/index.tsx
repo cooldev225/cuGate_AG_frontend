@@ -1,17 +1,13 @@
 import "../../assets/scss/cugate.scss";
 import images from '../../assets/images/cugate';
 import { SplashPage } from "../splash";
-import React, { useLayoutEffect,useEffect,useState, useRef } from "react";
-import { useSelector } from "react-redux";
-import { StoreState } from "../../types/models/store";
+import React, { useEffect,useState, useRef } from "react";
 import { featureList, menuList, officeList } from "./contents";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 export const CugatePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
   const [activeItem, setActiveItem] = useState(0);
-  const { mobilemenu_toggle } = useSelector((state:StoreState) => state.auth);
   const [scrollPosition, setScrollPosition] = useState(0);
   const isMounted = useRef(true);
   const [readMoreAbout, setReadMoreAbout] = useState(false);
@@ -24,17 +20,8 @@ export const CugatePage: React.FC = () => {
     setIsLoading(false);
   }
 
-  function updateSize() {
-    setIsMobile(window.innerWidth<1024);
-  }
-  useLayoutEffect(() => {
-    window.addEventListener("resize", updateSize);
-    return () => window.removeEventListener("resize", updateSize);
-  }, []);
-  
   useEffect(()=>{
     window.addEventListener("load",handleLoading);
-    setIsMobile(window.innerWidth<1024);
     if(isMounted.current) {
       setIsLoading(false)
     }
@@ -55,8 +42,8 @@ export const CugatePage: React.FC = () => {
   return isLoading ? (
     <SplashPage />
   ):(
-    <div className={"page page-cugate"+(isMobile?" mobile-size":"")+(mobilemenu_toggle?" offcanvas-menu":"")}>
-      <section className={"-uk-section uk-section-default uk-visible@l "+(scrollPosition>80?"uk-sticky":"")}>
+    <div className={"page page-cugate"}>
+      <section className={"menu-uk-section -uk-section uk-section-default uk-visible@l "+(scrollPosition>80?"uk-sticky":"")}>
         <div className="uk-container uk-container-large">
           <div className="cg-menu">
             <ul className="uk-grid uk-grid-small uk-flex-between" uk-scrollspy-nav="closest: li; scroll: true; offset: 107">
@@ -103,7 +90,7 @@ export const CugatePage: React.FC = () => {
               </div>
             </div>
 
-            <motion.div className="uk-width-2-5@m" animate={{opacity: 1,}}>
+            <motion.div className="uk-width-2-5@m uk-grid-margin" animate={{opacity: 1,}}>
               <div className="uk-panel" uk-scrollspy="target: > *; cls: uk-animation-slide-right-medium; delay: 300">
                 <motion.h2 
                   className="uk-heading-medium uk-text-primary" 

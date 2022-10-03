@@ -473,4 +473,36 @@
     .uk-section-secondary:not(.uk-preserve-color) a:hover{
         color: #fff;
     }
+    &.uk-text-center {
+        text-align: center!important;
+    }
+    &.mobile-size{
+        overflow: visible;
+        overflow-x: hidden;
+        nav.uk-light .uk-background-secondary .uk-navbar-nav > li > a{
+            min-height: 40px;
+        }
+        #navbar{
+            .uk-navbar{
+                .uk-navbar-left{
+                    ul>li .uk-margin-small-left{
+                        display: none;
+                    }
+                }
+                .uk-navbar-right{
+                    @media (max-width: 450px){
+                        display: none;
+                    }
+                }
+            }
+        }
+        .page.page-cugate{
+            .menu-uk-section{
+                display: none;
+            }
+            .uk-grid-margin{
+                margin-top: 40px;
+            }
+        }
+    }
 }
