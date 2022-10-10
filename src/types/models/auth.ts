@@ -2,6 +2,6 @@ import { User } from "./user";
 
 export interface AuthState {
     user: User;
-    page: number;
+    page: string;
     mobilemenu_toggle:number;
 }

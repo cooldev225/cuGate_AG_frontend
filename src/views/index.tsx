@@ -8,4 +8,4 @@ export { OurTeamPage } from "./our-team";
 export { ImpressumPage } from "./impressum";
 export { PrivacyPolicyPage } from "./privacy-policy";
 export { SplashPage } from "./splash";
-export { AuthPage } from "./auth";
+export { LoginPage } from "./auth";

@@ -82,4 +82,12 @@ nav.uk-navbar-container{
     .uk-light {
         color: rgba(255,255,255,.9);
     }
+    .tools-bar-right{
+        a{
+            padding-right: 0px!important;
+        }
+    }
+}
+nav#navbar.noMenu{
+    display:none;
 }

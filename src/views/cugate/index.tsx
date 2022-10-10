@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 export const CugatePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeItem, setActiveItem] = useState(0);
+  const [sectionTop, setSectionTop] = useState(menuList);
   const [scrollPosition, setScrollPosition] = useState(0);
   const isMounted = useRef(true);
   const [readMoreAbout, setReadMoreAbout] = useState(false);
@@ -15,7 +16,13 @@ export const CugatePage: React.FC = () => {
   const handleScroll = () => {
     const position = window.pageYOffset;
     setScrollPosition(position);
+    let current_pos = 0;
+    menuList.map((value,index) => {
+      if(value && value.top && position > value.top - 60) current_pos = index;
+    });
+    setActiveItem(current_pos);
   };
+
   const handleLoading = () => {
     setIsLoading(false);
   }
@@ -23,22 +30,38 @@ export const CugatePage: React.FC = () => {
   useEffect(()=>{
     window.addEventListener("load",handleLoading);
     if(isMounted.current) {
-      setIsLoading(false)
+      setIsLoading(false);
     }
     return () => {
       isMounted.current = false;
       window.removeEventListener("load",handleLoading);
     }
   },[]);
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    if(!isLoading){
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      menuList.map((value,index) => {
+        let element = document.querySelector('#'+value.href);
+        let rect = element?.getBoundingClientRect();
+        sectionTop[index].top = rect?.top;
+        setSectionTop([...sectionTop]);
+        menuList[index].top = rect?.top;
+      });
+    }
+  }, [isLoading]);
+
   const signup = () => {
     //
   };
+
   return isLoading ? (
     <SplashPage />
   ):(
@@ -50,9 +73,22 @@ export const CugatePage: React.FC = () => {
               {
                 menuList.map((value,index)=>(
                   <li className={activeItem===index?"uk-first-column uk-active":""} key={index}>
-                    <Link to={"#"+value.href} onClick={()=>setActiveItem(index)} className="uk-link-reset uk-margin-medium-top uk-margin-medium-bottom uk-display-inline-block" uk-scroll="offset: 107">
+                    <Link 
+                      to={"#"+value.href} 
+                        onClick={()=>{
+                          setActiveItem(index); 
+                          if(value.top!=undefined)
+                            window.scrollTo({ top: value.top>=50 ? value.top - 50 : value.top, behavior: 'smooth' });
+                        }}
+                        className="uk-link-reset uk-margin-medium-top uk-margin-medium-bottom uk-display-inline-block"
+                      >
                       <span className="uk-text-bold uk-text-secondary uk-text-uppercase">
-                        {value.text}
+                        {
+                          //scrollPosition+'/'+sectionTop[index].top?.toFixed(0)
+                        }
+                        {
+                          value.text
+                        }
                       </span>
                     </Link>
                   </li>

@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { SplashPage } from "../views/splash";
 import { useSelector } from "react-redux";
 import { StoreState } from "../types/models/store";
+import { loginAction } from "../actions/user";
 
 interface AuthState {
   isInitialised: boolean;
@@ -19,9 +20,9 @@ interface AuthState {
 
 interface AuthContextValue extends AuthState {
   method: "JWT";
-  login: (phone_number: string, pin: string) => void;
+  login: (formData: any) => Promise<boolean>;//Promise<User>;
   logout: () => void;
-  register: () => void;// Promise<void>;
+  register: (formData: any) => Promise<boolean>;
 }
 
 interface AuthProviderProps {
@@ -87,7 +88,6 @@ const reducer = (state: AuthState, action: Action): AuthState => {
   switch (action.type) {
     case "INITIALISE": {
       const { isAuthenticated, user } = action.payload;
-
       return {
         ...state,
         isAuthenticated,
@@ -97,7 +97,6 @@ const reducer = (state: AuthState, action: Action): AuthState => {
     }
     case "LOGIN": {
       const { user } = action.payload;
-
       return {
         ...state,
         isAuthenticated: true,
@@ -113,7 +112,6 @@ const reducer = (state: AuthState, action: Action): AuthState => {
     }
     case "REGISTER": {
       const { user } = action.payload;
-
       return {
         ...state,
         isAuthenticated: true,
@@ -129,89 +127,45 @@ const reducer = (state: AuthState, action: Action): AuthState => {
 const AuthContext = createContext<AuthContextValue>({
   ...initialAuthState,
   method: "JWT",
-  login: () => {
-    return false;
-  },
+  login: () => Promise.resolve(false),
   logout: () => {
     return false;
   },
-  register: () => {
-    return false;
-  }//Promise.resolve(),
+  register: () => Promise.resolve(false),
 });
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
-  //const setRedux = useDispatch();
   const navigate = useNavigate();
-  const { user } = useSelector((state:StoreState) => state.auth);
+  //const { user } = useSelector((state:StoreState) => state.auth);
   const [state, dispatch] = useReducer(reducer, initialAuthState);
-  const login = async (_phone_number: string, _pin: string) => {
-    try {
-      const response = await axios.post<{
-        code: number;
-        msg: string;
-        user: User;
-      }>("/api/users/login", { phone_number: _phone_number, pin: _pin });
-      const { code, msg, user } = response.data;
-
-      console.log(['login action',code, msg, user]);
-      if (code === 0 && msg === "success") {
-        const token = jwtEncode(
-          {
-            exp: Math.floor(Date.now() / 1000) + 60 * 60,
-            data: user,
-          },
-          "key"
-        );
-        setSession(token);
-        dispatch({
-          type: "LOGIN",
-          payload: {
-            user,
-          },
-        });
-        return true;
-      } else {
-        setTimeout(() => {
-          toast(msg);
-        }, 500);
-      }
-      return false;
-    } catch (err) {
-      console.log(['login action err= ',err]);
-      /**test */
-      let user={
-        phone_number:_phone_number,
-        pin:_pin,
-
-        full_name: "",
-        email: "",
-        company_name: "",
-        company_address: "",
-        company_year: 0,
-        country: "",
-        city: "",
-        account_type: 0,
-        interesting: "",
-      };
+  const login = async (formData: any) => {
+    await loginAction(formData)
+    .then((res) => {
+      console.log(["loginAction", res]);
       const token = jwtEncode(
         {
           exp: Math.floor(Date.now() / 1000) + 60 * 60,
-          data: user,
+          data: res,
         },
         "key"
       );
       setSession(token);
+      let user = res;
       dispatch({
         type: "LOGIN",
         payload: {
-            user
+          user,
         },
       });
-      return true;
-      //
+    })
+    .catch((err) => {
+      console.error(err);
+      // setTimeout(() => {
+      //   toast(msg);
+      // }, 500);
       return false;
-    }
+    });
+    return true;
   };
 
   const logout = () => {
@@ -220,7 +174,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     navigate('/');
   };
 
-  const register = async () => {
+  const register = async (user: User) => {
     try {
       const response = await axios.post<{
         code: number;
@@ -251,28 +205,11 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
           toast(msg);
         }, 500);
       }
-      return true;
     } catch (err) {
       console.log(err);
-      /**test */
-      const token = jwtEncode(
-        {
-          exp: Math.floor(Date.now() / 1000) + 60 * 60,
-          data: user,
-        },
-        "key"
-      );
-      setSession(token);
-      dispatch({
-        type: "LOGIN",
-        payload: {
-            user
-        },
-      });
-      return true;
-      //
       return false;
     }
+    return true;
   };
 
   useEffect(() => {

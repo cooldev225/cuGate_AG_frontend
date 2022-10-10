@@ -1,7 +1,7 @@
 import axios from "axios";
-//import { APP_API_URL } from "src/constants";
+import { APP_API_URL } from "../constants";
 const axiosInstance = axios.create();
-axiosInstance.defaults.baseURL = "";//APP_API_URL;
+axiosInstance.defaults.baseURL = APP_API_URL;
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) =>

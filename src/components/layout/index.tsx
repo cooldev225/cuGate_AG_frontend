@@ -4,10 +4,14 @@ import { Footer } from "../footer";
 import "../../assets/scss/layout.scss";
 import { useSelector } from "react-redux";
 import { StoreState } from "../../types/models/store";
+import BackToTop from "./BackToTop";
+import WebFont from 'webfontloader';
+import { useLocation } from "react-router-dom";
 interface Props{
     children: ReactNode;
 }
 export const DefaultLayout: React.FC<Props> = (props) => {
+  const location = useLocation();
   const [isMobile, setIsMobile] = useState(false);
   const { mobilemenu_toggle } = useSelector((state:StoreState) => state.auth);
 
@@ -20,12 +24,23 @@ export const DefaultLayout: React.FC<Props> = (props) => {
   }, []);
   useEffect(()=>{
     updateSize();
+    WebFont.load({
+      google: {
+        families: ['Montserrat', 'Inter']
+      }
+    });
   },[]);
   return (
     <div className={"cugate-default-layout"+(isMobile?" mobile-size uk-text-center":"")+(mobilemenu_toggle?" offcanvas-menu":"")}>
       <Header />  
       {props.children}
-      <Footer />
+      {location.pathname.indexOf('login')>-1?(
+        <></>
+      ):(
+        <Footer />
+      )}
+      
+      <BackToTop />
     </div>
   );
 };

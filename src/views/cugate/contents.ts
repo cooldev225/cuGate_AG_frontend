@@ -1,10 +1,11 @@
 export const menuList:{
   text: string;
   href: string;
+  top?: number;
 }[] = [
   {
     text: 'About Us',
-    href: 'navbar'
+    href: 'navbar',
   },
   {
     text: 'The Cugate Music Catalogue',

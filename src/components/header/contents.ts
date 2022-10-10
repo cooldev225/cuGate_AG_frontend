@@ -7,7 +7,7 @@ export const menuList: {
     {
         key: "cugate",
         text: "CuGate",
-        url: "/",
+        url: "/cugate",
         icon: 0,
     },
     {
@@ -46,20 +46,24 @@ export const menuRightList: {
     key: string;
     text: string;
     url: string;
+    icon: number;
 }[] = [
     {
         key: "our_team",
         text: "Our Team",
         url: "/our-team",
+        icon: 0,
     },
     {
         key: "impressum",
         text: "Impressum",
         url: "/impressum",
+        icon: 0,
     },
     {
         key: "privacy_policy",
         text: "Privacy Policy",
         url: "/privacy-policy",
+        icon: 0,
     },
 ];

@@ -4,6 +4,7 @@
     font-size: 16px;
     font-weight: 400;
     line-height: 1.5;
+    overflow-x: hidden;
     -webkit-text-size-adjust: 100%;
     .uk-h1, .uk-h2, .uk-h3, .uk-h4, .uk-h5, .uk-h6, .uk-heading-2xlarge, .uk-heading-large, .uk-heading-medium, .uk-heading-small, .uk-heading-xlarge, h1, h2, h3, h4, h5, h6 {
         margin: 0 0 20px 0;
@@ -477,8 +478,6 @@
         text-align: center!important;
     }
     &.mobile-size{
-        overflow: visible;
-        overflow-x: hidden;
         nav.uk-light .uk-background-secondary .uk-navbar-nav > li > a{
             min-height: 40px;
         }
@@ -504,5 +503,33 @@
                 margin-top: 40px;
             }
         }
+    }
+    
+    //back-top
+    .shadow-none {
+        box-shadow: none !important;
+    }
+    .btn-icon {
+        padding: 0;
+        width: 2.625rem;
+        height: 2.625rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .btn-soft-primary {
+        background-color: rgba(0, 85, 255, 0.1);
+        color: #05f;
+        border-color: transparent;
+    }
+    .btn-back-to-top {
+        position: fixed;
+        bottom: 1rem;
+        right: 1rem;
+        display: none;
+        z-index: 10;
+    }
+    .btn-back-to-top.show {
+        display: flex;
     }
 }

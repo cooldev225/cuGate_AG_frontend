@@ -1,0 +1,55 @@
+.page.page-login{
+    font-family: 'Inter'!important;
+    h1{
+        font-family: 'Inter'!important;
+        text-transform: none;
+        font-weight: bold;
+    }
+    
+    .cation{
+        font-size: 20px;
+    }
+    
+    form{
+        width: 500px;
+    }
+    
+    input{
+        background: rgba(7, 41, 76, 0.3);
+        border-radius: 50px;
+        font-size: 1.25rem;
+        text-align:center;
+        padding: 0.85rem;
+    }
+    button{
+        border-radius: 50px;
+        font-size: 1.25rem;
+        padding: 0.85rem;
+    }
+    .social-buttons{
+        button{
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+    }
+    button.login{
+        background-color: var(--color-blue-dark);
+        max-width: 140px;
+        color: var(--color-orange);
+        border-color: var(--color-blue-dark);
+    }
+    .gray-color{
+        color: rgba(7, 41, 76, 0.5);
+        a, a:hover{
+            color: rgba(7, 41, 76, 0.5);
+        }
+    }
+    .register a{
+        text-decoration-line: underline!important;
+        color: var(--color-blue-dark);
+    }
+    .invalid-feedback{
+        margin-left:25px;
+    }
+}

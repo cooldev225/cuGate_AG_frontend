@@ -15,7 +15,7 @@ const initState = {
     account_type: 0,
     interesting: "",
   },
-  page: 0,
+  page: "",
   mobilemenu_toggle:0,
 };
   
