@@ -2,15 +2,12 @@ import { createContext, useEffect, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import type { FC, ReactNode } from "react";
 import jwtDecode from "jwt-decode";
-import jwtEncode from "jwt-encode";
 import type { User } from "../types/models/user";
 import axios from "../utils/axios";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { SplashPage } from "../views/splash";
-import { useSelector } from "react-redux";
-import { StoreState } from "../types/models/store";
-import { loginAction } from "../actions/user";
+import { loginAction, registerAction, getUserInfo } from "../actions/user";
+import { STATUS_CODE } from "../constants";
 
 interface AuthState {
   isInitialised: boolean;
@@ -20,9 +17,9 @@ interface AuthState {
 
 interface AuthContextValue extends AuthState {
   method: "JWT";
-  login: (formData: any) => Promise<boolean>;//Promise<User>;
+  login: (formData: any) => Promise<any>;
   logout: () => void;
-  register: (formData: any) => Promise<boolean>;
+  register: (formData: any) => Promise<any>;
 }
 
 interface AuthProviderProps {
@@ -70,8 +67,7 @@ const isValidToken = (accessToken: string): boolean => {
 
   const decoded: any = jwtDecode(accessToken);
   const currentTime = Date.now() / 1000;
-
-  return decoded.exp > currentTime;
+  return decoded.expires > currentTime;
 };
 
 const setSession = (accessToken: string | null): void => {
@@ -80,6 +76,7 @@ const setSession = (accessToken: string | null): void => {
     axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
   } else {
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("userinfo");
     delete axios.defaults.headers.common.Authorization;
   }
 };
@@ -127,7 +124,7 @@ const reducer = (state: AuthState, action: Action): AuthState => {
 const AuthContext = createContext<AuthContextValue>({
   ...initialAuthState,
   method: "JWT",
-  login: () => Promise.resolve(false),
+  login: () => Promise.resolve(-1),
   logout: () => {
     return false;
   },
@@ -139,33 +136,27 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   //const { user } = useSelector((state:StoreState) => state.auth);
   const [state, dispatch] = useReducer(reducer, initialAuthState);
   const login = async (formData: any) => {
-    await loginAction(formData)
-    .then((res) => {
-      console.log(["loginAction", res]);
-      const token = jwtEncode(
-        {
-          exp: Math.floor(Date.now() / 1000) + 60 * 60,
-          data: res,
-        },
-        "key"
-      );
-      setSession(token);
-      let user = res;
-      dispatch({
-        type: "LOGIN",
-        payload: {
-          user,
-        },
-      });
+    return await loginAction(formData)
+    .then(async (data) => {
+      if(data.result.code == STATUS_CODE.AUTH.SUCCESS_LOGIN){
+        setSession(data.result.token);
+      }
+      getUserInfo()
+        .then((data) => {
+          dispatch({
+            type: "INITIALISE",
+            payload: {
+              isAuthenticated: true,
+              user: data.result,
+            },
+          });
+        });
+      return data.result;
     })
     .catch((err) => {
       console.error(err);
-      // setTimeout(() => {
-      //   toast(msg);
-      // }, 500);
-      return false;
+      return {code: STATUS_CODE.UNKNOWN_FAILURE, message: "Somgthing wrong!"};
     });
-    return true;
   };
 
   const logout = () => {
@@ -174,42 +165,28 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     navigate('/');
   };
 
-  const register = async (user: User) => {
-    try {
-      const response = await axios.post<{
-        code: number;
-        msg: string;
-        user: User;
-        avatar: string;
-      }>("/api/users/register", user);
-      const { code, msg, avatar } = response.data;
-      if (code === 0 && msg === "success") {
-        user.avatar = avatar;
-        const token = jwtEncode(
-          {
-            exp: Math.floor(Date.now() / 1000) + 60 * 60,
-            data: response.data.user,
-          },
-          "key"
-        );
-        setSession(token);
-        dispatch({
-          type: "LOGIN",
-          payload: {
-            user,
-          },
-        });
-        navigate('/');
-      } else {
-        setTimeout(() => {
-          toast(msg);
-        }, 500);
+  const register = async (formData: any) => {
+    return await registerAction(formData)
+    .then(async (data) => {
+      if(data.result.code == STATUS_CODE.AUTH.SUCCESS_LOGIN){
+        setSession(data.result.token);
       }
-    } catch (err) {
-      console.log(err);
-      return false;
-    }
-    return true;
+      getUserInfo()
+        .then((data) => {
+          dispatch({
+            type: "INITIALISE",
+            payload: {
+              isAuthenticated: true,
+              user: data.result,
+            },
+          });
+        });
+      return data.result;
+    })
+    .catch((err) => {
+      console.error(err);
+      return {code: STATUS_CODE.UNKNOWN_FAILURE, message: "Somgthing wrong!"};
+    });
   };
 
   useEffect(() => {
@@ -218,18 +195,32 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         const accessToken = window.localStorage.getItem("accessToken");
         if (accessToken && isValidToken(accessToken)) {
           setSession(accessToken);
-
-          //const response = await axios.post<{ user: User }>("/api/auth/me");
-          //const { user } = response.data;
-          const decoded: any = jwtDecode(accessToken);
-          const user = decoded.data;
-          dispatch({
-            type: "INITIALISE",
-            payload: {
-              isAuthenticated: true,
-              user,
-            },
-          });
+          const userinfo = window.localStorage.getItem("userinfo");
+          if(userinfo == undefined || userinfo == null){
+            await getUserInfo()
+            .then((data) => {
+              const accept = window.localStorage.getItem("acceptCookie");
+              if(accept){
+                localStorage.setItem("userinfo", JSON.stringify(data.result));
+              }
+              
+              dispatch({
+                type: "INITIALISE",
+                payload: {
+                  isAuthenticated: true,
+                  user: data.result,
+                },
+              });
+            });
+          } else {
+            dispatch({
+              type: "INITIALISE",
+              payload: {
+                isAuthenticated: true,
+                user: JSON.parse(userinfo),
+              },
+            });
+          }
         } else {
           dispatch({
             type: "INITIALISE",

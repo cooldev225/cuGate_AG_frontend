@@ -8,4 +8,6 @@ export { OurTeamPage } from "./our-team";
 export { ImpressumPage } from "./impressum";
 export { PrivacyPolicyPage } from "./privacy-policy";
 export { SplashPage } from "./splash";
-export { LoginPage } from "./auth";
+export { AuthPage } from "./auth";
+export { ProfilePage } from "./profile/index";
+export { SubscribePage } from "./profile/subscribe";

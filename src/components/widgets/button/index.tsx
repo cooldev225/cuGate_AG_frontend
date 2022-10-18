@@ -15,10 +15,10 @@ export const Button: React.FC<Props> = (props) => {
   const {
     className,
     disabled,
-    color = "#e9822d",
+    color = "#00cbd8",
     textColor = "white",
     borderColor,
-    borderRadius = 10,
+    borderRadius = 40,
   } = props;
 
   const class_name = useMemo<string>(() => {

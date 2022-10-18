@@ -124,13 +124,21 @@ a{
   transition: .3s all ease;
 }
 
+li{
+  list-style: none;
+}
+
 .mt-3, .my-3 {
   margin-top: 1rem !important;
 }
 
+.focus{
+  cursor:pointer!important;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .logo-img img{
-    animation: App-logo-spin infinite 10s linear;
+    animation: App-logo-spin infinite 5s linear;
   }
 }
 @keyframes App-logo-spin {

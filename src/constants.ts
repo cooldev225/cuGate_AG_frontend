@@ -3,9 +3,10 @@ export const ENABLE_REDUX_DEV_TOOLS = true;
 export const APP_NAME = `${process.env.REACT_APP_NAME}`;
 export const APP_API_KEY = `${process.env.REACT_APP_API_KEY}`;
 export const APP_API_URL = `${process.env.REACT_APP_API_URL}`;
+export const GOOGLE_MAP_KEY = `${process.env.REACT_APP_GOOGLE_MAP_KEY}`;
 export const SOCIAL_KEYS = {
   GOOGLE: {
-    CLIENT_ID:`${process.env.GOOGLE_CLIENT_ID}`,
+    CLIENT_ID:`${process.env.REACT_APP_GOOGLE_CLIENT_ID}`,
   },
   TWITTER: {
     URL: "https://www.twitter.com/WonderRovie",
@@ -35,7 +36,7 @@ export const SOCIAL_KEYS = {
       "https://www.linkedin.com/developers/apps/134527126/settings",
   },
   FACEBOOK: {
-    APP_ID: `${process.env.FACEBOOK_APP_ID}`,//"3106874846267794", //"1996533887185869", //,
+    APP_ID: `${process.env.REACT_APP_FACEBOOK_APP_ID}`,//"3106874846267794", //"1996533887185869", //,
     DEVELOPER_URL: "https://developers.facebook.com/products/instagram/apis/",
     DEVELOPER_URL1:
       "https://developers.facebook.com/docs/instagram-basic-display-api/getting-started",
@@ -61,4 +62,11 @@ export const SOCIAL_KEYS = {
     DEVELOPER_URL: "https://developers.google.com/youtube/v3/getting-started",
     DEVELOPER_URL1: "https://console.cloud.google.com/apis/credentials",
   },
+};
+export const STATUS_CODE = {
+  UNKNOWN_FAILURE: -1, 
+  AUTH:{
+    SUCCESS_LOGIN: 20000,
+    WRONG_USERNAME_OR_PASSORD: -20000,
+  }
 };

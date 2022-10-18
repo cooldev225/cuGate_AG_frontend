@@ -1,0 +1,14 @@
+nav.toolbar{
+    height: 85px;
+    padding: 20px;
+    border-bottom: 2px solid #DBE2E6;;
+    .card-location{
+        width: 180px;
+    }
+    .search-bar{
+        width: 40%;
+    }
+    .search-categories{
+        width: calc(60% - 180px);
+    }
+}

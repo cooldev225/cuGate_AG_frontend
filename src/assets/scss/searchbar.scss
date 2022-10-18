@@ -1,0 +1,25 @@
+div.search-bar{
+    height: 100%;
+    position: relative;
+    button.search-button{
+      position: absolute;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      left: 4px;
+      top: 3px;
+      background-color: #07294c;
+      color: white;
+      border-style: none;
+    }
+    input.search-input{
+        position: absolute;
+        left: 0px;
+        width: calc(100% - 50px);
+        height: 100%;
+        border-radius: 50px;
+        border-style: none;
+        background-color: #dde9f4;
+        padding-left: 45px;
+    }
+}

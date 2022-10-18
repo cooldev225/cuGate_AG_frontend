@@ -1,0 +1,28 @@
+.page.page-profile-subscribe{
+    .card-kind{
+        .card{
+            padding: 20px 40px;
+            h2{
+                margin-bottom: 0px;
+            }
+        }
+        .card.active{
+            border-width: 3px;
+            border-color: var(--color-blue-dark);
+        }
+    }
+    .card-upload{
+        .drop_zone{
+            height: 260px;
+        }
+        .button-group{
+            width: 415px;
+        }
+    }
+    a.disable{
+        pointer-events: none;
+        h3{
+            color:grey;
+        }
+    }
+}

@@ -16,21 +16,23 @@ export const Header: React.FC = () => {
   const navigate = useNavigate();
   const [activeItem, setActiveItem] = useState('cugate');
   const [noMenu, setNoMenu] = useState(true);
-  const { login, register, isAuthenticated, user } = useAuth() as any;
+  const { logout, isAuthenticated, user } = useAuth() as any;
+  const [userMenuToggle, setUserMenuToggle] = useState(false);
 
   useEffect(() => {
-    setNoMenu(true);
+    setNoMenu(false);
+    if(location.pathname.indexOf('login')>-1||location.pathname.indexOf('register')>-1){
+      setNoMenu(true);
+    }
     menuList.map((value,index)=>{
       if(location.pathname.indexOf(value.url)>-1){
         setActiveItem(value.key);
-        setNoMenu(false);
         return index;
       }
     });
     menuRightList.map((value,index)=>{
       if(location.pathname.indexOf(value.url)>-1){
         setActiveItem(value.key);
-        setNoMenu(false);
         return index;
       }
     });
@@ -43,7 +45,13 @@ export const Header: React.FC = () => {
 
   return (
     <Fragment>
-      <nav id="navbar" className={"uk-navbar-container uk-navbar-transparent uk-light" + (noMenu?" noMenu":"")}>
+      <nav 
+        id="navbar"
+        className={"uk-navbar-container uk-navbar-transparent uk-light" + (noMenu?" noMenu":"")}
+        onMouseLeave={()=>setTimeout(() => {
+          setUserMenuToggle(false);
+        }, 500)}
+      >
         <div className="uk-background-secondary">
           <div className="uk-container uk-container-large">
             <div className="uk-navbar">
@@ -76,16 +84,70 @@ export const Header: React.FC = () => {
                   }
                   {
                     isAuthenticated?(
-                      <li className="tools-bar-right">
-                        <Link onClick={(e)=>{e.preventDefault();}} to={""}>
-                          <img alt="login" src={alam_icon} style={{width:'24px',marginRight:5}}/>
-                          <img alt="login" src={user_icon} style={{width:'24px'}}/>
-                        </Link>
+                      <li className="d-flex tools-bar-right">
+                        <img alt="alam" className="focus me-2" src={alam_icon} style={{width:'24px'}}/>
+                        <img 
+                          onClick={()=>setUserMenuToggle(!userMenuToggle)}
+                          alt="user"
+                          className="focus"
+                          src={user_icon}
+                          style={{width:'24px'}}
+                        />
+                        <ul 
+                          onMouseLeave={()=>setTimeout(() => {
+                            setUserMenuToggle(false);
+                          }, 500)}
+                          className={"user-menu-toggle" + (userMenuToggle?" show":"")}
+                        >
+                          <li>
+                            <Link to={""}>
+                              My profile
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to={""}>
+                              Membership
+                            </Link>
+                          </li>
+                          <li className="divider"></li>
+                          <li>
+                            <Link to={""}>
+                              Favorite Albums
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to={""}>
+                              Find Artists
+                            </Link>
+                          </li>
+                          <li className="divider"></li>
+                          <li>
+                            <Link to={""}>
+                              Help Center
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to={""}>
+                              How it works
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to={""}>
+                              News
+                            </Link>
+                          </li>
+                          <li className="divider"></li>
+                          <li>
+                            <Link to={""} onClick={()=>logout()}>
+                              logout
+                            </Link>
+                          </li>
+                        </ul>
                       </li>
                     ):(
                       <li className="tools-bar-right">
                         <Link onClick={(e)=>{e.preventDefault();navigate('login');}} to={""}>
-                          <img alt="login" src={user_icon} style={{width:'24px',marginRight:5}}/>Login
+                          <img alt="logout" src={user_icon} style={{width:'24px',marginRight:5}}/>Login
                         </Link>
                       </li>
                     )
@@ -96,6 +158,11 @@ export const Header: React.FC = () => {
           </div>
         </div>
       </nav>
+      {isAuthenticated?(
+        <div >
+          
+        </div>
+      ):(<></>)}
     </Fragment>
     
   );

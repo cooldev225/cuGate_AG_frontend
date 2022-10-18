@@ -1,4 +1,9 @@
-import { CugatePage, LoginPage, CumarketPage, CuviewPage, CuradioPage, CutrackPage, PlaylistsPage, ImpressumPage, PrivacyPolicyPage, OurTeamPage } from "./views";
+import { 
+  CugatePage, AuthPage, CumarketPage, CuviewPage,
+  CuradioPage, CutrackPage, PlaylistsPage,
+  ImpressumPage, PrivacyPolicyPage, OurTeamPage,
+  ProfilePage, SubscribePage
+} from "./views";
 import AuthRoute from "./utils/AuthRoute";
 import { BrowserRouter as Router, Routes , Route, BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from "./contexts/JWTAuthContext";
@@ -14,7 +19,10 @@ export default function App() {
               
             </Route>
             <Route path="/" element={<Root />} />
-            <Route path="/login" element={<LoginPage />} />
+            <Route path="/login" element={<AuthPage page={0}/>} />
+            <Route path="/register" element={<AuthPage  page={1}/>} />
+            <Route path="/profile" element={<ProfilePage/>} />
+            <Route path="/profile/subscribe" element={<SubscribePage/>} />
             <Route path="/cugate" element={<CugatePage/>} />
             <Route path="/cumarket" element={<CumarketPage/>} />
             <Route path="/cuview" element={<CuviewPage/>} />

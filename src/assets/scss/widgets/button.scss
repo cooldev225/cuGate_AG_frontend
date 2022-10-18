@@ -1,7 +1,5 @@
 .default-button {
-  height       : 6vh;
-  width        : 100%;
-  max-width    : 300px;
+  height       : 45px;
   border       : 1px solid var(--bazar-button-border-color);
   border-radius: var(--bazar-button-border-radius);
   position     : relative;
@@ -40,6 +38,10 @@
       height       : 11vw;
       font-size    : 4.4vw;
       font-weight  : 700;
+    }
+    img{
+      width: 50%;
+      margin-left: 10px;
     }
   }
 
