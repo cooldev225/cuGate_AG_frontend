@@ -2,7 +2,8 @@ import {
   CugatePage, AuthPage, CumarketPage, CuviewPage,
   CuradioPage, CutrackPage, PlaylistsPage,
   ImpressumPage, PrivacyPolicyPage, OurTeamPage,
-  ProfilePage, SubscribePage
+  ProfilePage, SubscribePage, MembershipPage,
+  CheckoutPage
 } from "./views";
 import AuthRoute from "./utils/AuthRoute";
 import { BrowserRouter as Router, Routes , Route, BrowserRouter } from 'react-router-dom';
@@ -16,13 +17,15 @@ export default function App() {
         <DefaultLayout>
           <Routes>
             <Route element={<AuthRoute/>}>
-              
+              <Route path="/profile" element={<ProfilePage/>} />
+              <Route path="/profile/subscribe" element={<SubscribePage/>} />
+              <Route path="/membership" element={<MembershipPage/>} />
+              <Route path="/checkout" element={<CheckoutPage/>} />
             </Route>
             <Route path="/" element={<Root />} />
             <Route path="/login" element={<AuthPage page={0}/>} />
             <Route path="/register" element={<AuthPage  page={1}/>} />
-            <Route path="/profile" element={<ProfilePage/>} />
-            <Route path="/profile/subscribe" element={<SubscribePage/>} />
+            
             <Route path="/cugate" element={<CugatePage/>} />
             <Route path="/cumarket" element={<CumarketPage/>} />
             <Route path="/cuview" element={<CuviewPage/>} />

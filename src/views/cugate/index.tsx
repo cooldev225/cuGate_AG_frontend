@@ -513,7 +513,6 @@ export const CugatePage: React.FC = () => {
                 </motion.p>
               </div>
             </div>
-
           </div>
         </div>
       </section>
@@ -534,7 +533,6 @@ export const CugatePage: React.FC = () => {
                 variants={{ hidden: {opacity: 0,y: 100},visible: {opacity: 1,y: 0},}}
               >
                 <div className="uk-grid uk-flex-center uk-flex-middle">
-
                   <div className="uk-width-1-2 uk-width-1-3@m uk-width-1-4@l">
                     <motion.img src={images[value.img_index]} style={{maxWidth:'80px'}} alt="" />
                   </div>
@@ -543,7 +541,6 @@ export const CugatePage: React.FC = () => {
                       {value.text}
                     </h3>
                   </div>
-
                 </div>
               </motion.div>
               ))
@@ -558,11 +555,9 @@ export const CugatePage: React.FC = () => {
           <h2 className="uk-heading-medium uk-text-center uk-text-secondary uk-margin-remove">
             We are global
           </h2>
-
           <p className="uk-test-large uk-text-center uk-text-bold uk-text-secondary uk-margin-medium-top uk-margin-large-bottom">
             Get in touch with our offices
           </p>
-
           <p className="uk-text-center uk-margin-large">
             <motion.img alt="" src={images[27]} useMap="#weareglobal-image-map" uk-scrollspy="cls: uk-animation-slide-bottom-medium; delay: 300;"
               initial="hidden"
@@ -578,7 +573,6 @@ export const CugatePage: React.FC = () => {
               }
             </map>
           </p>
-
         </div>
       </section>
 
@@ -588,7 +582,6 @@ export const CugatePage: React.FC = () => {
           <h2 className="uk-heading-medium uk-text-center uk-text-secondary uk-margin-large">
             We are successful
           </h2>
-
           <div className="uk-grid uk-grid-large cg-grid-large uk-child-width-1-4@m -uk-flex-middle">
             <div className="">
               <div className="uk-panel uk-text-center">
@@ -648,13 +641,10 @@ export const CugatePage: React.FC = () => {
                 <p className="uk-margin-remove">
                   artists
                 </p>
-
               </div>
             </div>
-
             <div className="">
               <div className="uk-panel uk-text-center">
-
                 <div className="uk-position-relative uk-width-2-3 uk-width-1-1@m uk-margin-auto">
                 <motion.img alt="" src={images[34]} className="" uk-scrollspy="cls: uk-animation-slide-left-medium; delay: 300; repeat: 0" 
                     initial="hidden"
@@ -681,13 +671,10 @@ export const CugatePage: React.FC = () => {
                 <p className="uk-margin-remove">
                   own tracks
                 </p>
-
               </div>
             </div>
-
             <div className="">
               <div className="uk-panel uk-text-center">
-
                 <div className="uk-position-relative uk-width-2-3 uk-width-1-1@m uk-margin-auto">
                 <motion.img alt="" src={images[37]} className="" uk-scrollspy="cls: uk-animation-slide-left-medium; delay: 300; repeat: 0" 
                     initial="hidden"

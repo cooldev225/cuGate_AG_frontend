@@ -1,14 +1,27 @@
 .page.page-profile-subscribe{
     .card-kind{
+        h2{
+            font-weight: 700;
+            font-size: 2rem;
+            text-align: center;
+        }
         .card{
-            padding: 20px 40px;
+            margin-top: 107px;
+            margin-bottom: 70px;
+            padding: 17px 74px;
+            background: #fff;
+            border: 1px solid #07294C;
+            border-radius: 30px;
             h2{
+                text-transform: unset;
                 margin-bottom: 0px;
+                font-weight: 500;
+                font-size: 1.2rem;
             }
         }
         .card.active{
-            border-width: 3px;
             border-color: var(--color-blue-dark);
+            background: #DDE9F4;
         }
     }
     .card-upload{

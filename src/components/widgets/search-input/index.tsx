@@ -1,22 +1,23 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import styled from "styled-components";
 import "../../../assets/scss/widgets/input.scss";
-type Props = InputProps;
 
 const Container = styled.div`
-  --bazar-input-color: ${(props) => props.theme.color};
-  --bazar-input-text-color: ${(props) => props.theme.textColor};
-  --bazar-input-border-radius: ${(props) => props.theme.borderRadius}px;
+  --cugate-input-color: ${(props) => props.theme.color};
+  --cugate-input-text-color: ${(props) => props.theme.textColor};
+  --cugate-input-border-radius: ${(props) => props.theme.borderRadius}px;
+  --cugate-input-width: ${(props) => props.theme.width};
 `;
 
-export const Input: React.FC<Props> = (props) => {
+export const SearchInput: React.FC<InputProps> = (props) => {
   const {
     className,
     disabled,
     type = "text",
     color = "white",
-    textColor = "#e9822d",
-    borderRadius = 10,
+    textColor = "var(--color-blue-dark)",
+    width = "100px",
+    borderRadius = 40,
     placeholder = "",
     length = 10000,
     value = "",
@@ -24,7 +25,6 @@ export const Input: React.FC<Props> = (props) => {
     example="",
   } = props;
   
-  const [_value, _setValue] = useState("");
   const class_name = useMemo<string>(() => {
     const class_name = ["custom-input"];
     disabled && class_name.push("disabled");
@@ -36,6 +36,7 @@ export const Input: React.FC<Props> = (props) => {
     <Container
       className={class_name}
       theme={{
+        width: width,
         color:color,
         textColor:textColor,
         borderRadius:borderRadius,
@@ -48,8 +49,8 @@ export const Input: React.FC<Props> = (props) => {
         maxLength={length}
         onChange={(e)=>{
           props.onChange && props.onChange(e.target.value);
-          //_setValue('*'.repeat(value.length));
-      }}/>
+        }}
+      />
       <div className="error-code" style={{display:error===''?'none':'block'}}><span>{error}</span></div>
       <div className="help-text" style={{display:example!==''&&error===''?'block':'none'}}><span>{example}</span></div>
       <div className="hr" style={{display:'none'}}><hr/></div>

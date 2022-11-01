@@ -10,5 +10,9 @@ nav.toolbar{
     }
     .search-categories{
         width: calc(60% - 180px);
+        overflow: hidden;
+        button{
+            height: 43px;
+        }
     }
 }

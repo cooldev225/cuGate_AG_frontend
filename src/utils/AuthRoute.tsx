@@ -5,6 +5,6 @@ const AuthRoute = () => {
   const { isAuthenticated } = useAuth();
   return isAuthenticated
     ? <Outlet />
-    : <Navigate to="/auth" replace />;
+    : <Navigate to="/login" replace />;
 };
 export default AuthRoute;

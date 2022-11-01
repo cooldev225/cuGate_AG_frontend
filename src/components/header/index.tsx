@@ -1,5 +1,5 @@
 import "../../assets/scss/header.scss";
-import { menuList, menuRightList } from "./contents";
+import { menuList, menuRightList, menuUserList } from "./contents";
 import { Fragment, useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
@@ -99,49 +99,23 @@ export const Header: React.FC = () => {
                           }, 500)}
                           className={"user-menu-toggle" + (userMenuToggle?" show":"")}
                         >
-                          <li>
-                            <Link to={""}>
-                              My profile
-                            </Link>
-                          </li>
-                          <li>
-                            <Link to={""}>
-                              Membership
-                            </Link>
-                          </li>
-                          <li className="divider"></li>
-                          <li>
-                            <Link to={""}>
-                              Favorite Albums
-                            </Link>
-                          </li>
-                          <li>
-                            <Link to={""}>
-                              Find Artists
-                            </Link>
-                          </li>
-                          <li className="divider"></li>
-                          <li>
-                            <Link to={""}>
-                              Help Center
-                            </Link>
-                          </li>
-                          <li>
-                            <Link to={""}>
-                              How it works
-                            </Link>
-                          </li>
-                          <li>
-                            <Link to={""}>
-                              News
-                            </Link>
-                          </li>
-                          <li className="divider"></li>
-                          <li>
-                            <Link to={""} onClick={()=>logout()}>
-                              logout
-                            </Link>
-                          </li>
+                          {menuUserList.map((item, index)=>(
+                            item.key==="divider"?(
+                              <li key={index} className={item.key}></li>
+                            ):item.key==="logout"?(
+                              <li key={index} onClick={()=>setUserMenuToggle(false)}>
+                                <Link to={""} onClick={()=>logout()}>
+                                  {item.text}
+                                </Link>
+                              </li>
+                            ):(
+                              <li className="mb-1" key={index} onClick={()=>setUserMenuToggle(false)}>
+                                <Link to={"" + item.url}>
+                                  {item.text}
+                                </Link>
+                              </li>
+                            )
+                          ))}
                         </ul>
                       </li>
                     ):(

@@ -1,12 +1,12 @@
 .custom-input {
   display         : flex;
-  height          : 6vh;
-  width           : 100%;
-  max-width       : 300px;
-  border-radius   : var(--bazar-input-border-radius);
+  height          : 50px;
+  width           : var(--cugate-input-width);
+  border-radius   : var(--cugate-input-border-radius);
   position        : relative;
-  background-color: var(--bazar-input-color);
-  box-shadow      : inset 0px 1px 4px rgb(0 0 0 / 50%);
+  background-color: var(--cugate-input-color);
+  //box-shadow      : inset 0px 1px 4px rgb(0 0 0 / 50%);
+  border          : 1px solid var(--cugate-input-text-color);
   margin-top      : 1.5vh;
   margin-bottom   : 3vh;
   margin-left     : auto;
@@ -21,7 +21,7 @@
     width       : 100%;
     border-style: none;
     font-size   : 1.2rem;
-    color       : var(--bazar-input-text-color);
+    color       : var(--cugate-input-text-color);
     font-weight : 500;
     &::placeholder {
       color      : var(--theme-secondary-color);

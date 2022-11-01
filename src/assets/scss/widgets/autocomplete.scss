@@ -1,0 +1,38 @@
+.cugate-autocomplete {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 40px;
+    padding: 2px;
+    $gap: 5px;
+    border: 1px solid var(--cugate-autocomplete-border-color);
+    &>.cugate-menu-widget {
+        margin-right: $gap;
+        margin-top: 22px;
+        &>.content {
+            display: none;
+        }
+    }
+    &>input {
+        flex: 1;
+        font-size: 14px;
+        height: 40px;
+        border-style: none;
+        width: calc(100% - 50px);
+        margin-left: 15px;
+    }
+    &>.search-icon {
+        margin: 0 $gap;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--cugate-autocomplete-border-color);
+        border-radius: 50%;
+        padding: 6px;
+        opacity: 0.3;
+        &.active {
+            opacity: 1;
+        }
+    }
+}

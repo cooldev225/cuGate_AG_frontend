@@ -37,22 +37,25 @@ export async function setUserInfo(data) {
   else return [];
 }
 
-export async function getGeoInfo() {
-  let data = {
-    lat:61.52401,
-    lng:61.52401,
-    username:61.52401,
-  };
-  const response = await g_axios.get("http://api.geonames.org/countryCode", data);
+export async function getGenres() {
+  const response = await axios.post("/getGenres", {});
   if (response.status === 200) return response.data;
   else return [];
 }
 
-export async function loginAction_(data) {
-  const response = await axios.post("/api/loginAjax.action", {
-    data,
-    token: window.localStorage.getItem("accessToken"),
-  });
+export async function getMoods() {
+  const response = await axios.post("/getMoods", {});
+  if (response.status === 200) return response.data;
+  else return [];
+}
+
+export async function getGeoInfo(lat, long) {
+  let data = {
+    lat: lat,
+    lng: long,
+    username: "goldstar22501",
+  };
+  const response = await g_axios.get("http://api.geonames.org/countryCode", data);
   if (response.status === 200) return response.data;
   else return [];
 }

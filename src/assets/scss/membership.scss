@@ -1,0 +1,43 @@
+.page.page-membership{
+    .caption{
+        font-weight: 800;
+    }
+    .body{
+        padding: 0px 20px;
+        grid-template-columns: auto;
+        @media (min-width: 500px){
+            grid-template-columns: auto auto;
+        }
+        @media (min-width: 960px){
+            grid-template-columns: auto auto auto;
+        }
+        @media (min-width: 1200px){
+            grid-template-columns: auto auto auto auto;
+        }
+        @media (min-width: 1440px){
+            grid-template-columns: auto auto auto auto auto;
+            padding: 0px 0px;
+        }
+        .card{
+            ul{
+                margin: 0px 0px 0px 0px;
+                padding-left: 0px;
+                margin-left: 20px;
+                li{
+                    list-style: disc;
+                }
+                padding-bottom: 50px;
+            }
+            button{
+                position: absolute;
+                bottom: 2rem;
+                margin-left: calc(10%);
+                width: 70%;
+            }
+            &.active, &:hover{
+                border-width: 2px;
+                border-color: var(--color-blue-dark);
+            }
+        }
+    }
+}

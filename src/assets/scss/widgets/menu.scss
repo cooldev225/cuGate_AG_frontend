@@ -1,0 +1,70 @@
+.cugate-menu-widget {
+  position: relative;
+  &>.menu-container {
+    position        : fixed;
+    display         : none;
+    z-index         : 999;
+    background-color: white;
+    overflow        : auto;
+    box-shadow      : rgb(0 0 0 / 20%) 0px 2px 1px -1px, rgb(0 0 0 / 14%) 0px 1px 1px 0px, rgb(0 0 0 / 12%) 0px 1px 3px 0px;
+
+    &.open {
+      display: grid;
+    }
+
+    &>ul {
+      &>li {
+        cursor    : pointer;
+        transition: all ease-in-out 0.3s;
+
+        &>.content {
+          display       : grid;
+          padding       : 10px 16px;
+          grid-auto-flow: column;
+          gap           : 5px;
+          align-items   : center;
+          width         : fit-content;
+        }
+
+        &:hover {
+          color           : white;
+          background-color: var(--cugate-menu-selected-color);
+        }
+      }
+    }
+  }
+
+  &.inline {
+    &>.menu-container {
+      &>ul {
+        &>li {
+          padding: 0;
+
+          &>.content {
+            padding: 0;
+            gap    : 0;
+
+            &>.icon {
+              background-color: var(--color-blue-500);
+              width           : 40px;
+              height          : 40px;
+              display         : flex;
+              justify-content : center;
+              align-items     : center;
+              border          : 1px solid var(--color-blue-500);
+            }
+
+            &>.content {
+              background-color: transparent;
+              border          : 1px solid var(--color-blue-500);
+              padding         : 0px 12px;
+              align-self      : stretch;
+              display         : flex;
+              align-items     : center;
+            }
+          }
+        }
+      }
+    }
+  }
+}

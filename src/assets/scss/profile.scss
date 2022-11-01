@@ -1,15 +1,25 @@
 .page.page-profile{
 
     .left-menu{
-        width: 400px;
         li{
             display: flex;
             a{
+                width: 100%;
+                font-weight: bold;
                 padding: 22px 25px 22px 55px;
+                color: var(--color-blue-dark)!important;
             }
+        }
+        li:hover, li.active{
+            background-color: #dde9f4;
         }
     }
     .content-wrapper{
-
+        h3{
+            text-transform: capitalize;
+        }
+        .form-control{
+            padding: 10px;
+        }
     }
 }

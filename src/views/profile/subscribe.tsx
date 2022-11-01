@@ -2,12 +2,13 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../assets/scss/subscribe.scss';
-import { setUserInfo } from "../../actions/user";
+import { getUserInfo, setUserInfo } from "../../actions/user";
 import useAuth from '../../hooks/useAuth';
 import { SetStateAction, useEffect, useState } from 'react';
 import { StoreState } from '../../types/models/store';
 import { FileUploader } from "react-drag-drop-files";
-import { getGeoInfo } from "../../actions/user";
+import { DefaultButton } from '../../components/widgets';
+import { setAddress } from '../../utils/geocode';
 
 export const SubscribePage: React.FC = () => {
     const dispatch = useDispatch();
@@ -23,50 +24,67 @@ export const SubscribePage: React.FC = () => {
 
     const getUserCoordinates = () => {
         if (!geolocationAPI) {
-            alert('Geolocation API is not available in your browser!')
+            console.log('Geolocation API is not available in your browser!')
         } else {
             geolocationAPI.getCurrentPosition(async (position) => {
             const { coords } = position;
-            console.log(coords);
             setLat(coords.latitude);
             setLong(coords.longitude);
-            let data = await getGeoInfo();
-            console.log(["data", data]);
+            if(lat>-1000000&&long>-1000000){
+                setAddress(coords.latitude, coords.longitude);
+            }
           }, (error) => {
-            alert('Something went wrong getting your position!')
+            console.log('Something went wrong getting your position!')
           })
         }
     }
     useEffect(() => {
-        getUserCoordinates();
         if(user?.is_subscribe){
             navigate("/profile");
         }
+        getUserCoordinates();
         if(activeKind == -1 && user){
             setActiveKind(user?.is_business);
         }
     },[user]);
+
     const submitKind = async () => {
         navigate("/profile");
         if(activeKind>-1){
-            await setUserInfo({is_business: activeKind});
+            await setUserInfo({
+                is_business: activeKind,
+                is_subscribe: 1
+            });
+            getUserInfo().then((data) => {
+                dispatch({
+                    type: "SET_USER",
+                    payload: data.result,
+                });
+            });
             dispatch({
                 type: "SET_PAGE",
                 payload: "subscribe-upload",
             });
         }
     };
+
     const submitUpload = async () => {
         // dispatch({
         //     type: "SET_PAGE",
         //     payload: "subscribe-categories",
         // });
         await setUserInfo({is_subscribe: 1});
+        getUserInfo().then((data) => {
+            dispatch({
+                type: "SET_USER",
+                payload: data.result,
+            });
+        });
         navigate("/profile");
     };
     return (
         <div className={"page page-profile-subscribe d-flex align-items-center justify-content-center"}>
-            {page == "subscribe-upload"?(
+            {page === "subscribe-upload"?(
                 <div className='card-upload'>
                     <FileUploader 
                         handleChange={(file: SetStateAction<null>)=>setFile(file)}
@@ -96,9 +114,7 @@ export const SubscribePage: React.FC = () => {
                             <h2>Business</h2>
                         </div>
                     </div>
-                    <Link className='d-block mt-5' to={""} onClick={()=>submitKind()}>
-                        <h3>Continue</h3>
-                    </Link>
+                    <DefaultButton textColor='var(--color-orange)' onClick={submitKind}>Continue</DefaultButton>
                 </div>
             )}
             

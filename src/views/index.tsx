@@ -11,3 +11,5 @@ export { SplashPage } from "./splash";
 export { AuthPage } from "./auth";
 export { ProfilePage } from "./profile/index";
 export { SubscribePage } from "./profile/subscribe";
+export { MembershipPage } from "./membership";
+export { CheckoutPage } from "./membership/checkout";

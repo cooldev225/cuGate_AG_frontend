@@ -27,7 +27,7 @@ export const SOCIAL_KEYS = {
     LOCATION: "Florida",
     CLIENT_ID: "86jox640ww4bz1",
     CLIENT_SECRET: "FLsfYB9JfYznrsG9",
-    REDIRECT_URL: "https://about.worldie.com",
+    REDIRECT_URL: "https://cugate.com",
     DEVELOPER_URL:
       "https://docs.microsoft.com/en-us/linkedin/shared/integrations/people/profile-api",
     DEVELOPER_URL1: "https://developer.linkedin.com/",
@@ -56,7 +56,7 @@ export const SOCIAL_KEYS = {
     DEVELOPER_URL2: "https://www.reddit.com/prefs/apps",
   },
   YOUTUBU: {
-    ACCOUNT: "WorldieCompany@Gmail.com",
+    ACCOUNT: "CugateCompany@Gmail.com",
     LOCAATION: "San Diego",
     API_KEY: "AIzaSyDAgCHbv840iRR0vyXHTp8IW5PjHW-jk70",
     DEVELOPER_URL: "https://developers.google.com/youtube/v3/getting-started",

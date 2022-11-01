@@ -5,6 +5,8 @@ interface ButtonProps {
   borderRadius?: number;
   borderColor?: string;
   textColor?: string;
+  type?: string;
+  loading?: boolean;
   children?: React.ReactNode;
   onClick?: (event: React.MouseEvent) => void;
 }
@@ -12,6 +14,7 @@ interface ButtonProps {
 interface InputProps {
   className?: string;
   disabled?: boolean;
+  width?: string;
   color?: string;
   type?: string;
   borderRadius?: number;

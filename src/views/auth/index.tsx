@@ -17,6 +17,8 @@ import { menuList, menuRightList } from '../../components/header/contents';
 import { useEffect, useState } from 'react';
 import { toast } from "react-toastify";
 import { STATUS_CODE } from "../../constants";
+import { setAddress } from '../../utils/geocode';
+import { Icon } from '../../components/widgets';
 
 export const AuthPage: React.FC<{page: number}> = (props) => {
     const navigate = useNavigate();
@@ -24,12 +26,34 @@ export const AuthPage: React.FC<{page: number}> = (props) => {
     const { page } = useSelector((state:StoreState) => state.auth);
     const [activeMenu, setActiveMenu] = useState(menuList[0]);
     const [validated, setValidated] = useState(false);
+    const geolocationAPI = navigator.geolocation;
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         username: "",
         email: "",
         password: "",
         confpass: "",
     });
+
+    const getUserCoordinates = () => {
+        if (!geolocationAPI) {
+            console.log('Geolocation API is not available in your browser!')
+        } else {
+            geolocationAPI.getCurrentPosition(async (position) => {
+            const { coords } = position;
+            if(coords.latitude>-1000000&&coords.longitude>-1000000){
+                // await setUserInfo({
+                //     is_profile: true,
+                //     register_latitude: coords.latitude,
+                //     register_longitude: coords.longitude,
+                // });
+                setAddress(coords.latitude, coords.longitude);
+            }
+          }, (error) => {
+            console.log('Something went wrong getting your position!')
+          })
+        }
+    }
 
     const responseGoogle = (response: any) => {
         let uid = response.getBasicProfile().getId();
@@ -98,27 +122,32 @@ export const AuthPage: React.FC<{page: number}> = (props) => {
                 password:formData.password,
                 email: formData.email,
             };
+            setLoading(true);
             await register(postData).then((res: any)=>{
-                if(res.code == STATUS_CODE.AUTH.SUCCESS_LOGIN){
-                    if(!res.is_subscribe){
+                if(res.code === STATUS_CODE.AUTH.SUCCESS_LOGIN){
+                    if(res.is_subscribe===0){
                         navigate("/profile/subscribe");
                     }else{
                         navigate(activeMenu.url);
                     }
                     res.message = "Registration successful!";
+                    getUserCoordinates();
                 }
                 setTimeout(() => {
                     toast(res.message);
                 }, 200);
             });
+            setLoading(false);
         }
         setValidated(true);
     };
 
     const loginAction = async (postData: any) => {
+        setLoading(true);
         await login(postData).then((res: any)=>{
-            if(res.code == STATUS_CODE.AUTH.SUCCESS_LOGIN){
+            if(res.code === STATUS_CODE.AUTH.SUCCESS_LOGIN){
                 if(!res.is_subscribe){
+                    getUserCoordinates();
                     navigate("/profile/subscribe");
                 }else{
                     navigate(activeMenu.url);
@@ -129,6 +158,7 @@ export const AuthPage: React.FC<{page: number}> = (props) => {
                 toast(res.message);
             }, 500);
         });
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -214,7 +244,11 @@ export const AuthPage: React.FC<{page: number}> = (props) => {
                                 className='w-100 mb-3 login d-flex justify-content-center'
                                 type="submit"
                             >
-                                Login
+                                {loading?(
+                                    <Icon name='loading'/>
+                                ):(
+                                    "Login"
+                                )}
                             </Button>
                         </div>
                         <Form.Label className='d-flex justify-content-center mt-5 mb-5 gray-color'>Or Sign Up Using</Form.Label>
@@ -338,7 +372,11 @@ export const AuthPage: React.FC<{page: number}> = (props) => {
                                 className='w-100 mb-3 login d-flex justify-content-center'
                                 type="submit"
                             >
-                                Registration
+                                {loading?(
+                                    <Icon name='loading'/>
+                                ):(
+                                    "Registration"
+                                )}
                             </Button>
                         </div>
                         <Form.Label className='d-flex justify-content-center mt-5 mb-5 gray-color'>Or Sign Up Using</Form.Label>

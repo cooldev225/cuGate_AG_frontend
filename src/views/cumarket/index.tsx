@@ -6,7 +6,7 @@ export const CumarketPage: React.FC = () => {
     return (
         <div className={"page page-cumarket"}>
             <div className="tool-bar">
-                <img src={img_preview} style={{width:'100%'}}/>
+                <img src={img_preview} style={{width:'100%'}} alt=""/>
             </div>
             <div>
                 <Inprocess/>

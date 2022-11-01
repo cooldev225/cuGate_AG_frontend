@@ -114,6 +114,8 @@ nav#navbar.noMenu{
         a{
             color: var(--color-blue-dark)!important;
             font-size: 0.85rem!important;
+            width: 100%;
+            display: block;
         }
         &.divider{
             border-width: 1px;

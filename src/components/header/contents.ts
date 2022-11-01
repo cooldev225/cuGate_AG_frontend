@@ -67,3 +67,68 @@ export const menuRightList: {
         icon: 0,
     },
 ];
+
+export const menuUserList: {
+    key: string;
+    text?: string;
+    url?: string;
+    icon?: number;
+}[] = [
+    {
+        key: "profile",
+        text: "My profile",
+        url: "/profile",
+        icon: 0,
+    },
+    {
+        key: "membership",
+        text: "Membership",
+        url: "/",
+        icon: 0,
+    },
+    {
+        key: "divider",
+    },
+    {
+        key: "favorite_albums",
+        text: "Favorite Albums",
+        url: "/",
+        icon: 0,
+    },
+    {
+        key: "find_artist",
+        text: "Find Artist",
+        url: "/",
+        icon: 0,
+    },
+    {
+        key: "divider",
+    },
+    {
+        key: "help_center",
+        text: "Help Center",
+        url: "/",
+        icon: 0,
+    },
+    {
+        key: "how_it_works",
+        text: "How it works",
+        url: "/",
+        icon: 0,
+    },
+    {
+        key: "news",
+        text: "News",
+        url: "/",
+        icon: 0,
+    },
+    {
+        key: "divider",
+    },
+    {
+        key: "logout",
+        text: "logout",
+        url: "/",
+        icon: 0,
+    },
+];
