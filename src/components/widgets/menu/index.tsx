@@ -33,8 +33,8 @@ export const Menu: React.FC<Props> = (props) => {
     menuItems,
     menuItemKeyProperty="value",
     menuItemLabelProperty="label",
-    disabled,
-    selectedColor="var(--color-blue-dark: #07294C)",
+    disabled=false,
+    selectedColor="var(--color-blue-dark)",
     maxHeight = 260,
     inline = false,
     open = false,
@@ -82,7 +82,7 @@ export const Menu: React.FC<Props> = (props) => {
   useEffect(() => {
     setState({
       ...state,
-      open,
+      open:open,
     });
   }, [open]);
 
@@ -102,14 +102,6 @@ export const Menu: React.FC<Props> = (props) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [activatorRef]);
-
-  useEffect(() => {
-    props.onChangeOpen && props.onChangeOpen(state.open);
-    state.open && selectedItemRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
-  }, [state.open]);
 
   const onMenuItemClick = (value: MenuItemProps): void => {
     setState({
@@ -140,7 +132,7 @@ export const Menu: React.FC<Props> = (props) => {
         {activator}
       </div>
       <Container
-        className={`menu-container${state.open ? " open" : ""}`}
+        className={`menu-container${state.open&&!disabled ? " open" : ""}`}
         styles={position}
         maxHeight={maxHeight}
         selectedColor={selectedColor}

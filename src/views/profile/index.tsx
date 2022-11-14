@@ -15,6 +15,8 @@ import Geocode from "react-geocode";
 import { setUserInfo } from "../../actions/user";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import moment from "moment";
+import { planList } from "../membership/contents";
 
 interface genreType {
     id: number;
@@ -150,7 +152,7 @@ export const ProfilePage: React.FC = () => {
         }
     }, [user]);
     useEffect(()=>{
-        let list = genreList.filter((g)=>g.title===searchGenre);
+        let list = genreList.filter((g)=>g.id.toString()==searchGenre);
         if(list.length)handleGenre(list[0].id);
     },[searchGenre]);
 
@@ -174,10 +176,13 @@ export const ProfilePage: React.FC = () => {
                 company: formData.company_name,
                 tel: formData.mobile_number,            
             });
-            getUserInfo().then((data) => {
+            await getUserInfo().then((data) => {
                 dispatch({
-                    type: "SET_USER",
-                    payload: data.result,
+                    type: "INITIALISE",
+                    payload: {
+                      isAuthenticated: true,
+                      user: data.result,
+                    },
                 });
                 setLoading(false);
             });
@@ -251,7 +256,7 @@ export const ProfilePage: React.FC = () => {
         setFormData({...formData,favorites:favorites});
     };
 
-    const setLocationAction = (e: GoogleMapReact.ClickEventValue) => {
+    const setLocationAction = async (e: GoogleMapReact.ClickEventValue) => {
         Geocode.setApiKey(GOOGLE_MAP_KEY);
         Geocode.setLanguage("en");
         Geocode.fromLatLng(e.lat.toString(), e.lng.toString()).then(
@@ -276,7 +281,16 @@ export const ProfilePage: React.FC = () => {
                 console.error(error);
             }
         );
-        setAddress(e.lat,e.lng);
+        await setAddress(e.lat,e.lng);
+        await getUserInfo().then((data) => {
+            dispatch({
+                type: "INITIALISE",
+                payload: {
+                  isAuthenticated: true,
+                  user: data.result,
+                },
+            });
+        });
     };
 
     const handlePassword = async (event: { currentTarget: any; preventDefault: () => void; stopPropagation: () => void; }) => {
@@ -547,7 +561,7 @@ export const ProfilePage: React.FC = () => {
                     <Form.Label key={1} className="d-flex justify-content-left mb-2">
                         <h3>Genres</h3>
                     </Form.Label>
-                    <div className="mb-4">
+                    <div className="mb-4 d-flex flex-wrap">
                         {genreList.map((genre)=>(
                             formData.favorites.genre.filter((g)=>g===genre.id).length?(
                                 <DefaultButton
@@ -578,26 +592,26 @@ export const ProfilePage: React.FC = () => {
                         {formData.favorites.genre.filter((g)=>
                             genreList.filter((_g)=>g===_g.id&&_g.level===1).length
                         ).length>0&&(
-                        <label>
-                            <AutoComplete 
-                                items={genreList.filter((g)=>{
-                                    if(g.level===2){
-                                        let parents = genreList.filter(
-                                            (_g)=>_g.level===1&&
-                                            formData.favorites.genre.filter((__g)=>__g===_g.id).length
-                                        );
-                                        if(parents.length&&parents.filter((p)=>p.id===g.parent_id).length>0){
-                                            return true;
-                                        }
+                        <AutoComplete 
+                            items={genreList.filter((g)=>{
+                                if(g.level===2){
+                                    let parents = genreList.filter(
+                                        (_g)=>_g.level===1&&
+                                        formData.favorites.genre.filter((__g)=>__g===_g.id).length
+                                    );
+                                    if(parents.length&&parents.filter((p)=>p.id===g.parent_id).length>0){
+                                        return true;
                                     }
-                                    return false;
-                                })}
-                                value={searchGenre}
-                                onChange={setSearchGenre}
-                                width="200px"
-                                borderColor="var(--color-blue-light)"
-                            />
-                        </label>
+                                }
+                                return false;
+                            })}
+                            itemKeyProperty={"id"}
+                            itemLabelProperty={"title"}
+                            value={searchGenre}
+                            onChange={setSearchGenre}
+                            width="200px"
+                            borderColor="var(--color-blue-light)"
+                        />
                         )}
                     </div>
 
@@ -755,8 +769,12 @@ export const ProfilePage: React.FC = () => {
                 </div>
             ):active===menuList[4].key?(//membership
                 <div>
-                    <p style={{color:'var(--color-blue-medium)'}}>Your plain is <span style={{color:'var(--color-blue-dark)'}}>Free B2B</span></p>
-                    <p><DefaultButton onClick={handleMembership}>Upgrade your plan</DefaultButton></p>
+                    <p style={{color:'var(--color-blue-medium)'}}>
+                        Your plan is <span style={{color:'var(--color-blue-dark)'}}>{planList[user.profile.membership_level?user.profile.membership_level:0].title}</span>
+                        <span className="ms-2">Expire on </span>
+                        {user.profile.membership_expire&&(<span style={{color:'var(--color-blue-dark)'}}>{moment(user.profile.membership_expire).format("DD/MM/YYYY")}</span>)}
+                    </p>
+                    {user.profile.membership_level<planList.length-1&&(<DefaultButton onClick={handleMembership}>Upgrade your plan</DefaultButton>)}
                 </div>
             ):(
                 <></>

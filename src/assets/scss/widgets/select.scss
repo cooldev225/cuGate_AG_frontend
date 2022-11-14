@@ -1,0 +1,23 @@
+.custom-select {
+  display         : flex;
+  height          : 36px;
+  width           : var(--cugate-select-width);
+  border-radius   : var(--cugate-select-border-radius);
+  position        : relative;
+  background-color: var(--cugate-select-color);
+  border          : 1px solid var(--cugate-select-text-color);
+  margin-left     : auto;
+  margin-right    : auto;
+  padding         : 3px 0px 3px 0px;
+  cursor: pointer;
+  
+  .cugate-menu-widget{
+    width         : 100%;
+    .open {
+      width       : var(--cugate-select-width);
+    }
+  } 
+  @media (max-width: 550px) {
+    max-width     : 100%;
+  }
+}

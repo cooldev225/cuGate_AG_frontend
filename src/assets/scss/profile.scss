@@ -1,5 +1,4 @@
 .page.page-profile{
-
     .left-menu{
         li{
             display: flex;
@@ -20,6 +19,14 @@
         }
         .form-control{
             padding: 10px;
+        }
+        .cugate-autocomplete{
+            margin-bottom: 1rem!important;
+            height: 50px;
+            border-radius: 40px;
+            .search-icon{
+                padding: 0px 10px;
+            }
         }
     }
 }

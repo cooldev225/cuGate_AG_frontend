@@ -1,8 +1,11 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { teamList } from "./contents";
 import { motion } from "framer-motion";
 
 export const OurTeamPage: React.FC = () => {
+    useEffect(()=>{
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
     return (
         <Fragment>
             <section className="-uk-section uk-section-default">

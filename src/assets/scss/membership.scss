@@ -41,3 +41,59 @@
         }
     }
 }
+.page.page-checkout{
+    .page-box{
+        width: 100%;
+        .box-wrapper{
+            max-width: 1024px;
+            margin:auto;
+        }
+    }
+    .body{
+        .card-caption{
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+        .card{
+            border-width: 1px;
+            border-color: rgb(231, 224, 224);
+            button{
+                margin-left: calc(50% - 102.5px - 1rem);
+                width: 205px;
+                .content{
+                    font-size: 1rem;
+                }
+            }
+            &.active, &:hover{
+                border-width: 1px;
+                border-color: rgb(231, 224, 224);
+            }
+            &.card-duration{
+                border: none;
+            }
+            .card-item{
+                border: 1px solid rgb(231, 224, 224);
+                margin-bottom: 1rem;
+                padding: 1rem;
+                span, input{
+                    margin-right: 1rem;
+                }
+                .badge{
+                    color: #fff;
+                    background-color: var(--color-blue-dark);
+                    border-radius: 4px;
+                    padding: 4px 8px;
+                }
+                .promote{
+                    font-size: 0.9rem;
+                    -webkit-text-decoration-line: line-through;
+                    text-decoration-line: line-through;
+                    color: #727586;
+                }
+                &.active{
+                    border: 1px solid var(--color-blue-dark);
+                }
+            }
+        }
+    }
+}

@@ -22,7 +22,7 @@ export const SubscribePage: React.FC = () => {
     const [long, setLong] = useState<number>(-1000000);
     const geolocationAPI = navigator.geolocation;
 
-    const getUserCoordinates = () => {
+    const getUserCoordinates = async () => {
         if (!geolocationAPI) {
             console.log('Geolocation API is not available in your browser!')
         } else {
@@ -31,7 +31,16 @@ export const SubscribePage: React.FC = () => {
             setLat(coords.latitude);
             setLong(coords.longitude);
             if(lat>-1000000&&long>-1000000){
-                setAddress(coords.latitude, coords.longitude);
+                await setAddress(coords.latitude, coords.longitude);
+                await getUserInfo().then((data) => {
+                    dispatch({
+                        type: "INITIALISE",
+                        payload: {
+                          isAuthenticated: true,
+                          user: data.result,
+                        },
+                    });
+                });
             }
           }, (error) => {
             console.log('Something went wrong getting your position!')
@@ -49,16 +58,23 @@ export const SubscribePage: React.FC = () => {
     },[user]);
 
     const submitKind = async () => {
-        navigate("/profile");
+        if(user?.is_subscribe){
+            navigate("/profile");
+        }else{
+            navigate("/membership");
+        }
         if(activeKind>-1){
             await setUserInfo({
                 is_business: activeKind,
                 is_subscribe: 1
             });
-            getUserInfo().then((data) => {
+            await getUserInfo().then((data) => {
                 dispatch({
-                    type: "SET_USER",
-                    payload: data.result,
+                    type: "INITIALISE",
+                    payload: {
+                      isAuthenticated: true,
+                      user: data.result,
+                    },
                 });
             });
             dispatch({
@@ -74,10 +90,13 @@ export const SubscribePage: React.FC = () => {
         //     payload: "subscribe-categories",
         // });
         await setUserInfo({is_subscribe: 1});
-        getUserInfo().then((data) => {
+        await getUserInfo().then((data) => {
             dispatch({
-                type: "SET_USER",
-                payload: data.result,
+                type: "INITIALISE",
+                payload: {
+                  isAuthenticated: true,
+                  user: data.result,
+                },
             });
         });
         navigate("/profile");

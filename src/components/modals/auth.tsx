@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import { Link } from 'react-router-dom';
 import GoogleLogin from "react-google-login";
 import FacebookLogin from "react-facebook-login";
-import { APP_API_URL, SOCIAL_KEYS } from "../../constants";
+import { SOCIAL_KEYS } from "../../constants";
 
 interface IProps{
     show: boolean;

@@ -1,11 +1,13 @@
 import "../../assets/scss/toolbar.scss";
 import styled from "styled-components";
-import { DefaultButton } from "../widgets";
-import icon_wclose from '../../assets/images/close.png';
+import { DefaultButton, Icon } from "../widgets";
 import { SearchBar } from "./searchbar";
 import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import moment from "moment";
+import { getGenres, getMoods, getUserInfo } from "../../actions/user";
+import { useDispatch } from "react-redux";
+import { activityList, seasonList } from "../../views/profile/contents";
 
 export const Toolbar: React.FC = () => {
   const Container = styled.nav``;
@@ -17,7 +19,13 @@ export const Toolbar: React.FC = () => {
     temperature: 16,
     weather: "ok",
   });
-  useEffect(()=>{
+  const [genreList, setGenreList] = useState<any>([]);
+  const [moodList, setMoodList] = useState<any>([]);
+  const [_activityList, _setActivityList] = useState<any>([]);
+  const [_seasonList, _setSeasonList] = useState<any>([]);
+  const dispatch = useDispatch();
+
+  const initialise = async () => {
     if(user&&user.geo_info.lat!==61.52401&&user.geo_info.lon!==105.318756){
       setInfo({
         country : user.geo_info?.country,
@@ -27,6 +35,41 @@ export const Toolbar: React.FC = () => {
         time: user.geo_info.time?moment(user.geo_info.time).format("hh:mm a"):moment().format("hh:mm a"),
       });
     }
+    if(user){
+      if(user.profile){
+        getGenres().then((data) => {
+          let favorite_genres = user.profile.favorite_genres.split(',').map((m:string)=>Number(m));
+          let filtered_data = data.result.filter((g:any)=>favorite_genres.filter((f:any)=>f === g.id).length);
+          setGenreList(filtered_data);
+        });
+        getMoods().then((data) => {
+          let favorite_moods = user.profile.favorite_moods.split(',').map((m:string)=>Number(m));
+          let filtered_data = data.result.filter((g:any)=>favorite_moods.filter((f:any)=>f === g.id).length);
+          setMoodList(filtered_data);
+        });
+
+        let favorite_activities = user.profile.favorite_activities.split(',');
+        let filtered_data = activityList.filter((g:any)=>favorite_activities.filter((f:any)=>f === g.key).length);
+        _setActivityList(filtered_data);
+
+        let favorite_seasons = user.profile.favorite_seasons.split(',');
+        filtered_data = seasonList.filter((g:any)=>favorite_seasons.filter((f:any)=>f === g.key).length);
+        _setSeasonList(filtered_data);
+      }else{
+        await getUserInfo().then((data) => {
+          dispatch({
+            type: "INITIALISE",
+            payload: {
+              isAuthenticated: true,
+              user: data.result,
+            },
+          });
+        });
+      }
+    }
+  }
+  useEffect(()=>{
+    initialise();
   },[user]);
   return (
     <Container className="d-flex w-100 px-10 toolbar">
@@ -49,9 +92,18 @@ export const Toolbar: React.FC = () => {
       </div>
       <SearchBar/>
       <div className="search-categories">
-        <DefaultButton color="#00cbd8" className="me-2">Classical<img src={icon_wclose} alt=""/></DefaultButton>
-        <DefaultButton color="#00cbd8" className="me-2">Dance<img src={icon_wclose} alt=""/></DefaultButton>
-        <DefaultButton color="#00cbd8" className="me-2">Pop<img src={icon_wclose} alt=""/></DefaultButton>
+        {genreList.map((genre:any,index:number)=>(
+          <DefaultButton key={"genre_"+index} color="#00cbd8" className="me-2">{genre.title}<Icon name="close" color="white" /></DefaultButton>
+        ))}
+        {moodList.map((mood:any,index:number)=>(
+          <DefaultButton key={"mood_"+index} color="#00cbd8" className="me-2">{mood.title}<Icon name="close" color="white" /></DefaultButton>
+        ))}
+        {_activityList.map((activity:any,index:number)=>(
+          <DefaultButton key={"activity"+index} color="#00cbd8" className="me-2">{activity.text}<Icon name="close" color="white" /></DefaultButton>
+        ))}
+        {_seasonList.map((season:any,index:number)=>(
+          <DefaultButton key={"season"+index} color="#00cbd8" className="me-2">{season.key}<Icon name="close" color="white" /></DefaultButton>
+        ))}
       </div>
     </Container>
   );

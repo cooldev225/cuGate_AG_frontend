@@ -20,6 +20,7 @@ import linkedin from "./svg/linkedin";
 import facebook from "./svg/facebook";
 import instagram from "./svg/instagram";
 import loading from "./svg/loading";
+import close from "./svg/close";
 export const Icon: React.FC<IconProps> = ({
   name = "",
   color = "currentColor",
@@ -47,5 +48,6 @@ export const Icon: React.FC<IconProps> = ({
     name === "social"? facebook:
     name === "social"? instagram:
     name === "loading"? loading:
+    name === "close"? close:
     SearchIcon, { color, width }) || null;
 };

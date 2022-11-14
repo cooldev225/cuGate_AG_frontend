@@ -3,7 +3,7 @@ import {
   CuradioPage, CutrackPage, PlaylistsPage,
   ImpressumPage, PrivacyPolicyPage, OurTeamPage,
   ProfilePage, SubscribePage, MembershipPage,
-  CheckoutPage
+  CheckoutPage, DashboardPage
 } from "./views";
 import AuthRoute from "./utils/AuthRoute";
 import { BrowserRouter as Router, Routes , Route, BrowserRouter } from 'react-router-dom';
@@ -20,7 +20,8 @@ export default function App() {
               <Route path="/profile" element={<ProfilePage/>} />
               <Route path="/profile/subscribe" element={<SubscribePage/>} />
               <Route path="/membership" element={<MembershipPage/>} />
-              <Route path="/checkout" element={<CheckoutPage/>} />
+              <Route path="/checkout/:id" element={<CheckoutPage/>} />
+              <Route path="/dashboard" element={<DashboardPage/>} />
             </Route>
             <Route path="/" element={<Root />} />
             <Route path="/login" element={<AuthPage page={0}/>} />

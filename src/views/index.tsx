@@ -13,3 +13,4 @@ export { ProfilePage } from "./profile/index";
 export { SubscribePage } from "./profile/subscribe";
 export { MembershipPage } from "./membership";
 export { CheckoutPage } from "./membership/checkout";
+export { DashboardPage } from "./dashboard";

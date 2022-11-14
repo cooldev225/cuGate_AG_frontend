@@ -58,6 +58,9 @@ nav.uk-light {
                 &>.uk-text-small > li.tools-bar-right ul li:hover *{
                     color: var(--color-orange) !important;
                 }
+                &>.uk-text-small > li.tools-bar-right ul li.active a{
+                    color: var(--color-orange) !important;
+                }
             }
             li.uk-active {
                 background-color: white;

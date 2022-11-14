@@ -75,6 +75,12 @@ export const menuUserList: {
     icon?: number;
 }[] = [
     {
+        key: "dashboard",
+        text: "My page",
+        url: "/dashboard",
+        icon: 0,
+    },
+    {
         key: "profile",
         text: "My profile",
         url: "/profile",
@@ -83,7 +89,7 @@ export const menuUserList: {
     {
         key: "membership",
         text: "Membership",
-        url: "/",
+        url: "/membership",
         icon: 0,
     },
     {

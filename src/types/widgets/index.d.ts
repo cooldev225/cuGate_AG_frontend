@@ -34,6 +34,7 @@ interface OptionProps {
 }
 
 interface SelectProps {
+  width?:string;
   color?:string;
   textColor?:string;
   borderRadius?:number;

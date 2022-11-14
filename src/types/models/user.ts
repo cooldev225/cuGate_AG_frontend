@@ -1,15 +1,21 @@
-export interface User {
-  phone_number: string;
-  pin: string;
+export interface UserProfile {
+  favorite_genres: string,
+  favorite_moods: string,
+  favorite_activities: string,
+  favorite_seasons: string,
+  [key: string]: any;
+}
 
-  full_name: string;
+export interface UserGeoInfo {
+  lat: number;
+  lon: number;
+  [key: string]: any;
+}
+
+export interface User {
+  account: string;
   email: string;
-  company_name: string;
-  company_address: string;
-  company_year: number;
-  country: string;
-  city: string;
-  account_type: number;
-  interesting: string;
+  profile: UserProfile;
+  geo_info: UserGeoInfo;
   [key: string]: any;
 }

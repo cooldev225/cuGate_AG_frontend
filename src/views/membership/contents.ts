@@ -1,8 +1,10 @@
 export const planList = [
     {
+        id: 0,
         key: "free_b2c",
         title: "Free B2C",
         button: "Registration",
+        price: 0,
         items: [
             "Profile Page",
             "See the Radio",
@@ -14,9 +16,11 @@ export const planList = [
         ],
     },
     {
+        id: 1,
         key:"paid_b2c",
         title: "Paid B2C",
         button: "3$/month",
+        price: 3,
         items: [
             "Profile Page",
             "See the Radio",
@@ -28,9 +32,11 @@ export const planList = [
         ],
     },
     {
+        id: 2,
         key:"basic_b2b",
         title: "B2B Basic",
         button: "9.99$/month",
+        price: 9.99,
         items: [
             "Profile Page",
             "FP@MW own content",
@@ -43,9 +49,11 @@ export const planList = [
         ],
     },
     {
+        id: 3,
         key:"medium_b2b",
         title: "B2B Medium",
         button: "15.99$/month",
+        price: 15.99,
         items: [
             "Profile Page",
             "FP@MW own content",
@@ -60,9 +68,11 @@ export const planList = [
         ],
     },
     {
+        id: 4,
         key:"premium_b2b",
         title: "B2B Premium",
         button: "9.99$/month",
+        price: 9.99,
         items: [
             "Profile Page",
             "FP@MW own content",

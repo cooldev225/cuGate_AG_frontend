@@ -52,6 +52,14 @@
     }
   }
 
+  &.small-button{
+    height       : 35px;
+    &>.content {
+      padding        : 0 0.8rem;
+      font-size      : 0.9rem;
+    }
+  }
+
   &:hover {
     &::before {
       opacity: 0.5;

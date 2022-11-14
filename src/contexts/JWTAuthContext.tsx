@@ -8,6 +8,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { SplashPage } from "../views/splash";
 import { loginAction, registerAction, getUserInfo } from "../actions/user";
 import { STATUS_CODE } from "../constants";
+import { useSelector } from "react-redux";
+import { StoreState } from "../types/models/store";
 
 interface AuthState {
   isInitialised: boolean;
@@ -133,7 +135,6 @@ const AuthContext = createContext<AuthContextValue>({
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const navigate = useNavigate();
-  //const { user } = useSelector((state:StoreState) => state.auth);
   const [state, dispatch] = useReducer(reducer, initialAuthState);
   const login = async (formData: any) => {
     return await loginAction(formData)
@@ -141,7 +142,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       if(data.result.code == STATUS_CODE.AUTH.SUCCESS_LOGIN){
         setSession(data.result.token);
       }
-      getUserInfo()
+      await getUserInfo()
         .then((data) => {
           dispatch({
             type: "INITIALISE",
@@ -171,7 +172,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       if(data.result.code == STATUS_CODE.AUTH.SUCCESS_LOGIN){
         setSession(data.result.token);
       }
-      getUserInfo()
+      await getUserInfo()
         .then((data) => {
           dispatch({
             type: "INITIALISE",
@@ -203,7 +204,6 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
               if(accept){
                 localStorage.setItem("userinfo", JSON.stringify(data.result));
               }
-              
               dispatch({
                 type: "INITIALISE",
                 payload: {

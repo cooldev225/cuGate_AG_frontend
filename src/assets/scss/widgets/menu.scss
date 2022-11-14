@@ -1,18 +1,21 @@
 .cugate-menu-widget {
   position: relative;
+  z-index: 1;
   &>.menu-container {
-    position        : fixed;
     display         : none;
     z-index         : 999;
     background-color: white;
     overflow        : auto;
     box-shadow      : rgb(0 0 0 / 20%) 0px 2px 1px -1px, rgb(0 0 0 / 14%) 0px 1px 1px 0px, rgb(0 0 0 / 12%) 0px 1px 3px 0px;
-
+    margin-top: 8px;
     &.open {
       display: grid;
+      z-index: 2;
     }
-
     &>ul {
+      padding-left: 0px;
+      margin-bottom: 0px;
+      z-index: 2;
       &>li {
         cursor    : pointer;
         transition: all ease-in-out 0.3s;
@@ -33,13 +36,11 @@
       }
     }
   }
-
   &.inline {
     &>.menu-container {
       &>ul {
         &>li {
           padding: 0;
-
           &>.content {
             padding: 0;
             gap    : 0;

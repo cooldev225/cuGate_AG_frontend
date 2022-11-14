@@ -70,3 +70,10 @@ export const STATUS_CODE = {
     WRONG_USERNAME_OR_PASSORD: -20000,
   }
 };
+export const PAYMENT_KEYS = {
+  PAYPAL: {
+    ACCOUNT: `${process.env.REACT_APP_PAYPAL_ACCOUNT}`,
+    CLIENT_ID: `${process.env.REACT_APP_PAYPAL_CLIENT_ID}`,
+    SECRET: `${process.env.REACT_APP_PAYPAL_SECRET}`,
+  }
+}

@@ -49,6 +49,18 @@ export async function getMoods() {
   else return [];
 }
 
+export async function getFilterStations() {
+  const response = await axios.post("/getFilterStations", {});
+  if (response.status === 200) return response.data;
+  else return [];
+}
+
+export async function getSearchTrackList(params) {
+  const response = await axios.post("/getSearchTrackList", params);
+  if (response.status === 200) return response.data;
+  else return [];
+}
+
 export async function getGeoInfo(lat, long) {
   let data = {
     lat: lat,

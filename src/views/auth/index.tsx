@@ -8,7 +8,7 @@ import FacebookLogin from "react-facebook-login";
 import { SOCIAL_KEYS } from "../../constants";
 import useAuth from '../../hooks/useAuth';
 import { StoreState } from '../../types/models/store';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import icons from '../../assets/images/menu';
 import icon_text_content from '../../assets/images/content Unlimited.svg';
 import icon_text_cugate from '../../assets/images/cugate-text.svg';
@@ -19,9 +19,15 @@ import { toast } from "react-toastify";
 import { STATUS_CODE } from "../../constants";
 import { setAddress } from '../../utils/geocode';
 import { Icon } from '../../components/widgets';
+import { getUserInfo } from '../../actions/user';
 
 export const AuthPage: React.FC<{page: number}> = (props) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const ourLocation = {
+        lat: 52.48546014466491, 
+        lon: 13.34604,
+    };
     const { login,register,isAuthenticated } = useAuth() as any;
     const { page } = useSelector((state:StoreState) => state.auth);
     const [activeMenu, setActiveMenu] = useState(menuList[0]);
@@ -35,25 +41,50 @@ export const AuthPage: React.FC<{page: number}> = (props) => {
         confpass: "",
     });
 
-    const getUserCoordinates = () => {
+    const getUserCoordinates = async () => {
         if (!geolocationAPI) {
-            console.log('Geolocation API is not available in your browser!')
+            console.log('Geolocation API is not available in your browser!');
+            setDefaultLocation();
         } else {
             geolocationAPI.getCurrentPosition(async (position) => {
-            const { coords } = position;
-            if(coords.latitude>-1000000&&coords.longitude>-1000000){
-                // await setUserInfo({
-                //     is_profile: true,
-                //     register_latitude: coords.latitude,
-                //     register_longitude: coords.longitude,
-                // });
-                setAddress(coords.latitude, coords.longitude);
-            }
-          }, (error) => {
-            console.log('Something went wrong getting your position!')
-          })
+                const { coords } = position;
+                if(coords.latitude>-1000000&&coords.longitude>-1000000){
+                    setAddress(coords.latitude, coords.longitude).then(()=>{
+                        getUserInfo().then((data) => {
+                            dispatch({
+                                type: "INITIALISE",
+                                payload: {
+                                  isAuthenticated: true,
+                                  user: data.result,
+                                },
+                            });
+                        });
+                    }).catch((err)=>{
+                        console.log(err);
+                    });
+                }else{
+                    setDefaultLocation();
+                }
+            }, async (error) => {
+                console.log('Something went wrong getting your position!');
+                setDefaultLocation();
+            })
         }
     }
+
+    const setDefaultLocation = () => {
+        setAddress(ourLocation.lat, ourLocation.lon).then(()=>{
+            getUserInfo().then((data) => {
+                dispatch({
+                    type: "INITIALISE",
+                    payload: {
+                      isAuthenticated: true,
+                      user: data.result,
+                    },
+                });
+            });
+        });
+    };
 
     const responseGoogle = (response: any) => {
         let uid = response.getBasicProfile().getId();
@@ -123,15 +154,16 @@ export const AuthPage: React.FC<{page: number}> = (props) => {
                 email: formData.email,
             };
             setLoading(true);
-            await register(postData).then((res: any)=>{
+            await register(postData).then(async (res: any)=>{
                 if(res.code === STATUS_CODE.AUTH.SUCCESS_LOGIN){
-                    if(res.is_subscribe===0){
+                    await getUserCoordinates();
+                    if(res.is_subscribe===undefined||!res.is_subscribe||res.is_subscribe===0){
                         navigate("/profile/subscribe");
                     }else{
                         navigate(activeMenu.url);
                     }
                     res.message = "Registration successful!";
-                    getUserCoordinates();
+                    
                 }
                 setTimeout(() => {
                     toast(res.message);

@@ -6,8 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import icons from '../../assets/images/menu';
 import user_icon from '../../assets/images/user.svg';
 import alam_icon from '../../assets/images/alam.svg';
-import { useDispatch, useSelector } from "react-redux";
-import { StoreState } from "../../types/models/store";
+import { useDispatch } from "react-redux";
 import useAuth from "../../hooks/useAuth";
 
 export const Header: React.FC = () => {
@@ -36,11 +35,12 @@ export const Header: React.FC = () => {
         return index;
       }
     });
-
-    dispatch({
-      type: "SET_PAGE",
-      payload: activeItem,
-    });
+    if(location.pathname.indexOf('checkout')===-1&&location.pathname.indexOf('membership')===-1){
+      dispatch({
+        type: "SET_PAGE",
+        payload: activeItem,
+      });
+    }
   }, [location.pathname]);
 
   return (
@@ -109,7 +109,11 @@ export const Header: React.FC = () => {
                                 </Link>
                               </li>
                             ):(
-                              <li className="mb-1" key={index} onClick={()=>setUserMenuToggle(false)}>
+                              <li
+                                className={"mb-1" + ("/"+item.key === location.pathname? " active":"")}
+                                key={index}
+                                onClick={()=>setUserMenuToggle(false)}
+                              >
                                 <Link to={"" + item.url}>
                                   {item.text}
                                 </Link>
