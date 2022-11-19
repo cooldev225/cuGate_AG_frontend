@@ -2,6 +2,7 @@ interface ButtonProps {
   className?: string;
   disabled?: boolean;
   color?: string;
+  width?: string;
   borderRadius?: number;
   borderColor?: string;
   textColor?: string;

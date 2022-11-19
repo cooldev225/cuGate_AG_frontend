@@ -23,8 +23,10 @@
     }
     .content-wrapper{
         .file-upload-box{
+            min-height: 255px;
             border-radius: 10px;
             padding: 20px;
+            color: white;
             background-color: #dcfdff;
             margin-bottom: 20px;
             border: 1px solid #03799a;
@@ -40,6 +42,12 @@
                 height: 30px;
                 .content{
                     padding: 0px;
+                }
+            }
+            &.drag-active{
+                background-color: #07294c;
+                .title{
+                    font-size: 1.3rem;
                 }
             }
         }

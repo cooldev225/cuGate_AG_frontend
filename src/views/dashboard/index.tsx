@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "../../assets/scss/dashboard.scss";
-import { AutoComplete, DefaultButton, Icon, Menu, Select } from "../../components/widgets";
-import { getFilterStations, getGenres, getMoods, getSearchTrackList } from "../../actions/user";
+import { AutoComplete, DefaultButton, Icon, Select } from "../../components/widgets";
+import { getAnalyzeData, getFilterStations, getGenres, getMoods, getSearchTrackList } from "../../actions/user";
 import useAuth from "../../hooks/useAuth";
 import { activityList, seasonList } from "../profile/contents";
 import { Link } from "react-router-dom";
 import { sortByList, regionList, tabMenuList } from "./contents";
 import icon from '../../assets/images/icon-cugate.svg';
+import moment from "moment";
+import { useDropzone } from "react-dropzone";
+import ReactAudioPlayer from "react-audio-player";
 
 export const DashboardPage: React.FC = () => {
     const { user } = useAuth() as any;
@@ -16,6 +19,8 @@ export const DashboardPage: React.FC = () => {
     const [moodList, setMoodList] = useState<any>([]);
     const [stationList, setStationList] = useState<any>([]);
     const [searchStation, setSearchStation] = useState<any>("");
+    const [loading, setLoading] = useState("");
+    const [moreLoading, setMoreLoading] = useState(false);
     const [formData, setFormData] = useState<any>({
         genre: [],
         mood: [],
@@ -24,9 +29,30 @@ export const DashboardPage: React.FC = () => {
         region: "all",
         station:[],
         sort_by: sortByList[0].value,
-        londing: false,
     });
+    const [analyzeClose, setAnalyzeClose] = useState(false);
 
+    const onDrop = useCallback((acceptedFiles: any[]) => {
+        acceptedFiles.map((file) => {
+        //   const reader = new FileReader();
+        //   reader.onload = function (e) {
+        //     analyzeFile.push(e.target.result);
+        //     setAnalyzeFile({...analyzeFile});
+        //   };
+        //   reader.readAsDataURL(file);
+          setAnalyzeFile(file);
+          return file;
+        });
+    }, []);
+    const [analyzeFile, setAnalyzeFile] = useState<any>(null);
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        onDrop,
+        accept: {
+            'audio/mp3': ['.mp3'],
+            'audio/wav': ['.wav']
+        }
+    });
+    
     const [trackSearch, setTrackSearch] = useState<any>({
         pagination:{
             page: 0,
@@ -71,24 +97,51 @@ export const DashboardPage: React.FC = () => {
     }, [user]);
 
     useEffect(()=>{
-        if(formData.loading) return;
-        formData.loading = true;
+        
+    },[tab_menu]);
+
+    useEffect(()=>{
+        if(loading!=="") return;
         if(tab_menu==="tracks"){
+            setLoading("tracks");
             getSearchTrackList({
                 pagination: trackSearch.pagination,
                 filter: formData
             }).then((data)=>{
-                formData.loading = false;
+                setLoading("");
                 setTrackSearch(data.result);
             }).catch((err)=>{
                 console.log(err);
-                formData.loading = false;
+                setLoading("");
             });
         }
     },[formData]);
 
+    const handleMore = () => {
+        if(loading!=="") return;
+        if(tab_menu==="tracks"){
+            let data = trackSearch;
+            data.pagination.page ++;
+            setMoreLoading(true);
+            getSearchTrackList({
+                pagination: data.pagination,
+                filter: formData
+            }).then((res)=>{
+                data.pagination = res.result.pagination;
+                res.result.list.map((r:any)=>{
+                    data.list.push(r);
+                });
+                setTrackSearch({...data});
+                setMoreLoading(false);
+            }).catch((err)=>{
+                console.log(err);
+                setMoreLoading(false);
+            });
+        }
+    };
+
     useEffect(()=>{
-        if(formData.loading) return;
+        if(loading!=="") return;
         if(searchStation!==""&&!formData.station.filter((g:any)=>g===searchStation).length){
             let list = formData.station;
             list.push(searchStation);
@@ -97,7 +150,7 @@ export const DashboardPage: React.FC = () => {
     },[searchStation]);
 
     useEffect(()=>{
-        if(formData.loading) return;
+        if(loading!=="") return;
         if(searchGenre!==""&&!formData.genre.filter((g:any)=>g===searchGenre).length){
             let list = formData.genre;
             list.push(searchGenre);
@@ -117,7 +170,7 @@ export const DashboardPage: React.FC = () => {
     };
 
     const handleMood = (mood: number) => {
-        if(formData.loading) return;
+        if(loading!=="") return;
         let list = [];
         formData.mood.forEach((g:any)=>{
             if(mood !== g) list.push(g);
@@ -129,7 +182,7 @@ export const DashboardPage: React.FC = () => {
     };
 
     const handleActivity = (activity: any) => {
-        if(formData.loading) return;
+        if(loading!=="") return;
         let list = [];
         formData.activity.forEach((g:any)=>{
             if(activity !== g) list.push(g);
@@ -141,7 +194,7 @@ export const DashboardPage: React.FC = () => {
     };
 
     const handleSeason = (season: any) => {
-        if(formData.loading) return;
+        if(loading!=="") return;
         let list = [];
         formData.season.forEach((g:any)=>{
             if(season !== g) list.push(g);
@@ -153,12 +206,12 @@ export const DashboardPage: React.FC = () => {
     };
 
     const setRegion = (v:any) => {
-        if(formData.loading) return;
+        if(loading!=="") return;
         setFormData({...formData,region:v});
     };
 
     const handleStation = (station: any) => {
-        if(formData.loading) return;
+        if(loading!=="") return;
         let list: any[] = [];
         formData.station.forEach((g:any)=>{
             if(station !== g) list.push(g);
@@ -170,11 +223,17 @@ export const DashboardPage: React.FC = () => {
     };
 
     const handleAnalyze = () => {
-        console.log(formData);
+        if(analyzeFile){
+            setTabMenu("analyze");
+            console.log(analyzeFile);
+            getAnalyzeData(analyzeFile).then((data)=>{
+                //
+            });
+        }
     };
 
     const handleSortBy = (val:any) => {
-        if(formData.loading) return;
+        if(loading!=="") return;
         setFormData({...formData, sort_by: val});
     };
 
@@ -191,7 +250,7 @@ export const DashboardPage: React.FC = () => {
                                     textColor="var(--color-blue-light)"
                                     borderColor="var(--color-blue-light)"
                                     className="mb-3 me-3 small-button"
-                                    disabled={formData.loading}
+                                    disabled={loading!==""}
                                     key={"genre_"+genre}
                                 >
                                     {genre}
@@ -212,7 +271,7 @@ export const DashboardPage: React.FC = () => {
                                 itemLabelProperty={"title"}
                                 value={searchGenre}
                                 onChange={setSearchGenre}
-                                disabled={formData.loading}
+                                disabled={loading!==""}
                                 borderColor="var(--color-blue-light)"
                             />
                         </div>
@@ -227,7 +286,7 @@ export const DashboardPage: React.FC = () => {
                                         textColor="white"
                                         borderColor="var(--color-blue-light)"
                                         className="mb-3 me-3 small-button"
-                                        disabled={formData.loading}
+                                        disabled={loading!==""}
                                         key={mood.id}
                                         onClick={()=>handleMood(mood.id)}
                                     >
@@ -239,7 +298,7 @@ export const DashboardPage: React.FC = () => {
                                         textColor="var(--color-blue-light)"
                                         borderColor="var(--color-blue-light)"
                                         className="mb-3 me-3 small-button"
-                                        disabled={formData.loading}
+                                        disabled={loading!==""}
                                         key={mood.id}
                                         onClick={()=>handleMood(mood.id)}
                                     >
@@ -259,7 +318,7 @@ export const DashboardPage: React.FC = () => {
                                         textColor="white"
                                         borderColor="var(--color-blue-light)"
                                         className="mb-3 me-3 small-button"
-                                        disabled={formData.loading}
+                                        disabled={loading!==""}
                                         key={index}
                                         onClick={()=>handleActivity(activity.key)}
                                     >
@@ -271,7 +330,7 @@ export const DashboardPage: React.FC = () => {
                                         textColor="var(--color-blue-light)"
                                         borderColor="var(--color-blue-light)"
                                         className="mb-3 me-3 small-button"
-                                        disabled={formData.loading}
+                                        disabled={loading!==""}
                                         key={index}
                                         onClick={()=>handleActivity(activity.key)}
                                     >
@@ -291,7 +350,7 @@ export const DashboardPage: React.FC = () => {
                                         textColor="white"
                                         borderColor="var(--color-blue-light)"
                                         className="mb-3 me-3 small-button"
-                                        disabled={formData.loading}
+                                        disabled={loading!==""}
                                         key={index}
                                         onClick={()=>handleSeason(season.key)}
                                     >
@@ -303,7 +362,7 @@ export const DashboardPage: React.FC = () => {
                                         textColor="var(--color-blue-light)"
                                         borderColor="var(--color-blue-light)"
                                         className="mb-3 me-3 small-button"
-                                        disabled={formData.loading}
+                                        disabled={loading!==""}
                                         key={index}
                                         onClick={()=>handleSeason(season.key)}
                                     >
@@ -318,7 +377,7 @@ export const DashboardPage: React.FC = () => {
                         <Select
                             items={regionList}
                             textColor="var(--color-blue-light)"
-                            disabled={formData.loading}
+                            disabled={loading!==""}
                             value={formData.region}
                             onChange={setRegion}
                         />
@@ -332,7 +391,7 @@ export const DashboardPage: React.FC = () => {
                                     textColor="var(--color-blue-light)"
                                     borderColor="var(--color-blue-light)"
                                     className="mb-3 me-3 small-button"
-                                    disabled={formData.loading}
+                                    disabled={loading!==""}
                                     key={"station_"+station.radioId}
                                 >
                                     {station.radioName}
@@ -352,7 +411,7 @@ export const DashboardPage: React.FC = () => {
                             items={stationList}
                             itemKeyProperty={"radioId"}
                             itemLabelProperty={"radioName"}
-                            disabled={formData.loading}
+                            disabled={loading!==""}
                             value={searchStation}
                             onChange={setSearchStation}
                             borderColor="var(--color-blue-light)"
@@ -361,26 +420,83 @@ export const DashboardPage: React.FC = () => {
                 </fieldset>
             </aside>
             <div className="col-sm-12 col-md-8 content-wrapper">
-                <div className="file-upload-box text-center">
-                    <img src="upload_cloud.svg" alt="upload"/>
-                    <p>Drag your file here</p>
-                    <DefaultButton
-                        color="var(--color-blue-light)"
-                        textColor="white"
-                        borderColor="var(--color-blue-light)"
-                        className="mb-3"
+                {(!analyzeClose||tab_menu==="analyze")&&(analyzeFile?(
+                    <div
+                        className={"file-upload-box text-center drag-active"}
                     >
-                        Select file to upload
-                    </DefaultButton>
-                    <DefaultButton
-                        color="var(--color-blue-light)"
-                        textColor="white"
-                        borderColor="var(--color-blue-light)"
-                        className="close-btn"
+                        <div className="mt-5 mb-3 title">
+                            {analyzeFile.name}
+                        </div>
+                        <div className="mb-3">
+                            <ReactAudioPlayer
+                                src={URL.createObjectURL(analyzeFile)}
+                                // autoPlay
+                                controls
+                                className=""
+                            />
+                        </div>
+                        <DefaultButton
+                            color="var(--color-blue-light)"
+                            textColor="white"
+                            borderColor="var(--color-blue-light)"
+                            className="me-3"
+                            onClick={()=>setAnalyzeFile(null)}
+                        >
+                            Cancel
+                        </DefaultButton>
+                        <DefaultButton
+                            color="var(--color-blue-light)"
+                            textColor="white"
+                            borderColor="var(--color-blue-light)"
+                            className="mb-3"
+                            onClick={handleAnalyze}
+                        >
+                            Submit
+                        </DefaultButton>
+                        
+                        <DefaultButton
+                            color="var(--color-blue-light)"
+                            textColor="white"
+                            borderColor="var(--color-blue-light)"
+                            className="close-btn"
+                            onClick={()=>setAnalyzeClose(true)}
+                        >
+                            <Icon name="close"/>
+                        </DefaultButton>
+                    </div>
+                ):(
+                    <div
+                        {...getRootProps({ className: "dropzone", accept: "mp3/*" })}
+                        className={"focus file-upload-box text-center" + (isDragActive?" drag-active":"")}
                     >
-                        <Icon name="close"/>
-                    </DefaultButton>
-                </div>
+                        <img src="upload_cloud.svg" alt="upload"/>
+                        <input
+                            className="input-zone"
+                            {...getInputProps()}
+
+                        />
+                        <p className="dropzone-content">
+                            {isDragActive?"Release to drop the files here":"Drag your file here"}
+                        </p>
+                        <DefaultButton
+                            color="var(--color-blue-light)"
+                            textColor="white"
+                            borderColor="var(--color-blue-light)"
+                            className="mb-3"
+                        >
+                            Select file to upload
+                        </DefaultButton>
+                        <DefaultButton
+                            color="var(--color-blue-light)"
+                            textColor="white"
+                            borderColor="var(--color-blue-light)"
+                            onClick={()=>setAnalyzeClose(true)}
+                            className="close-btn"
+                        >
+                            <Icon name="close"/>
+                        </DefaultButton>
+                    </div>
+                ))}
                 <div className="tab-header w-100 mb-2">
                     <ul className="d-flex justify-content-end">
                         {tabMenuList.map((tab)=>(
@@ -406,11 +522,11 @@ export const DashboardPage: React.FC = () => {
                         />
                     </div>
                     <div className="status-header">
-                        <span>total results: {formData.loading?"...":trackSearch.pagination.total}</span>
+                        <span>total results: {loading==="tracks"?"...":trackSearch.pagination.total}</span>
                     </div>
                 </div>
                 <div className="content-body">
-                    {formData.loading?(
+                    {loading!==""?(
                         <div className="loading-widget">
                             <div className="logo-img">
                                 <img src={icon} alt="loading"/>
@@ -426,7 +542,7 @@ export const DashboardPage: React.FC = () => {
                                 <div className="item-header d-flex justify-content-between">
                                     <div className="d-flex flex-column">
                                         <span className="title">{item.title}</span>
-                                        <span className="description">Published: yesterday by John</span>
+                                        <span className="description">Published: {moment(item.update_time).format("DD/MM/YYYY")} by John</span>
                                     </div>
                                     <DefaultButton onClick={handleAnalyze}>Analyze</DefaultButton>
                                 </div>
@@ -477,7 +593,28 @@ export const DashboardPage: React.FC = () => {
                             <>Analyze Developing...</>
                         ):(<></>)
                     )}
-                    
+                    {loading===""&&(
+                    <div
+                        className="row d-flex justify-content-center mt-4 mb-4"
+                    >
+                        <div style={{width: '200px',textAlign:'center'}}>
+                            <DefaultButton
+                                color="white"
+                                textColor="var(--color-blue-light)"
+                                borderColor="var(--color-blue-light)"
+                                className={"mb-3 me-3"+(tab_menu==="tracks"&&trackSearch.pagination.page<trackSearch.pagination.pages-1?"":" display-none")}
+                                disabled={trackSearch.pagination.page>=trackSearch.pagination.pages-1}
+                                onClick={()=>handleMore()}
+                            >
+                                {moreLoading?(
+                                    <Icon name="loading"/>
+                                ):(
+                                    "More"
+                                )}
+                            </DefaultButton>
+                        </div>
+                    </div>
+                    )}
                 </div>
             </div>
         </div>

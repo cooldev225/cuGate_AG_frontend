@@ -61,6 +61,14 @@ export async function getSearchTrackList(params) {
   else return [];
 }
 
+export async function getAnalyzeData(file) {
+  //let formData = new FormData();
+  //formData.append("file", file);
+  const response = await axios.post("/getAnalyzeData", {file:file});
+  if (response.status === 200) return response.data;
+  else return [];
+}
+
 export async function getGeoInfo(lat, long) {
   let data = {
     lat: lat,

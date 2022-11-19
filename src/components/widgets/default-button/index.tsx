@@ -3,19 +3,19 @@ import styled from "styled-components";
 import "../../../assets/scss/widgets/button.scss";
 import { Icon } from "../icons";
 
-type Props = ButtonProps;
-
 const Container = styled.button`
   --cugate-button-color: ${(props) => props.theme.color};
   --cugate-button-text-color: ${(props) => props.theme.textColor};
   --cugate-button-border-color: ${(props) => props.theme.borderColor};
   --cugate-button-border-radius: ${(props) => props.theme.borderRadius}px;
+  --cugate-button-width: ${(props) => props.theme.width};
 `;
 
-export const DefaultButton: React.FC<Props> = (props) => {
+export const DefaultButton: React.FC<ButtonProps> = (props) => {
   const {
     className,
     disabled,
+    width="100%",
     color = "var(--color-blue-dark)",
     textColor = "white",
     borderColor,
@@ -53,6 +53,7 @@ export const DefaultButton: React.FC<Props> = (props) => {
         textColor:textColor,
         borderColor:borderColor,
         borderRadius:borderRadius,
+        width:width,
       }}
       type={props.type==="submit"?"submit":"button"}
     >
