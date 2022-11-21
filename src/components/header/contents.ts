@@ -13,32 +13,50 @@ export const menuList: {
     {
         key: "cumarket",
         text: "CuMarket",
-        url: "/cumarket",//"https://www.cumarket.net",
+        url: "https://www.cumarket.net", //"/cumarket",
         icon: 1,
+    },
+    {
+        key: "cucontent",
+        text: "CuContent",
+        url: "http://catalog.cugate.com/",
+        icon: 6,
     },
     {
         key: "cuview",
         text: "CuView",
-        url: "/cuview",//"https://cumarket.net/ytb/a-1-n",
+        url: "https://cumarket.net",// "/cuview",
         icon: 2,
     },
     {
         key: "curadio",
         text: "CuRadio",
-        url: "/curadio",//"https://curadio.cugate.com",
+        url: "https://curadio.cugate.com", //"/curadio",
         icon: 3,
     },
     {
         key: "cutrack",
         text: "CuTrack",
-        url: "/cutrack",//"http://curadio.net",
+        url: "http://curadio.net", //"/cutrack",
         icon: 4,
     },
     {
         key: "playlists",
         text: "Playlists",
-        url: "/playlists",//"https://playlists.cugate.com",
+        url: "https://playlists.cugate.com", //"/playlists",
         icon: 5,
+    },
+    {
+        key: "dashboard",
+        text: "Dashboard",
+        url: "http://dashboard.cugate.com/",
+        icon: 7,
+    },
+    {
+        key: "cusync",
+        text: "CuSync",
+        url: "http://cusync.cugate.com/index.html",
+        icon: 8,
     },
 ];
   

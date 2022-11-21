@@ -117,6 +117,12 @@ export const teamList:{
         role: "Representative Asia, Taipei, Taiwan",
         description: "Served as Chairman of Taipei Audio-Video production Association. Work involved in drama, music, publishing, comics, cartoons, online games, copyright promotion and management, and sound quality optimization technology."
       },
+      {
+        avatar: "Xun-Xing.png",
+        name: "Xun Xing",
+        role: "Full-Stack Developer",
+        description: "Xun Xing is a normal human being who loves art. He is also a full-stack developer with extensive website building experience. Although he has a walking disability, he spends most of his time programming at home and finds the only happiness in his life in growing a project."
+      },
     ]
   },
   {

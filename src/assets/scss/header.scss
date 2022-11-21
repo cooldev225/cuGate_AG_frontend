@@ -10,7 +10,7 @@ nav.uk-light {
             column-gap: 0.25em;
             box-sizing: border-box;
             min-height: 80px;
-            padding: 0 15px;
+            padding: 0 5px;
             font-size: .875rem;
             font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
             text-decoration: none;
@@ -85,6 +85,27 @@ nav.uk-light {
                 line-height: 1.5;
             }
         }
+        .hidden-small-width{
+            display: block;
+            @media (max-width: 1550px){
+                display: none;
+            }
+            @media (max-width: 1200px){
+                display: block;
+            }
+            @media (max-width: 830px){
+                display: none;
+            }
+        }
+        .hidden-smaller-width li span{
+            display: block;
+            @media (max-width: 1200px){
+                display: none;
+            }
+        }
+    }
+    .force-stratch-width{
+        max-width: unset!important;
     }
 }
 nav.uk-navbar-container{

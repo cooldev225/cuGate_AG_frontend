@@ -53,16 +53,16 @@ export const Header: React.FC = () => {
         }, 500)}
       >
         <div className="uk-background-secondary">
-          <div className="uk-container uk-container-large">
+          <div className="uk-container uk-container-large force-stratch-width">
             <div className="uk-navbar">
               <div className="uk-navbar-left">
-                <ul className="uk-navbar-nav uk-text-large">
+                <ul className="uk-navbar-nav uk-text-large hidden-smaller-width">
                   {
                     menuList.map((value,index)=>(
                       <li key={index} className={activeItem===value.key?"uk-active":""} onClick={()=>setActiveItem(value.key)}>
                         <Link onClick={(e)=>{e.preventDefault();navigate(value.url);}} to={""}>
                           <img alt={value.text} src={icons[value.icon]} style={{width:'32px'}}/>
-                          <span className="uk-margin-small-left uk-visible@m"> 
+                          <span className="uk-margin-smaller-left uk-visible@m"> 
                             {value.text}
                           </span>
                         </Link>
@@ -75,7 +75,7 @@ export const Header: React.FC = () => {
                 <ul className="uk-navbar-nav uk-text-small">
                   {
                     menuRightList.map((value,index)=>(
-                      <li key={index} className={activeItem===value.key?"uk-active":""} onClick={()=>setActiveItem(value.key)}>
+                      <li key={index} className={"hidden-small-width "+(activeItem===value.key?"uk-active":"")} onClick={()=>setActiveItem(value.key)}>
                         <Link onClick={(e)=>{e.preventDefault();navigate(value.url);}} to={""}>
                           {value.text}
                         </Link>
@@ -84,7 +84,7 @@ export const Header: React.FC = () => {
                   }
                   {
                     isAuthenticated?(
-                      <li className="d-flex tools-bar-right">
+                      <li className="ms-2 d-flex tools-bar-right">
                         <img alt="alam" className="focus me-2" src={alam_icon} style={{width:'24px'}}/>
                         <img 
                           onClick={()=>setUserMenuToggle(!userMenuToggle)}
@@ -123,7 +123,7 @@ export const Header: React.FC = () => {
                         </ul>
                       </li>
                     ):(
-                      <li className="tools-bar-right">
+                      <li className="ms-2 tools-bar-right">
                         <Link onClick={(e)=>{e.preventDefault();navigate('login');}} to={""}>
                           <img alt="logout" src={user_icon} style={{width:'24px',marginRight:5}}/>Login
                         </Link>

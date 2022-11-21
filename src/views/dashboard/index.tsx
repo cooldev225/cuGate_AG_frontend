@@ -34,17 +34,18 @@ export const DashboardPage: React.FC = () => {
 
     const onDrop = useCallback((acceptedFiles: any[]) => {
         acceptedFiles.map((file) => {
-        //   const reader = new FileReader();
-        //   reader.onload = function (e) {
-        //     analyzeFile.push(e.target.result);
-        //     setAnalyzeFile({...analyzeFile});
-        //   };
-        //   reader.readAsDataURL(file);
-          setAnalyzeFile(file);
-          return file;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                console.log(e.target?.result);
+                _setAnalyzeFile(e.target?.result);
+            };
+            reader.readAsDataURL(file);
+            setAnalyzeFile(file);
+            return file;
         });
     }, []);
     const [analyzeFile, setAnalyzeFile] = useState<any>(null);
+    const [_analyzeFile, _setAnalyzeFile] = useState<any>(null);
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         accept: {
@@ -225,8 +226,7 @@ export const DashboardPage: React.FC = () => {
     const handleAnalyze = () => {
         if(analyzeFile){
             setTabMenu("analyze");
-            console.log(analyzeFile);
-            getAnalyzeData(analyzeFile).then((data)=>{
+            getAnalyzeData(_analyzeFile).then((data)=>{
                 //
             });
         }
