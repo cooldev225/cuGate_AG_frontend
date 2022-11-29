@@ -32,6 +32,7 @@ export const SubscribePage: React.FC = () => {
             setLong(coords.longitude);
             if(lat>-1000000&&long>-1000000){
                 await setAddress(coords.latitude, coords.longitude);
+                console.log(["getUserInfo_console subscribe setaddress"]);
                 await getUserInfo().then((data) => {
                     dispatch({
                         type: "INITIALISE",
@@ -43,7 +44,7 @@ export const SubscribePage: React.FC = () => {
                 });
             }
           }, (error) => {
-            console.log('Something went wrong getting your position!')
+            console.log('Something went wrong getting your position!\n' + error)
           })
         }
     }
@@ -52,7 +53,7 @@ export const SubscribePage: React.FC = () => {
             navigate("/profile");
         }
         getUserCoordinates();
-        if(activeKind == -1 && user){
+        if(activeKind === -1 && user){
             setActiveKind(user?.is_business);
         }
     },[user]);
@@ -68,6 +69,7 @@ export const SubscribePage: React.FC = () => {
                 is_business: activeKind,
                 is_subscribe: 1
             });
+            console.log(["getUserInfo_console subscribe setkind"]);
             await getUserInfo().then((data) => {
                 dispatch({
                     type: "INITIALISE",
@@ -90,6 +92,7 @@ export const SubscribePage: React.FC = () => {
         //     payload: "subscribe-categories",
         // });
         await setUserInfo({is_subscribe: 1});
+        console.log(["getUserInfo_console subscribe issubscribe"]);
         await getUserInfo().then((data) => {
             dispatch({
                 type: "INITIALISE",
@@ -136,7 +139,6 @@ export const SubscribePage: React.FC = () => {
                     <DefaultButton textColor='var(--color-orange)' onClick={submitKind}>Continue</DefaultButton>
                 </div>
             )}
-            
         </div>
     );
 };

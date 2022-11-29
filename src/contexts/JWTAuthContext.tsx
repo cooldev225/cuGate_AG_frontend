@@ -74,18 +74,20 @@ const isValidToken = (accessToken: string): boolean => {
 
 const setSession = (accessToken: string | null): void => {
   if (accessToken) {
-    localStorage.setItem("accessToken", accessToken);
+    window.localStorage.setItem("accessToken", accessToken);
     axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
   } else {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("userinfo");
+    window.localStorage.removeItem("accessToken");
+    window.localStorage.removeItem("userinfo");
     delete axios.defaults.headers.common.Authorization;
   }
 };
 
 const reducer = (state: AuthState, action: Action): AuthState => {
+  console.log(["const reducer = (state: action.type=", action.type]);
   switch (action.type) {
     case "INITIALISE": {
+      console.log(["const reducer = (state: AuthState>>>>>>>>>>>>>>>>>>>>"]);
       const { isAuthenticated, user } = action.payload;
       return {
         ...state,
@@ -134,7 +136,6 @@ const AuthContext = createContext<AuthContextValue>({
 });
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
-  const navigate = useNavigate();
   const [state, dispatch] = useReducer(reducer, initialAuthState);
   const login = async (formData: any) => {
     return await loginAction(formData)
@@ -142,6 +143,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       if(data.result.code == STATUS_CODE.AUTH.SUCCESS_LOGIN){
         setSession(data.result.token);
       }
+      console.log(["getUserInfo_console jwtlogin"]);
       await getUserInfo()
         .then((data) => {
           dispatch({
@@ -163,7 +165,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const logout = () => {
     setSession(null);
     dispatch({ type: "LOGOUT" });
-    navigate('/');
+    window.location.href='/login';
   };
 
   const register = async (formData: any) => {
@@ -172,6 +174,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       if(data.result.code == STATUS_CODE.AUTH.SUCCESS_LOGIN){
         setSession(data.result.token);
       }
+      console.log(["getUserInfo_console jwtregister"]);
       await getUserInfo()
         .then((data) => {
           dispatch({
@@ -198,11 +201,12 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
           setSession(accessToken);
           const userinfo = window.localStorage.getItem("userinfo");
           if(userinfo == undefined || userinfo == null){
+            console.log(["getUserInfo_console jwtinit"]);
             await getUserInfo()
             .then((data) => {
               const accept = window.localStorage.getItem("acceptCookie");
               if(accept){
-                localStorage.setItem("userinfo", JSON.stringify(data.result));
+                window.localStorage.setItem("userinfo", JSON.stringify(data.result));
               }
               dispatch({
                 type: "INITIALISE",

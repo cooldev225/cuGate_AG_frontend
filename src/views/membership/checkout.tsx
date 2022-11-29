@@ -24,7 +24,7 @@ export const CheckoutPage: React.FC = () => {
     const monthsByLevel = [1,3,6,12,48];
 
     useEffect(()=>{
-        if(user.profile.membership_level && plan.id && user.profile.membership_level===plan.id){
+        if(user&&user.profile&&user.profile.membership_level && plan.id && user.profile.membership_level===plan.id){
             navigate('/profile');
         }
     },[user, plan]);
@@ -74,6 +74,7 @@ export const CheckoutPage: React.FC = () => {
                 membership_expire: moment().add(monthsByLevel[duration], "months").format("YYYY-MM-DD hh:mm"),
                 amount: total,
             });
+            console.log(["getUserInfo_console checkout"]);
             await getUserInfo().then((data) => {
                 dispatch({
                     type: "INITIALISE",

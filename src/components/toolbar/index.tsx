@@ -8,8 +8,10 @@ import moment from "moment";
 import { getGenres, getMoods, getUserInfo } from "../../actions/user";
 import { useDispatch } from "react-redux";
 import { activityList, seasonList } from "../../views/profile/contents";
+import { useLocation } from "react-router";
 
 export const Toolbar: React.FC = () => {
+  const location = useLocation();
   const Container = styled.nav``;
   const { user } = useAuth() as any;
   const [info,setInfo] = useState({
@@ -56,20 +58,25 @@ export const Toolbar: React.FC = () => {
         filtered_data = seasonList.filter((g:any)=>favorite_seasons.filter((f:any)=>f === g.key).length);
         _setSeasonList(filtered_data);
       }else{
-        await getUserInfo().then((data) => {
-          dispatch({
-            type: "INITIALISE",
-            payload: {
-              isAuthenticated: true,
-              user: data.result,
-            },
-          });
-        });
+        console.log(["getUserInfo_console toolsbar"]);
+        // await getUserInfo().then((data) => {
+        //   dispatch({
+        //     type: "INITIALISE",
+        //     payload: {
+        //       isAuthenticated: true,
+        //       user: data.result,
+        //     },
+        //   });
+        // });
+        // setTimeout(() => {
+          window.location.href=location.pathname;
+        // }, 200);
       }
     }
   }
   useEffect(()=>{
     initialise();
+    console.log(["getUserInfo_console toolbar user=", user]);
   },[user]);
   return (
     <Container className="d-flex w-100 px-10 toolbar">

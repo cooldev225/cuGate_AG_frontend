@@ -6,7 +6,14 @@ export async function loginAction(data) {
   Object.keys(data).forEach((key) => {
     formData.append(key, data[key]);
   });
-  const response = await axios.post("/login", formData);
+  const response = await axios.post("/login", formData,
+    {
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        "Access-Control-Allow-Origin": "*",
+      }
+    }
+  );
   if (response.status === 200) return response.data;
   else return [];
 }
@@ -23,7 +30,9 @@ export async function registerAction(data) {
 
 export async function getUserInfo() {
   const response = await axios.post("/getUserInfo", {});
-  if (response.status === 200) return response.data;
+  if (response.status === 200){
+    return response.data;
+  }
   else return [];
 }
 
@@ -61,12 +70,30 @@ export async function getSearchTrackList(params) {
   else return [];
 }
 
-export async function getAnalyzeData(file) {
-  //let formData = new FormData();
-  //formData.append("file", file);
-  const response = await axios.post("/getAnalyzeData", {file:file});
+export async function uploadTrackToAnalyze(file) {
+  let formData = new FormData();
+  formData.append("musicFile", file);
+  const response = await axios.post(
+    "/uploadTrackToAnalyze",
+    formData,
+    {
+      headers: {}
+    }
+  );
   if (response.status === 200) return response.data;
-  else return [];
+}
+
+export async function getAnalyzeTrackInfo(data) {
+  let formData = new FormData();
+  formData.append("filename", data.filename);
+  const response = await axios.post(
+    "/getAnalyzeTrackInfo",
+    formData,
+    {
+      headers: {}
+    }
+  );
+  if (response.status === 200) return response.data;
 }
 
 export async function getGeoInfo(lat, long) {

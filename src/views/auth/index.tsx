@@ -2,7 +2,7 @@ import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../assets/scss/auth.scss';
 import Form from 'react-bootstrap/Form';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useHref, useNavigate } from 'react-router-dom';
 import GoogleLogin from "react-google-login";
 import FacebookLogin from "react-facebook-login";
 import { SOCIAL_KEYS } from "../../constants";
@@ -28,7 +28,7 @@ export const AuthPage: React.FC<{page: number}> = (props) => {
         lat: 52.48546014466491, 
         lon: 13.34604,
     };
-    const { login,register,isAuthenticated } = useAuth() as any;
+    const { login,logout,register,isAuthenticated } = useAuth() as any;
     const { page } = useSelector((state:StoreState) => state.auth);
     const [activeMenu, setActiveMenu] = useState(menuList[0]);
     const [validated, setValidated] = useState(false);
@@ -50,7 +50,9 @@ export const AuthPage: React.FC<{page: number}> = (props) => {
                 const { coords } = position;
                 if(coords.latitude>-1000000&&coords.longitude>-1000000){
                     setAddress(coords.latitude, coords.longitude).then(()=>{
+                        console.log(["getUserInfo_console auth getUserCoordinates"]);
                         getUserInfo().then((data) => {
+                            console.log(["getUserInfo_console auth getUserCoordinates ", data.result]);
                             dispatch({
                                 type: "INITIALISE",
                                 payload: {
@@ -74,7 +76,9 @@ export const AuthPage: React.FC<{page: number}> = (props) => {
 
     const setDefaultLocation = () => {
         setAddress(ourLocation.lat, ourLocation.lon).then(()=>{
+            console.log(["getUserInfo_console setDefaultLocation"]);
             getUserInfo().then((data) => {
+                console.log(["getUserInfo_console setDefaultLocation", data.result]);
                 dispatch({
                     type: "INITIALISE",
                     payload: {
@@ -157,17 +161,17 @@ export const AuthPage: React.FC<{page: number}> = (props) => {
             await register(postData).then(async (res: any)=>{
                 if(res.code === STATUS_CODE.AUTH.SUCCESS_LOGIN){
                     await getUserCoordinates();
-                    if(res.is_subscribe===undefined||!res.is_subscribe||res.is_subscribe===0){
-                        navigate("/profile/subscribe");
-                    }else{
-                        navigate(activeMenu.url);
-                    }
                     res.message = "Registration successful!";
-                    
-                }
-                setTimeout(() => {
                     toast(res.message);
-                }, 200);
+                    setTimeout(() => {
+                        logout();
+                    }, 500);
+                    // if(res.is_subscribe===undefined||!res.is_subscribe||res.is_subscribe===0){
+                    //     navigate("/profile/subscribe");
+                    // }else{
+                    //     navigate(activeMenu.url);
+                    // }
+                }
             });
             setLoading(false);
         }

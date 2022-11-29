@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import "../../assets/scss/dashboard.scss";
 import { AutoComplete, DefaultButton, Icon, Select } from "../../components/widgets";
-import { getAnalyzeData, getFilterStations, getGenres, getMoods, getSearchTrackList } from "../../actions/user";
+import { uploadTrackToAnalyze, getAnalyzeTrackInfo, getFilterStations, getGenres, getMoods, getSearchTrackList } from "../../actions/user";
 import useAuth from "../../hooks/useAuth";
 import { activityList, seasonList } from "../profile/contents";
 import { Link } from "react-router-dom";
@@ -36,8 +36,13 @@ export const DashboardPage: React.FC = () => {
         acceptedFiles.map((file) => {
             const reader = new FileReader();
             reader.onload = function (e) {
-                console.log(e.target?.result);
-                _setAnalyzeFile(e.target?.result);
+                // console.log(e.target?.result);
+                setTabMenu("analyze");
+                setLoading("analyze");
+                uploadTrackToAnalyze(file).then((data: any)=>{
+                    setLoading("");
+                    setUploadedFile(data.data);
+                });
             };
             reader.readAsDataURL(file);
             setAnalyzeFile(file);
@@ -45,7 +50,8 @@ export const DashboardPage: React.FC = () => {
         });
     }, []);
     const [analyzeFile, setAnalyzeFile] = useState<any>(null);
-    const [_analyzeFile, _setAnalyzeFile] = useState<any>(null);
+    const [uploadedFile, setUploadedFile] = useState<any>(null);
+    const [uploadedFileDiv, setUploadedFileDiv] = useState<any>("");
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         accept: {
@@ -65,7 +71,7 @@ export const DashboardPage: React.FC = () => {
     });
 
     useEffect(()=>{
-        if(user){
+        if(user&&user.profile){
             getMoods().then((data) => {
                 setMoodList(data.result);
                 if(user.profile?.favorite_moods!==""){
@@ -224,10 +230,12 @@ export const DashboardPage: React.FC = () => {
     };
 
     const handleAnalyze = () => {
-        if(analyzeFile){
+        if(uploadedFile){
             setTabMenu("analyze");
-            getAnalyzeData(_analyzeFile).then((data)=>{
-                //
+            setLoading("analyze");
+            getAnalyzeTrackInfo(uploadedFile).then((data: any)=>{
+                setLoading("");
+                setUploadedFileDiv(data.data);
             });
         }
     };
@@ -435,25 +443,33 @@ export const DashboardPage: React.FC = () => {
                                 className=""
                             />
                         </div>
-                        <DefaultButton
-                            color="var(--color-blue-light)"
-                            textColor="white"
-                            borderColor="var(--color-blue-light)"
-                            className="me-3"
-                            onClick={()=>setAnalyzeFile(null)}
-                        >
-                            Cancel
-                        </DefaultButton>
-                        <DefaultButton
-                            color="var(--color-blue-light)"
-                            textColor="white"
-                            borderColor="var(--color-blue-light)"
-                            className="mb-3"
-                            onClick={handleAnalyze}
-                        >
-                            Submit
-                        </DefaultButton>
-                        
+                        {(loading!=="analyze"||loading==="analyze"&&uploadedFile!==null)&&(
+                            <Fragment>
+                                <DefaultButton
+                                    color="var(--color-blue-light)"
+                                    textColor="white"
+                                    borderColor="var(--color-blue-light)"
+                                    className="me-3"
+                                    onClick={()=>{setAnalyzeFile(null);setUploadedFile(null);}}
+                                >
+                                    Cancel
+                                </DefaultButton>
+                                <DefaultButton
+                                    color="var(--color-blue-light)"
+                                    textColor="white"
+                                    borderColor="var(--color-blue-light)"
+                                    className="mb-3"
+                                    disabled={uploadedFileDiv}
+                                    onClick={handleAnalyze}
+                                >
+                                    {loading==="analyze"?(
+                                        <Icon name='loading'/>
+                                    ):(
+                                        "Submit"
+                                    )}
+                                </DefaultButton>
+                            </Fragment>
+                        )}
                         <DefaultButton
                             color="var(--color-blue-light)"
                             textColor="white"
@@ -475,6 +491,7 @@ export const DashboardPage: React.FC = () => {
                             {...getInputProps()}
 
                         />
+                      
                         <p className="dropzone-content">
                             {isDragActive?"Release to drop the files here":"Drag your file here"}
                         </p>
@@ -510,6 +527,7 @@ export const DashboardPage: React.FC = () => {
                         ))}
                     </ul>
                 </div>
+                {tab_menu!=="analyze"&&(
                 <div className="content-header d-flex justify-content-between mb-2">
                     <div className="sort-by-header d-flex">
                         <label className="d-flex align-items-center">Sort By: </label>
@@ -525,6 +543,7 @@ export const DashboardPage: React.FC = () => {
                         <span>total results: {loading==="tracks"?"...":trackSearch.pagination.total}</span>
                     </div>
                 </div>
+                )}
                 <div className="content-body">
                     {loading!==""?(
                         <div className="loading-widget">
@@ -590,7 +609,7 @@ export const DashboardPage: React.FC = () => {
                         ):tab_menu==="stations"?(
                             <>Stations Developing...</>
                         ):tab_menu==="analyze"?(
-                            <>Analyze Developing...</>
+                            <div id="ajaxContentRow" dangerouslySetInnerHTML={{__html: uploadedFileDiv}}></div>
                         ):(<></>)
                     )}
                     {loading===""&&(

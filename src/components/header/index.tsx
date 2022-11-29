@@ -15,7 +15,7 @@ export const Header: React.FC = () => {
   const navigate = useNavigate();
   const [activeItem, setActiveItem] = useState('cugate');
   const [noMenu, setNoMenu] = useState(true);
-  const { logout, isAuthenticated, user } = useAuth() as any;
+  const { logout, isAuthenticated } = useAuth() as any;
   const [userMenuToggle, setUserMenuToggle] = useState(false);
 
   useEffect(() => {
@@ -60,12 +60,24 @@ export const Header: React.FC = () => {
                   {
                     menuList.map((value,index)=>(
                       <li key={index} className={activeItem===value.key?"uk-active":""} onClick={()=>setActiveItem(value.key)}>
-                        <Link onClick={(e)=>{e.preventDefault();navigate(value.url);}} to={""}>
+                        {value.url.indexOf("http")===-1?(
+                        <Link
+                          onClick={(e)=>{e.preventDefault();navigate(value.url);}}
+                          to={""}
+                        >
                           <img alt={value.text} src={icons[value.icon]} style={{width:'32px'}}/>
                           <span className="uk-margin-smaller-left uk-visible@m"> 
                             {value.text}
                           </span>
                         </Link>
+                        ):(
+                        <a href={value.url}>
+                          <img alt={value.text} src={icons[value.icon]} style={{width:'32px'}}/>
+                          <span className="uk-margin-smaller-left uk-visible@m"> 
+                            {value.text}
+                          </span>
+                        </a>
+                        )}
                       </li>
                     ))
                   }

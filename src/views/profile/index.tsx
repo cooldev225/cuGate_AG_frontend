@@ -110,7 +110,7 @@ export const ProfilePage: React.FC = () => {
         setTimeout(() => {
             setShowMap(true);
         }, 1000);
-        if(user){
+        if(user&&user.profile){
             formData.first_name = user.profile.first_name?user.profile.first_name:"";
             formData.last_name = user.profile.last_name?user.profile.last_name:"";
             formData.username = user.account;
@@ -176,9 +176,11 @@ export const ProfilePage: React.FC = () => {
                 company: formData.company_name,
                 tel: formData.mobile_number,            
             });
+            console.log(["getUserInfo_console profile 01"]);
             await getUserInfo().then((data) => {
+                console.log(["getUserInfo_console profile 01 dispatch", data.result]);
                 dispatch({
-                    type: "INITIALISE",
+                    type: "INITIsssALISE",
                     payload: {
                       isAuthenticated: true,
                       user: data.result,
@@ -282,6 +284,7 @@ export const ProfilePage: React.FC = () => {
             }
         );
         await setAddress(e.lat,e.lng);
+        console.log(["getUserInfo_console profile 02"]);
         await getUserInfo().then((data) => {
             dispatch({
                 type: "INITIALISE",
