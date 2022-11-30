@@ -10,6 +10,7 @@ import icon from '../../assets/images/icon-cugate.svg';
 import moment from "moment";
 import { useDropzone } from "react-dropzone";
 import ReactAudioPlayer from "react-audio-player";
+import AnalyseView from "../../components/dashboard/analyseView";
 
 export const DashboardPage: React.FC = () => {
     const { user } = useAuth() as any;
@@ -609,7 +610,7 @@ export const DashboardPage: React.FC = () => {
                         ):tab_menu==="stations"?(
                             <>Stations Developing...</>
                         ):tab_menu==="analyze"?(
-                            <div id="ajaxContentRow" dangerouslySetInnerHTML={{__html: uploadedFileDiv}}></div>
+                            <AnalyseView data={uploadedFileDiv}/>
                         ):(<></>)
                     )}
                     {loading===""&&(

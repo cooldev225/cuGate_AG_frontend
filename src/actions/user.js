@@ -87,7 +87,7 @@ export async function getAnalyzeTrackInfo(data) {
   let formData = new FormData();
   formData.append("filename", data.filename);
   const response = await axios.post(
-    "/getAnalyzeTrackInfo",
+    "/getAnalyzeTrackInfoJson",
     formData,
     {
       headers: {}

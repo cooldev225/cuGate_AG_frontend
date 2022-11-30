@@ -1,0 +1,156 @@
+#ajaxContentRow{
+    .container{
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    #resultsSectionHeader {
+        background-color: #03799a;
+        text-transform: uppercase;
+        padding: 2rem 0 0.5rem 0;
+        font-size: 3.5rem;
+        text-align: center;
+        font-weight: 900;
+        .darkblue {
+            color: #00c7d4;
+        }
+        .lightblue {
+            color: #bdd6e9;
+        }
+    }
+    #mainResultsContWrapper{
+        background-color:#026688;
+        .result-main{
+            margin: 4rem 0;
+            font-family: "Axiforma";
+            .res-wrapper {
+                display: flex;
+                width: 100%;
+            }
+            .res-info {
+                padding-left: 50px;
+                display: flex;
+                flex-direction: column;
+                align-content: space-between;
+                justify-content: space-between;
+                width: 100%;
+            }
+            .res-info-main {
+                position: relative;
+                min-height: 5rem;
+                margin-bottom: 2rem;
+            }
+            .track-title-members {
+                margin-left: 5rem;
+            }
+            .track-title, .track-title a {
+                color: white;
+                font-size: 18px;
+                font-weight: bolder;
+            }
+            .track-members, .track-members a {
+                color: white;
+                font-size: 14px;
+            }
+            .track-portal-links, .sim_block .track-portal-links {
+                display: flex;
+                flex-wrap: wrap;
+            }
+            .portal_block {
+                margin-top: 5px;
+            }
+            .portal_block, .sim_block .portal_block {
+                width: 36px;
+                height: 36px;
+                margin-right: 5px;
+                border-radius: 5px;
+            }
+            .portal_img, .sim_block .portal_img {
+                width: 36px;
+                height: 36px;
+                border-radius: 10px;
+                background-size: 100%;
+                background-size: cover;
+                -webkit-background-size: cover;
+                -moz-background-size: cover;
+                -o-background-size: cover;
+                background-size: cover;
+                background-position: center center;
+                border: 1px solid transparent;
+            }
+            .album-cover {
+                min-width: 100px;
+                max-width: 200px;
+                max-height: 200px;
+                object-fit: contain;
+                background-color: white;
+                box-shadow: 15px 10px 30px -5px rgb(0 0 0 / 50%);
+                -webkit-box-shadow: 15px 10px 30px -5px rgb(0 0 0 / 50%);
+                -moz-box-shadow: 15px 10px 30px -5px rgba(0,0,0,0.5);
+                border: 3px solid white;
+            }
+            .track-matchpercent{
+                background: #fff902;
+                color: #037a9a;
+                border-radius: 50%;
+                width: 3.5rem;
+                height: 3.5rem;
+                padding: 1rem 0;
+                font-weight: bold;
+                display: flex;
+                justify-content: center;
+                align-items: baseline;
+                border: 2px solid transparent;
+            }
+            .track-searchtype {
+                color: #fff902;
+            }
+            .track-searchtype {
+                margin-top: 0.5rem;
+                text-align: center;
+            }
+            .track-title-members {
+                margin-left: 5rem;
+            }
+        } 
+        #monitoringContWrapper{
+            #monitoringTabContent{
+                .tab-pane{
+                    #radioMonitoringTabContent{
+                        background-color: white;
+                    }
+                    #youtubeTabContent{
+                        .video-in-tab{
+                            background-color: #bdd6e9;
+                        }
+                        .yt-analyse-result{
+                            background-color: #8cb4d5;
+                        }
+                        .yt-cugate-services{
+                            background-color: #026688;
+                        }
+                        .yt-ft-similars{
+                            background-color: #10183a;
+                        }
+                        .search-bar-in-tab{
+                            background-color: #047b9b;
+                            &> .container-fluid{
+                                max-width: 1000px;
+                                margin: 0 auto;
+                            }
+                        }
+                        .yt-related-videos{
+                            background-color: white;
+                            &> .container-fluid{
+                                max-width: 1000px;
+                                background-color:white;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        #expandedTabWrapper{
+            background-color: white;
+        }
+    }
+}
