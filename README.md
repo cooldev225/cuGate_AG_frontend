@@ -30,3 +30,8 @@ https://www.figma.com/file/RiCYTBxcJJcuAC0CVQeTFU/CuGate?node-id=0%3A1&t=QrwskEI
 
 https://www.figma.com/file/wuYoYP6Oq72lcVhzDYItYr/VeoBarcode?node-id=501%3A2&t=bwCpwY5IKPika0z2-0
 
+https://www.elastic.co/guide/en/elasticsearch/reference/current/zip-windows.html
+Username
+elastic
+Password
+TVnM9cpsM1Hiq4WfAxe2bGO9

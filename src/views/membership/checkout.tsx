@@ -7,13 +7,11 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { PAYMENT_KEYS } from "../../constants";
 import { getUserInfo, setUserInfo } from "../../actions/user";
 import moment from "moment";
-import { useDispatch } from "react-redux";
 import useAuth from "../../hooks/useAuth";
 
 export const CheckoutPage: React.FC = () => {
-    const { user } = useAuth() as any;
+    const { user, dispatchUser } = useAuth() as any;
     const { id } = useParams();
-    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [plan, setPlan] = useState<any>({
         title: "",
@@ -74,15 +72,8 @@ export const CheckoutPage: React.FC = () => {
                 membership_expire: moment().add(monthsByLevel[duration], "months").format("YYYY-MM-DD hh:mm"),
                 amount: total,
             });
-            console.log(["getUserInfo_console checkout"]);
             await getUserInfo().then((data) => {
-                dispatch({
-                    type: "INITIALISE",
-                    payload: {
-                      isAuthenticated: true,
-                      user: data.result,
-                    },
-                });
+                dispatchUser(data.result);
             });
             navigate('/profile');
         }

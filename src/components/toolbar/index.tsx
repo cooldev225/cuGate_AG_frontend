@@ -8,12 +8,10 @@ import moment from "moment";
 import { getGenres, getMoods, getUserInfo } from "../../actions/user";
 import { useDispatch } from "react-redux";
 import { activityList, seasonList } from "../../views/profile/contents";
-import { useLocation } from "react-router";
 
 export const Toolbar: React.FC = () => {
-  const location = useLocation();
   const Container = styled.nav``;
-  const { user } = useAuth() as any;
+  const { user, dispatchUser } = useAuth() as any;
   const [info,setInfo] = useState({
     country: "Germany",
     city: "Berlin",
@@ -25,11 +23,14 @@ export const Toolbar: React.FC = () => {
   const [moodList, setMoodList] = useState<any>([]);
   const [_activityList, _setActivityList] = useState<any>([]);
   const [_seasonList, _setSeasonList] = useState<any>([]);
-  const dispatch = useDispatch();
 
   const initialise = async () => {
-    if(user&&user.geo_info.lat!==61.52401&&user.geo_info.lon!==105.318756){
-      setInfo({
+    if(user&&user.geo_info.country!=null){
+      if(user.geo_info.lat===61.52401&&user.geo_info.lon===105.318756){
+        user.geo_info.country = "Germany";
+        user.geo_info.city = "Berlin";
+      }
+      await setInfo({
         country : user.geo_info?.country,
         city : user.geo_info?.city,
         temperature: user.geo_info?.temperature,
@@ -58,25 +59,17 @@ export const Toolbar: React.FC = () => {
         filtered_data = seasonList.filter((g:any)=>favorite_seasons.filter((f:any)=>f === g.key).length);
         _setSeasonList(filtered_data);
       }else{
-        console.log(["getUserInfo_console toolsbar"]);
-        // await getUserInfo().then((data) => {
-        //   dispatch({
-        //     type: "INITIALISE",
-        //     payload: {
-        //       isAuthenticated: true,
-        //       user: data.result,
-        //     },
-        //   });
-        // });
+        await getUserInfo().then((data) => {
+          dispatchUser(data.result);
+        });
         // setTimeout(() => {
-          window.location.href=location.pathname;
+        //   window.location.href=location.pathname;
         // }, 200);
       }
     }
   }
   useEffect(()=>{
-    initialise();
-    console.log(["getUserInfo_console toolbar user=", user]);
+    if(user)initialise();
   },[user]);
   return (
     <Container className="d-flex w-100 px-10 toolbar">

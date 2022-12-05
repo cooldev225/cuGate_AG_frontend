@@ -55,7 +55,7 @@ interface markerType {
 };
 export const ProfilePage: React.FC = () => {
     const navigate = useNavigate();
-    const { user } = useAuth() as any;
+    const { user, dispatchUser } = useAuth() as any;
     const [active, setActive] = useState(menuList[0].key);
     const [genreList, setGenreList] = useState<genreType[]>([]);
     const [moodList, setMoodList] = useState<moodType[]>([]);
@@ -176,16 +176,8 @@ export const ProfilePage: React.FC = () => {
                 company: formData.company_name,
                 tel: formData.mobile_number,            
             });
-            console.log(["getUserInfo_console profile 01"]);
             await getUserInfo().then((data) => {
-                console.log(["getUserInfo_console profile 01 dispatch", data.result]);
-                dispatch({
-                    type: "INITIsssALISE",
-                    payload: {
-                      isAuthenticated: true,
-                      user: data.result,
-                    },
-                });
+                dispatchUser(data.result);
                 setLoading(false);
             });
             setTimeout(() => {
@@ -284,15 +276,8 @@ export const ProfilePage: React.FC = () => {
             }
         );
         await setAddress(e.lat,e.lng);
-        console.log(["getUserInfo_console profile 02"]);
         await getUserInfo().then((data) => {
-            dispatch({
-                type: "INITIALISE",
-                payload: {
-                  isAuthenticated: true,
-                  user: data.result,
-                },
-            });
+            dispatchUser(data.result);
         });
     };
 

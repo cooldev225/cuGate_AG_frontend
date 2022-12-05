@@ -1,6 +1,7 @@
 import { GOOGLE_MAP_KEY } from "../constants";
 import Geocode from "react-geocode";
 import { setUserInfo } from "../actions/user";
+
 const ourLocation = {
   lat: 52.48546014466491, 
   lon: 13.34604,

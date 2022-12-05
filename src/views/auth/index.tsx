@@ -2,13 +2,13 @@ import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../assets/scss/auth.scss';
 import Form from 'react-bootstrap/Form';
-import { Link, useHref, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import GoogleLogin from "react-google-login";
 import FacebookLogin from "react-facebook-login";
 import { SOCIAL_KEYS } from "../../constants";
 import useAuth from '../../hooks/useAuth';
 import { StoreState } from '../../types/models/store';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import icons from '../../assets/images/menu';
 import icon_text_content from '../../assets/images/content Unlimited.svg';
 import icon_text_cugate from '../../assets/images/cugate-text.svg';
@@ -23,12 +23,11 @@ import { getUserInfo } from '../../actions/user';
 
 export const AuthPage: React.FC<{page: number}> = (props) => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const ourLocation = {
         lat: 52.48546014466491, 
         lon: 13.34604,
     };
-    const { login,logout,register,isAuthenticated } = useAuth() as any;
+    const { login, register, isAuthenticated, dispatchUser } = useAuth() as any;
     const { page } = useSelector((state:StoreState) => state.auth);
     const [activeMenu, setActiveMenu] = useState(menuList[0]);
     const [validated, setValidated] = useState(false);
@@ -49,17 +48,9 @@ export const AuthPage: React.FC<{page: number}> = (props) => {
             geolocationAPI.getCurrentPosition(async (position) => {
                 const { coords } = position;
                 if(coords.latitude>-1000000&&coords.longitude>-1000000){
-                    setAddress(coords.latitude, coords.longitude).then(()=>{
-                        console.log(["getUserInfo_console auth getUserCoordinates"]);
-                        getUserInfo().then((data) => {
-                            console.log(["getUserInfo_console auth getUserCoordinates ", data.result]);
-                            dispatch({
-                                type: "INITIALISE",
-                                payload: {
-                                  isAuthenticated: true,
-                                  user: data.result,
-                                },
-                            });
+                    setAddress(coords.latitude, coords.longitude).then(async ()=>{
+                        await getUserInfo().then((data) => {
+                            dispatchUser(data.result);
                         });
                     }).catch((err)=>{
                         console.log(err);
@@ -76,16 +67,8 @@ export const AuthPage: React.FC<{page: number}> = (props) => {
 
     const setDefaultLocation = () => {
         setAddress(ourLocation.lat, ourLocation.lon).then(()=>{
-            console.log(["getUserInfo_console setDefaultLocation"]);
             getUserInfo().then((data) => {
-                console.log(["getUserInfo_console setDefaultLocation", data.result]);
-                dispatch({
-                    type: "INITIALISE",
-                    payload: {
-                      isAuthenticated: true,
-                      user: data.result,
-                    },
-                });
+                dispatchUser(data.result);
             });
         });
     };
@@ -120,12 +103,13 @@ export const AuthPage: React.FC<{page: number}> = (props) => {
         loginAction(postData);
     };
 
-    const handleLoginSubmit = (event: { currentTarget: any; preventDefault: () => void; stopPropagation: () => void; }) => {
+    const handleLoginSubmit = async (event: { currentTarget: any; preventDefault: () => void; stopPropagation: () => void; }) => {
         event.preventDefault();
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
             event.stopPropagation();
         }else{
+            await getUserCoordinates();
             let postData = {
                 submit:'web',
                 user:formData.username,
@@ -163,14 +147,14 @@ export const AuthPage: React.FC<{page: number}> = (props) => {
                     await getUserCoordinates();
                     res.message = "Registration successful!";
                     toast(res.message);
-                    setTimeout(() => {
-                        logout();
-                    }, 500);
-                    // if(res.is_subscribe===undefined||!res.is_subscribe||res.is_subscribe===0){
-                    //     navigate("/profile/subscribe");
-                    // }else{
-                    //     navigate(activeMenu.url);
-                    // }
+                    // setTimeout(() => {
+                    //     logout();
+                    // }, 500);
+                    if(res.is_subscribe===undefined||!res.is_subscribe||res.is_subscribe===0){
+                        navigate("/profile/subscribe");
+                    }else{
+                        navigate(activeMenu.url);
+                    }
                 }
             });
             setLoading(false);
@@ -180,10 +164,10 @@ export const AuthPage: React.FC<{page: number}> = (props) => {
 
     const loginAction = async (postData: any) => {
         setLoading(true);
-        await login(postData).then((res: any)=>{
+        await login(postData).then(async (res: any)=>{
             if(res.code === STATUS_CODE.AUTH.SUCCESS_LOGIN){
                 if(!res.is_subscribe){
-                    getUserCoordinates();
+                    await getUserCoordinates();
                     navigate("/profile/subscribe");
                 }else{
                     navigate(activeMenu.url);

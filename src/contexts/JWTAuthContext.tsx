@@ -22,6 +22,7 @@ interface AuthContextValue extends AuthState {
   login: (formData: any) => Promise<any>;
   logout: () => void;
   register: (formData: any) => Promise<any>;
+  dispatchUser: (user: User) => void;
 }
 
 interface AuthProviderProps {
@@ -84,10 +85,8 @@ const setSession = (accessToken: string | null): void => {
 };
 
 const reducer = (state: AuthState, action: Action): AuthState => {
-  console.log(["const reducer = (state: action.type=", action.type]);
   switch (action.type) {
     case "INITIALISE": {
-      console.log(["const reducer = (state: AuthState>>>>>>>>>>>>>>>>>>>>"]);
       const { isAuthenticated, user } = action.payload;
       return {
         ...state,
@@ -133,6 +132,7 @@ const AuthContext = createContext<AuthContextValue>({
     return false;
   },
   register: () => Promise.resolve(false),
+  dispatchUser: () => Promise.resolve(),
 });
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
@@ -143,7 +143,6 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       if(data.result.code == STATUS_CODE.AUTH.SUCCESS_LOGIN){
         setSession(data.result.token);
       }
-      console.log(["getUserInfo_console jwtlogin"]);
       await getUserInfo()
         .then((data) => {
           dispatch({
@@ -168,13 +167,22 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     window.location.href='/login';
   };
 
+  const dispatchUser = (user: User) => {
+    dispatch({
+      type: "INITIALISE",
+      payload: {
+        isAuthenticated: true,
+        user: user,
+      },
+    });
+  };
+
   const register = async (formData: any) => {
     return await registerAction(formData)
     .then(async (data) => {
       if(data.result.code == STATUS_CODE.AUTH.SUCCESS_LOGIN){
         setSession(data.result.token);
       }
-      console.log(["getUserInfo_console jwtregister"]);
       await getUserInfo()
         .then((data) => {
           dispatch({
@@ -199,9 +207,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         const accessToken = window.localStorage.getItem("accessToken");
         if (accessToken && isValidToken(accessToken)) {
           setSession(accessToken);
-          const userinfo = window.localStorage.getItem("userinfo");
-          if(userinfo == undefined || userinfo == null){
-            console.log(["getUserInfo_console jwtinit"]);
+          //const userinfo = window.localStorage.getItem("userinfo");
+          //if(userinfo == undefined || userinfo == null){
             await getUserInfo()
             .then((data) => {
               const accept = window.localStorage.getItem("acceptCookie");
@@ -216,15 +223,15 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
                 },
               });
             });
-          } else {
-            dispatch({
-              type: "INITIALISE",
-              payload: {
-                isAuthenticated: true,
-                user: JSON.parse(userinfo),
-              },
-            });
-          }
+          // } else {
+          //   dispatch({
+          //     type: "INITIALISE",
+          //     payload: {
+          //       isAuthenticated: true,
+          //       user: JSON.parse(userinfo),
+          //     },
+          //   });
+          // }
         } else {
           dispatch({
             type: "INITIALISE",
@@ -260,6 +267,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         login,
         logout,
         register,
+        dispatchUser,
       }}
     >
       {children}

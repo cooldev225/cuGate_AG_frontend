@@ -8,51 +8,20 @@ import { SetStateAction, useEffect, useState } from 'react';
 import { StoreState } from '../../types/models/store';
 import { FileUploader } from "react-drag-drop-files";
 import { DefaultButton } from '../../components/widgets';
-import { setAddress } from '../../utils/geocode';
 
 export const SubscribePage: React.FC = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { user } = useAuth() as any;
+    const { user, dispatchUser } = useAuth() as any;
     const { page } = useSelector((state:StoreState) => state.auth);
     const [activeKind, setActiveKind] = useState(-1);
     const [file, setFile] = useState(null);
     const fileTypes = ["MP3", "MP4", "AVI"];
-    const [lat, setLat] = useState<number>(-1000000);
-    const [long, setLong] = useState<number>(-1000000);
-    const geolocationAPI = navigator.geolocation;
 
-    const getUserCoordinates = async () => {
-        if (!geolocationAPI) {
-            console.log('Geolocation API is not available in your browser!')
-        } else {
-            geolocationAPI.getCurrentPosition(async (position) => {
-            const { coords } = position;
-            setLat(coords.latitude);
-            setLong(coords.longitude);
-            if(lat>-1000000&&long>-1000000){
-                await setAddress(coords.latitude, coords.longitude);
-                console.log(["getUserInfo_console subscribe setaddress"]);
-                await getUserInfo().then((data) => {
-                    dispatch({
-                        type: "INITIALISE",
-                        payload: {
-                          isAuthenticated: true,
-                          user: data.result,
-                        },
-                    });
-                });
-            }
-          }, (error) => {
-            console.log('Something went wrong getting your position!\n' + error)
-          })
-        }
-    }
     useEffect(() => {
         if(user?.is_subscribe){
             navigate("/profile");
         }
-        getUserCoordinates();
         if(activeKind === -1 && user){
             setActiveKind(user?.is_business);
         }
@@ -69,15 +38,8 @@ export const SubscribePage: React.FC = () => {
                 is_business: activeKind,
                 is_subscribe: 1
             });
-            console.log(["getUserInfo_console subscribe setkind"]);
             await getUserInfo().then((data) => {
-                dispatch({
-                    type: "INITIALISE",
-                    payload: {
-                      isAuthenticated: true,
-                      user: data.result,
-                    },
-                });
+                dispatchUser(data.result);
             });
             dispatch({
                 type: "SET_PAGE",
@@ -92,15 +54,8 @@ export const SubscribePage: React.FC = () => {
         //     payload: "subscribe-categories",
         // });
         await setUserInfo({is_subscribe: 1});
-        console.log(["getUserInfo_console subscribe issubscribe"]);
         await getUserInfo().then((data) => {
-            dispatch({
-                type: "INITIALISE",
-                payload: {
-                  isAuthenticated: true,
-                  user: data.result,
-                },
-            });
+            dispatchUser(data.result);
         });
         navigate("/profile");
     };
