@@ -126,9 +126,13 @@ export const Header: React.FC = () => {
                                 key={index}
                                 onClick={()=>setUserMenuToggle(false)}
                               >
-                                <Link to={"" + item.url}>
-                                  {item.text}
-                                </Link>
+                                {item.url?.indexOf("http")===-1?(
+                                  <Link to={"" + item.url}>
+                                    {item.text}
+                                  </Link>
+                                ):(
+                                  <a href={item.url} target="blank" rel="noreferrer">{item.text}</a>
+                                )}
                               </li>
                             )
                           ))}

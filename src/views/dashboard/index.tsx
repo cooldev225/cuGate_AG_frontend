@@ -1,18 +1,23 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import "../../assets/scss/dashboard.scss";
 import { DefaultButton, Icon, Select } from "../../components/widgets";
-import { getAnalyzeTrackInfo, getSearchTrackList } from "../../actions/user";
+import { getAnalyzeTrackInfo, getFilterStations, getGenres, getMoods, getSearchAlbumList, getSearchArtistList, getSearchStationList, getSearchTrackList } from "../../actions/user";
 import useAuth from "../../hooks/useAuth";
-import { Link } from "react-router-dom";
 import { sortByList, tabMenuList } from "./contents";
 import icon from '../../assets/images/icon-cugate.svg';
 import moment from "moment";
 import AnalyseView from "../../components/dashboard/analyseView";
 import SearchSide from "../../components/dashboard/searchSide";
 import AnalyseForm from "../../components/dashboard/analyseForm";
+import { useSelector } from "react-redux";
+import { StoreState } from "../../types/models/store";
 
 export const DashboardPage: React.FC = () => {
     const { user } = useAuth() as any;
+    const { keyword } = useSelector((state:StoreState) => state.auth);
+    const [genreList, setGenreList] = useState<any>([]);
+    const [moodList, setMoodList] = useState<any>([]);
+    const [stationList, setStationList] = useState<any>([]);
     const [tab_menu, setTabMenu] = useState<string>("tracks");
     const [searchGenre, setSearchGenre] = useState("");
     const [searchStation, setSearchStation] = useState<any>("");
@@ -25,28 +30,44 @@ export const DashboardPage: React.FC = () => {
         season: [],
         region: "all",
         station:[],
+        keyword: "",
         sort_by: sortByList[0].value,
     });
     const [analyzeClose, setAnalyzeClose] = useState(false);
-
-    
-    const [analyzeFile, setAnalyzeFile] = useState<any>(null);
-    const [uploadedFile, setUploadedFile] = useState<any>(null);
-    const [uploadedFileDiv, setUploadedFileDiv] = useState<any>("");
-    
-    
-    const [trackSearch, setTrackSearch] = useState<any>({
+    const defaultDataList = {
         pagination:{
             page: 0,
             pages: 0,
             size: 10,
             total: 0,
         },
+        isLoaded: false,
         list: [],
-    });
+    };
+    
+    const [analyzeFile, setAnalyzeFile] = useState<any>(null);
+    const [uploadedFile, setUploadedFile] = useState<any>(null);
+    const [uploadedFileDiv, setUploadedFileDiv] = useState<any>("");
+    
+    
+    const [trackSearch, setTrackSearch] = useState<any>(defaultDataList);
+    const [albumSearch, setAlbumSearch] = useState<any>(defaultDataList);
+    const [artistSearch, setArtistSearch] = useState<any>(defaultDataList);
+    const [stationSearch, setStationSearch] = useState<any>(defaultDataList);
 
     useEffect(()=>{
         if(user&&user.profile){
+            getMoods().then((data) => {
+                setMoodList(data.result);
+            });
+            getGenres().then((data) => {
+                setGenreList(data.result);
+            });
+
+            getFilterStations().then((data)=>{
+                setStationList(data.result);
+            });
+            
             if(user.profile?.favorite_moods!==""){
                 formData.mood = user.profile.favorite_moods.split(',').map((m:string)=>Number(m));
             }
@@ -58,11 +79,14 @@ export const DashboardPage: React.FC = () => {
             }
             setFormData({...formData});
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
     useEffect(()=>{
-        
-    },[tab_menu]);
+        formData.keyword = keyword;
+        setFormData({...formData});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[keyword]);
 
     useEffect(()=>{
         if(loading!=="") return;
@@ -73,7 +97,50 @@ export const DashboardPage: React.FC = () => {
                 filter: formData
             }).then((data)=>{
                 setLoading("");
+                data.result.isLoaded = true;
                 setTrackSearch(data.result);
+            }).catch((err)=>{
+                console.log(err);
+                setLoading("");
+            });
+        }
+        if(tab_menu==="albums"){
+            setLoading("albums");
+            getSearchAlbumList({
+                pagination: albumSearch.pagination,
+                filter: formData
+            }).then((data)=>{
+                setLoading("");
+                data.result.isLoaded = true;
+                setAlbumSearch(data.result);
+            }).catch((err)=>{
+                console.log(err);
+                setLoading("");
+            });
+        }
+        if(tab_menu==="artists"){
+            setLoading("artists");
+            getSearchArtistList({
+                pagination: artistSearch.pagination,
+                filter: formData
+            }).then((data)=>{
+                setLoading("");
+                data.result.isLoaded = true;
+                setArtistSearch(data.result);
+            }).catch((err)=>{
+                console.log(err);
+                setLoading("");
+            });
+        }
+        if(tab_menu==="stations"){
+            setLoading("stations");
+            getSearchStationList({
+                pagination: stationSearch.pagination,
+                filter: formData
+            }).then((data)=>{
+                setLoading("");
+                data.result.isLoaded = true;
+                setStationSearch(data.result);
             }).catch((err)=>{
                 console.log(err);
                 setLoading("");
@@ -81,6 +148,71 @@ export const DashboardPage: React.FC = () => {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[formData]);
+
+    useEffect(()=>{
+        if(loading!=="") return;
+        if(tab_menu==="tracks"){
+            if(trackSearch.isLoaded)return;
+            setLoading("tracks");
+            getSearchTrackList({
+                pagination: trackSearch.pagination,
+                filter: formData
+            }).then((data)=>{
+                setLoading("");
+                data.result.isLoaded = true;
+                setTrackSearch(data.result);
+            }).catch((err)=>{
+                console.log(err);
+                setLoading("");
+            });
+        }
+        if(tab_menu==="albums"){
+            if(albumSearch.isLoaded)return;
+            setLoading("albums");
+            getSearchAlbumList({
+                pagination: albumSearch.pagination,
+                filter: formData
+            }).then((data)=>{
+                setLoading("");
+                data.result.isLoaded = true;
+                setAlbumSearch(data.result);
+            }).catch((err)=>{
+                console.log(err);
+                setLoading("");
+            });
+        }
+        if(tab_menu==="artists"){
+            if(artistSearch.isLoaded)return;
+            setLoading("artists");
+            getSearchArtistList({
+                pagination: artistSearch.pagination,
+                filter: formData
+            }).then((data)=>{
+                setLoading("");
+                data.result.isLoaded = true;
+                setArtistSearch(data.result);
+            }).catch((err)=>{
+                console.log(err);
+                setLoading("");
+            });
+        }
+        if(tab_menu==="stations"){
+            if(stationSearch.isLoaded)return;
+            setLoading("stations");
+            getSearchStationList({
+                pagination: stationSearch.pagination,
+                filter: formData
+            }).then((data)=>{
+                setLoading("");
+                data.result.isLoaded = true;
+                setStationSearch(data.result);
+            }).catch((err)=>{
+                console.log(err);
+                setLoading("");
+            });
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[tab_menu]);
 
     const handleMore = () => {
         if(loading!=="") return;
@@ -103,6 +235,63 @@ export const DashboardPage: React.FC = () => {
                 setMoreLoading(false);
             });
         }
+        if(tab_menu==="albums"){
+            let data = albumSearch;
+            data.pagination.page ++;
+            setMoreLoading(true);
+            getSearchAlbumList({
+                pagination: data.pagination,
+                filter: formData
+            }).then((res)=>{
+                data.pagination = res.result.pagination;
+                res.result.list.map((r:any)=>{
+                    data.list.push(r);
+                });
+                setAlbumSearch({...data});
+                setMoreLoading(false);
+            }).catch((err)=>{
+                console.log(err);
+                setMoreLoading(false);
+            });
+        }
+        if(tab_menu==="artists"){
+            let data = artistSearch;
+            data.pagination.page ++;
+            setMoreLoading(true);
+            getSearchArtistList({
+                pagination: data.pagination,
+                filter: formData
+            }).then((res)=>{
+                data.pagination = res.result.pagination;
+                res.result.list.map((r:any)=>{
+                    data.list.push(r);
+                });
+                setArtistSearch({...data});
+                setMoreLoading(false);
+            }).catch((err)=>{
+                console.log(err);
+                setMoreLoading(false);
+            });
+        }
+        if(tab_menu==="stations"){
+            let data = stationSearch;
+            data.pagination.page ++;
+            setMoreLoading(true);
+            getSearchStationList({
+                pagination: data.pagination,
+                filter: formData
+            }).then((res)=>{
+                data.pagination = res.result.pagination;
+                res.result.list.map((r:any)=>{
+                    data.list.push(r);
+                });
+                setStationSearch({...data});
+                setMoreLoading(false);
+            }).catch((err)=>{
+                console.log(err);
+                setMoreLoading(false);
+            });
+        }
     };
 
     useEffect(()=>{
@@ -116,6 +305,7 @@ export const DashboardPage: React.FC = () => {
     },[searchStation]);
 
     useEffect(()=>{
+        console.log(searchGenre);
         if(loading!=="") return;
         if(searchGenre!==""&&!formData.genre.filter((g:any)=>g===searchGenre).length){
             let list = formData.genre;
@@ -200,6 +390,12 @@ export const DashboardPage: React.FC = () => {
         }
     };
 
+    const handleTrackDetail = (track_id: number, file_id: number) => {
+
+    };
+
+    const handleAlbumDetail = (album_id: number) => {};
+
     const handleSortBy = (val:any) => {
         if(loading!=="") return;
         setFormData({...formData, sort_by: val});
@@ -227,6 +423,9 @@ export const DashboardPage: React.FC = () => {
                         "setRegion": setRegion,
                         "setSearchGenre": setSearchGenre,
                         "setSearchStation": setSearchStation,
+                        "genreList": genreList,
+                        "moodList": moodList,
+                        "stationList": stationList
                     }
                 }/>
             </aside>
@@ -273,104 +472,461 @@ export const DashboardPage: React.FC = () => {
                         />
                     </div>
                     <div className="status-header">
-                        <span>total results: {loading==="tracks"?"...":trackSearch.pagination.total}</span>
+                        <span>total results: {
+                            loading!==""?"...":
+                            tab_menu==="tracks"?trackSearch.pagination.total:
+                            tab_menu==="albums"?albumSearch.pagination.total:
+                            tab_menu==="artists"?artistSearch.pagination.total:
+                            tab_menu==="stations"?stationSearch.pagination.total:
+                            ""
+                        }</span>
                     </div>
                 </div>
                 )}
                 <div className="content-body">
-                    {loading!==""?(
-                        <div className="loading-widget">
-                            <div className="logo-img">
-                                <img src={icon} alt="loading"/>
-                                <div className="loading-text">
-                                    Loading ...
-                                </div>
-                            </div>
-                        </div>
-                    ):(
-                        tab_menu==="tracks"?(
-                            trackSearch.list.map((item:any, index:number)=>(
-                            <div className="row-item mb-3" key={"item_"+index}>
-                                <div className="item-header d-flex justify-content-between">
-                                    <div className="d-flex flex-column">
-                                        <span className="title">{item.title}</span>
-                                        <span className="description">Published: {moment(item.update_time).format("DD/MM/YYYY")} by John</span>
-                                    </div>
-                                    <DefaultButton onClick={handleAnalyze}>Analyze</DefaultButton>
-                                </div>
-                                <div>
-                                Drow an interface of a widget in a full accordance with its technical description. The functionality of widget must contain a search field (search by image), price comparison and a wallet.
-                                </div>
-                                <div className="d-flex justify-content-between item-bottom">
-                                    <div className="d-flex align-items-end" style={{color: 'grey'}}>
-                                        124 views
-                                    </div>
-                                    <div className="d-flex mb-2 mt-3">
-                                        <div id="itunes_block" className="portal_block">
-                                            <Link to="https://itunes.apple.com/us/album/id192617001?i=192617043&amp;at=1l3vri7&amp;app=itunes" target="_blank">
-                                                <img src="Apple_icon.png" alt="Apple"/>
-                                            </Link>
-                                        </div>
-                                        <div id="amazon_block" className="portal_block">
-                                            <Link to="http://www.amazon.com/dp/B000QNQ4HY/?tag=cugate-20" target="_blank">
-                                                <img src="Amazon_icon.png" alt=""/>
-                                            </Link>
-                                        </div>
-                                        <div id="spotify_block" className="portal_block">
-                                            <Link to="https://open.spotify.com/track/32DrfMiPy6UdPuuKqgS4Lk" target="_blank">
-                                                <img src="Spotify_icon.png" alt=""/>
-                                            </Link>
-                                        </div>
-                                        <div id="deezer_block" className="portal_block">
-                                            <Link to="http://www.deezer.com/track/786698" target="_blank">
-                                                <img src="Deezer_icon.png" alt=""/>
-                                            </Link>
-                                        </div>
-                                        <div id="cuview_block" className="portal_block">
-                                            <Link to="https://cumarket.net/ytb/t-6-1" target="_blank">
-                                                <img src="Cugate_icon.png" alt=""/>
-                                            </Link>
+                    {tab_menu==="tracks"?(
+                        <Fragment>
+                            {loading==="tracks"?(
+                                <div className="loading-widget">
+                                    <div className="logo-img">
+                                        <img src={icon} alt="loading"/>
+                                        <div className="loading-text">
+                                            Loading ...
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            ))
-                        ):tab_menu==="albums"?(
-                            <>Albums Developing...</>
-                        ):tab_menu==="artists"?(
-                            <>Artists Developing...</>
-                        ):tab_menu==="stations"?(
-                            <>Stations Developing...</>
-                        ):tab_menu==="analyze"?(
-                            uploadedFileDiv && analyzeFile? (
-                                <AnalyseView data={uploadedFileDiv} url={URL.createObjectURL(analyzeFile)}/>
                             ):(
-                                <>{uploadedFileDiv}</>
-                            )
-                        ):(<></>)
-                    )}
-                    {loading===""&&(
-                    <div
-                        className="row d-flex justify-content-center mt-4 mb-4"
-                    >
-                        <div style={{width: '200px',textAlign:'center'}}>
-                            <DefaultButton
-                                color="white"
-                                textColor="var(--color-blue-light)"
-                                borderColor="var(--color-blue-light)"
-                                className={"mb-3 me-3"+(tab_menu==="tracks"&&trackSearch.pagination.page<trackSearch.pagination.pages-1?"":" display-none")}
-                                disabled={trackSearch.pagination.page>=trackSearch.pagination.pages-1}
-                                onClick={()=>handleMore()}
-                            >
-                                {moreLoading?(
-                                    <Icon name="loading"/>
-                                ):(
-                                    "More"
+                                <Fragment>
+                                {trackSearch.list.map((item:any, index:number)=>(
+                                    <Fragment>
+                                        {(formData.sort_by==="played_ranking"||formData.sort_by==="played_count")?(
+                                        <div className="row-item mb-3" key={"item_"+index}>
+                                            <div className="item-header d-flex justify-content-between">
+                                                <div className="d-flex flex-column">
+                                                    <span className="title">{item.media}<span></span></span>
+                                                    <span className="description">Published: {item.lastUpdated} by: {item.artist}</span>
+                                                </div>
+                                                <DefaultButton
+                                                    className="small-button"
+                                                    color="white"
+                                                    textColor="var(--color-blue-light)"
+                                                    borderColor="var(--color-blue-light)"
+                                                    onClick={()=>handleTrackDetail(item.id, item.file_info.file_id)}
+                                                >
+                                                    View
+                                                </DefaultButton>
+                                            </div>
+                                            <div className="d-flex">
+                                                <div className="d-flex item-album w-100">
+                                                    <img src={`https://img.cugate.com/?i=${item.albumId}&o=member`} alt=""/>
+                                                    <div className="ms-2 item-album-title w-100">
+                                                        <div dangerouslySetInnerHTML={{__html: item.resume}}></div>
+                                                        <div className="d-flex description mt-4">
+                                                            <div className={item.rank+","+item.lastRank}>
+                                                                <span className="me-1">Rank:</span>
+                                                                {item.lastRank==null||item.rank<item.lastRank?(
+                                                                    <span className="color-green">{item.rank}<Icon name="arrow-up"/></span>
+                                                                ):(
+                                                                    <span className="color-red">{item.rank}<Icon name="arrow-down"/></span>
+                                                                )}
+                                                            </div>
+                                                            <div className="ms-4">
+                                                                <span className="me-1">Type:</span>
+                                                                {item.file_info.f_track_type_title}
+                                                            </div>
+                                                            {genreList.filter((g: any)=>g.id===item.genre).length>0&&(<div className="ms-4">
+                                                                <span className="me-1">Genre:</span>
+                                                                {genreList.filter((g: any)=>g.id===item.genre)[0].title}
+                                                            </div>)}
+                                                            {moodList.filter((g: any)=>g.id===item.key).length>0&&(<div className="ms-4">
+                                                                <span className="me-1">Mood:</span>
+                                                                {moodList.filter((g: any)=>g.id===item.key)[0].title}
+                                                            </div>)}
+                                                            <div className="ms-4">
+                                                                <span className="me-1">Time:</span>
+                                                                {item.file_info.f_track_time/1000}s
+                                                            </div>
+                                                        </div>
+                                                        <div className="d-flex description">
+                                                            <div className="d-flex w-100">
+                                                                <span className="me-2 mt-1">Frequency:</span>
+                                                                <div style={{
+                                                                    width:'100%',
+                                                                    maxWidth:'400px',
+                                                                    backgroundColor: '#dcfdff',
+                                                                    marginTop: 4,
+                                                                    borderRadius: 2,
+                                                                    color:'black',
+                                                                }}>
+                                                                    <div style={{
+                                                                        width:(100*item.max_count/trackSearch.pagination.max)+'%',
+                                                                        height:'100%',
+                                                                        backgroundColor: '#00cbd8',
+                                                                    }}>
+                                                                        <span className="fw-bold ms-2">{item.max_count}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="ms-4">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="d-flex">
+                                                <div className="d-flex align-items-end" style={{color: 'grey'}}>
+                                                    {item.played_count>0?item.played_count+" played":""}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        ):(
+                                        <div className="row-item mb-3" key={"item_"+index}>
+                                            <div className="item-header d-flex justify-content-between">
+                                                <div className="d-flex flex-column">
+                                                    <span className="title">{item.title}</span>
+                                                    <span className="description">Published: {moment(item.update_time).format("DD/MM/YYYY")} by {item.track_member_title}</span>
+                                                </div>
+                                                <DefaultButton
+                                                    className="small-button"
+                                                    color="white"
+                                                    textColor="var(--color-blue-light)"
+                                                    borderColor="var(--color-blue-light)"
+                                                    onClick={()=>handleTrackDetail(item.id, item.file_info.file_id)}
+                                                >
+                                                    Analyze
+                                                </DefaultButton>
+                                            </div>
+                                            <div className="d-flex justify-content-between">
+                                                <div className="d-flex item-album">
+                                                    <img src={`https://img.cugate.com/?i=${item.album_id}&o=member`} alt=""/>
+                                                    <div className="ms-2 item-album-title">
+                                                        <div className="fw-bold">{item.album_title}</div>
+                                                        <div className="d-flex">
+                                                            <div className="">
+                                                                <span className="me-1">By:</span>
+                                                                {item.album_member_title}
+                                                            </div>
+                                                            <div className="ms-4">
+                                                                <span className="me-1">Type:</span>
+                                                                {item.file_info.f_track_type_title}
+                                                            </div>
+                                                            <div className="ms-4">
+                                                                <span className="me-1">Time:</span>
+                                                                {item.file_info.f_track_time/1000}s
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="d-flex mb-2 mt-3"></div>
+                                            </div>
+                                            <div className="d-flex">
+                                                <div className="d-flex align-items-end" style={{color: 'grey'}}>
+                                                    {item.played_count>0?item.played_count+" played":""}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        )}
+                                    </Fragment>
+                                ))}
+                                {trackSearch.pagination.pages>0&&trackSearch.pagination.pages>trackSearch.pagination.page+1&&(
+                                    <div
+                                        className="row d-flex justify-content-center mt-4 mb-4"
+                                    >
+                                        <div style={{width: '200px',textAlign:'center'}}>
+                                            <DefaultButton
+                                                color="white"
+                                                textColor="var(--color-blue-light)"
+                                                borderColor="var(--color-blue-light)"
+                                                className={"mb-3 me-3"}
+                                                onClick={()=>handleMore()}
+                                            >
+                                                {moreLoading?(
+                                                    <Icon name="loading"/>
+                                                ):(
+                                                    "More"
+                                                )}
+                                            </DefaultButton>
+                                        </div>
+                                    </div>
                                 )}
-                            </DefaultButton>
-                        </div>
-                    </div>
-                    )}
+                                </Fragment>
+                            )}
+                        </Fragment>
+                    ):tab_menu==="albums"?(
+                        <Fragment>
+                            {loading==="albums"?(
+                                <div className="loading-widget">
+                                    <div className="logo-img">
+                                        <img src={icon} alt="loading"/>
+                                        <div className="loading-text">
+                                            Loading ...
+                                        </div>
+                                    </div>
+                                </div>
+                            ):(
+                                <Fragment>
+                                {albumSearch.list.map((item:any, index:number)=>(
+                                    <Fragment>
+                                    {(formData.sort_by==="played_ranking"||formData.sort_by==="played_count")?(
+                                    <div className="row-item mb-3" key={"item_"+index}>
+                                        <div className="item-header d-flex justify-content-between">
+                                            <div className="d-flex flex-column">
+                                                <span className="title">{item.media}<span></span></span>
+                                                <span className="description">Published: {item.lastUpdated} by: {item.artist}</span>
+                                            </div>
+                                            <DefaultButton
+                                                className="small-button"
+                                                color="white"
+                                                textColor="var(--color-blue-light)"
+                                                borderColor="var(--color-blue-light)"
+                                                onClick={()=>handleTrackDetail(item.id, item.file_info.file_id)}
+                                            >
+                                                View
+                                            </DefaultButton>
+                                        </div>
+                                        <div className="d-flex">
+                                            <div className="d-flex item-album w-100">
+                                                <img src={`https://img.cugate.com/?i=${item.albumId}&o=member`} alt=""/>
+                                                <div className="ms-2 item-album-title w-100">
+                                                    <div dangerouslySetInnerHTML={{__html: item.resume}}></div>
+                                                    <div className="d-flex description mt-4">
+                                                        <div className={item.rank+","+item.lastRank}>
+                                                            <span className="me-1">Rank:</span>
+                                                            {item.lastRank==null||item.rank<item.lastRank?(
+                                                                <span className="color-green">{item.rank}<Icon name="arrow-up"/></span>
+                                                            ):(
+                                                                <span className="color-red">{item.rank}<Icon name="arrow-down"/></span>
+                                                            )}
+                                                        </div>
+                                                        {genreList.filter((g: any)=>g.id===item.genre).length>0&&(<div className="ms-4">
+                                                            <span className="me-1">Genre:</span>
+                                                            {genreList.filter((g: any)=>g.id===item.genre)[0].title}
+                                                        </div>)}
+                                                        {moodList.filter((g: any)=>g.id===item.key).length>0&&(<div className="ms-4">
+                                                            <span className="me-1">Mood:</span>
+                                                            {moodList.filter((g: any)=>g.id===item.key)[0].title}
+                                                        </div>)}
+                                                    </div>
+                                                    <div className="d-flex description">
+                                                        <div className="d-flex w-100">
+                                                            <span className="me-2 mt-1">Frequency:</span>
+                                                            <div style={{
+                                                                width:'100%',
+                                                                maxWidth:'400px',
+                                                                backgroundColor: '#dcfdff',
+                                                                marginTop: 4,
+                                                                borderRadius: 2,
+                                                                color:'black',
+                                                            }}>
+                                                                <div style={{
+                                                                    width:(100*item.sum_count/albumSearch.pagination.sum)+'%',
+                                                                    height:'100%',
+                                                                    backgroundColor: '#00cbd8',
+                                                                }}>
+                                                                    <span className="fw-bold ms-2">{item.sum_count}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="ms-4">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="d-flex">
+                                            <div className="d-flex align-items-end" style={{color: 'grey'}}>
+                                                {item.played_count>0?item.played_count+" played":""}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    ):(
+                                        <div className="row-item mb-3" key={"item_"+index}>
+                                            <div className="d-flex justify-content-between">
+                                                <div className="d-flex item-album">
+                                                    <img src={`https://img.cugate.com/?o=album&i=${item.id}&s=174`} alt=""/>
+                                                    <div className="ms-2 item-album-title">
+                                                        <div className="fw-bold">{item.title}</div>
+                                                        <div>
+                                                            <span className="description">Published: {moment(item.update_time).format("DD/MM/YYYY")}</span></div>
+                                                        <div className="d-flex">By: 
+                                                            {item.members?.map((member: any, m_index: number)=>(
+                                                                <div className="ms-1" key={item.id+"_"+m_index}>
+                                                                    {m_index>0&&(<span className="me-1">,</span>)}
+                                                                    {member.title}
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="d-flex mb-2 mt-3">
+                                                    <DefaultButton
+                                                        className="small-button"
+                                                        color="white"
+                                                        textColor="var(--color-blue-light)"
+                                                        borderColor="var(--color-blue-light)"
+                                                        onClick={()=>handleAlbumDetail(item.id)}
+                                                    >
+                                                        View
+                                                    </DefaultButton>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                    </Fragment>
+                                    
+                                ))}
+                                {albumSearch.pagination.pages>0&&albumSearch.pagination.pages>albumSearch.pagination.page+1&&(
+                                    <div
+                                        className="row d-flex justify-content-center mt-4 mb-4"
+                                    >
+                                        <div style={{width: '200px',textAlign:'center'}}>
+                                            <DefaultButton
+                                                color="white"
+                                                textColor="var(--color-blue-light)"
+                                                borderColor="var(--color-blue-light)"
+                                                className={"mb-3 me-3"}
+                                                onClick={()=>handleMore()}
+                                            >
+                                                {moreLoading?(
+                                                    <Icon name="loading"/>
+                                                ):(
+                                                    "More"
+                                                )}
+                                            </DefaultButton>
+                                        </div>
+                                    </div>
+                                )}
+                                </Fragment>
+                            )}
+                        </Fragment>
+                    ):tab_menu==="artists"?(
+                        <Fragment>
+                            {loading==="artists"?(
+                                <div className="loading-widget">
+                                    <div className="logo-img">
+                                        <img src={icon} alt="loading"/>
+                                        <div className="loading-text">
+                                            Loading ...
+                                        </div>
+                                    </div>
+                                </div>
+                            ):(
+                                <Fragment>
+                                {artistSearch.list.map((item:any, index:number)=>(
+                                    <div className="row-item mb-3" key={"item_"+index}>
+                                        <div className="d-flex justify-content-between">
+                                            <div className="d-flex item-album">
+                                                <img src={`https://img.cugate.com/?o=member&i=${item.id}&s=174`} alt=""/>
+                                                <div className="ms-2 item-album-title">
+                                                    <div className="fw-bold">{item.title}</div>
+                                                </div>
+                                            </div>
+                                            <div className="d-flex mb-2 mt-3">
+                                                <DefaultButton
+                                                    className="small-button"
+                                                    color="white"
+                                                    textColor="var(--color-blue-light)"
+                                                    borderColor="var(--color-blue-light)"
+                                                    onClick={()=>handleAlbumDetail(item.id)}
+                                                >
+                                                    View
+                                                </DefaultButton>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                                {artistSearch.pagination.pages>0&&artistSearch.pagination.pages>artistSearch.pagination.page+1&&(
+                                    <div
+                                        className="row d-flex justify-content-center mt-4 mb-4"
+                                    >
+                                        <div style={{width: '200px',textAlign:'center'}}>
+                                            <DefaultButton
+                                                color="white"
+                                                textColor="var(--color-blue-light)"
+                                                borderColor="var(--color-blue-light)"
+                                                className={"mb-3 me-3"}
+                                                onClick={()=>handleMore()}
+                                            >
+                                                {moreLoading?(
+                                                    <Icon name="loading"/>
+                                                ):(
+                                                    "More"
+                                                )}
+                                            </DefaultButton>
+                                        </div>
+                                    </div>
+                                )}
+                                </Fragment>
+                            )}
+                        </Fragment>
+                    ):tab_menu==="stations"?(
+                        <Fragment>
+                            {loading==="stations"?(
+                                <div className="loading-widget">
+                                    <div className="logo-img">
+                                        <img src={icon} alt="loading"/>
+                                        <div className="loading-text">
+                                            Loading ...
+                                        </div>
+                                    </div>
+                                </div>
+                            ):(
+                                <Fragment>
+                                {stationSearch.list.map((item:any, index:number)=>(
+                                    <div className="row-item mb-3" key={"item_"+index}>
+                                        <div className="d-flex justify-content-between">
+                                            <div className="d-flex item-album">
+                                                <div className="ms-2 item-album-title">
+                                                    <div className="fw-bold focus" onClick={()=>window.open(item.playerUrl, "_blank")}>{item.radioName}</div>
+                                                    <div className="">{item.radioProperty}</div>
+                                                </div>
+                                            </div>
+                                            <div className="d-flex mb-2 mt-3">
+                                                <DefaultButton
+                                                    className="small-button"
+                                                    color="white"
+                                                    textColor="var(--color-blue-light)"
+                                                    borderColor="var(--color-blue-light)"
+                                                    onClick={()=>handleAlbumDetail(item.id)}
+                                                >
+                                                    View
+                                                </DefaultButton>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                                {stationSearch.pagination.pages>0&&stationSearch.pagination.pages>stationSearch.pagination.page+1&&(
+                                    <div
+                                        className="row d-flex justify-content-center mt-4 mb-4"
+                                    >
+                                        <div style={{width: '200px',textAlign:'center'}}>
+                                            <DefaultButton
+                                                color="white"
+                                                textColor="var(--color-blue-light)"
+                                                borderColor="var(--color-blue-light)"
+                                                className={"mb-3 me-3"}
+                                                onClick={()=>handleMore()}
+                                            >
+                                                {moreLoading?(
+                                                    <Icon name="loading"/>
+                                                ):(
+                                                    "More"
+                                                )}
+                                            </DefaultButton>
+                                        </div>
+                                    </div>
+                                )}
+                                </Fragment>
+                            )}
+                        </Fragment>
+                    ):tab_menu==="analyze"?(
+                        uploadedFileDiv && analyzeFile? (
+                            <AnalyseView data={uploadedFileDiv} url={URL.createObjectURL(analyzeFile)}/>
+                        ):(
+                            <>There is no uploaded file.</>
+                        )
+                    ):(<></>)
+                    }
                 </div>
             </div>
         </div>

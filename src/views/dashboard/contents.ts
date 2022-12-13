@@ -31,16 +31,20 @@ export const tabMenuList: {
 ];
 export const sortByList = [
     {
+        label: "Played Ranking",
+        value: "played_ranking",
+    },
+    {
+        label: "Played Count",
+        value: "played_count",
+    },
+    {
         label: "Alpha",
         value: "alpha",
     },
     {
         label: "Newly published",
         value: "new_published",
-    },
-    {
-        label: "Large played",
-        value: "large_played",
     },
 ];
 export const regionList = [

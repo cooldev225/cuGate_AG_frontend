@@ -6,7 +6,6 @@ import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import moment from "moment";
 import { getGenres, getMoods, getUserInfo } from "../../actions/user";
-import { useDispatch } from "react-redux";
 import { activityList, seasonList } from "../../views/profile/contents";
 
 export const Toolbar: React.FC = () => {

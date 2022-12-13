@@ -164,7 +164,7 @@ export const AuthPage: React.FC<{page: number}> = (props) => {
 
     const loginAction = async (postData: any) => {
         setLoading(true);
-        await login(postData).then(async (res: any)=>{
+        let res = await login(postData);
             if(res.code === STATUS_CODE.AUTH.SUCCESS_LOGIN){
                 if(!res.is_subscribe){
                     await getUserCoordinates();
@@ -177,7 +177,6 @@ export const AuthPage: React.FC<{page: number}> = (props) => {
             setTimeout(() => {
                 toast(res.message);
             }, 500);
-        });
         setLoading(false);
     };
 

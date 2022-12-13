@@ -140,10 +140,9 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const login = async (formData: any) => {
     return await loginAction(formData)
     .then(async (data) => {
-      if(data.result.code == STATUS_CODE.AUTH.SUCCESS_LOGIN){
+      if(data.result.code === STATUS_CODE.AUTH.SUCCESS_LOGIN){
         setSession(data.result.token);
-      }
-      await getUserInfo()
+        await getUserInfo()
         .then((data) => {
           dispatch({
             type: "INITIALISE",
@@ -153,6 +152,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
             },
           });
         });
+      }
       return data.result;
     })
     .catch((err) => {
@@ -180,10 +180,9 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const register = async (formData: any) => {
     return await registerAction(formData)
     .then(async (data) => {
-      if(data.result.code == STATUS_CODE.AUTH.SUCCESS_LOGIN){
+      if(data.result.code === STATUS_CODE.AUTH.SUCCESS_LOGIN){
         setSession(data.result.token);
-      }
-      await getUserInfo()
+        await getUserInfo()
         .then((data) => {
           dispatch({
             type: "INITIALISE",
@@ -193,6 +192,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
             },
           });
         });
+      }
       return data.result;
     })
     .catch((err) => {

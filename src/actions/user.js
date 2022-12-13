@@ -70,6 +70,24 @@ export async function getSearchTrackList(params) {
   else return [];
 }
 
+export async function getSearchAlbumList(params) {
+  const response = await axios.post("/getSearchAlbumList", params);
+  if (response.status === 200) return response.data;
+  else return [];
+}
+
+export async function getSearchArtistList(params) {
+  const response = await axios.post("/getSearchArtistList", params);
+  if (response.status === 200) return response.data;
+  else return [];
+}
+
+export async function getSearchStationList(params) {
+  const response = await axios.post("/getSearchStationList", params);
+  if (response.status === 200) return response.data;
+  else return [];
+}
+
 export async function uploadTrackToAnalyze(file) {
   let formData = new FormData();
   formData.append("musicFile", file);

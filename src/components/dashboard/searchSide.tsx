@@ -5,26 +5,6 @@ import { regionList } from "../../views/dashboard/contents";
 import { activityList, seasonList } from "../../views/profile/contents";
 import { AutoComplete, DefaultButton, Icon, Select } from "../widgets";
 export const SearchSide: React.FC<any> = (props) => {
-    const [genreList, setGenreList] = useState<any>([]);
-    const [moodList, setMoodList] = useState<any>([]);
-    const [stationList, setStationList] = useState<any>([]);
-    const { user } = useAuth() as any;
-    
-    useEffect(()=>{
-        if(user&&user.profile){
-            getMoods().then((data) => {
-                setMoodList(data.result);
-            });
-            getGenres().then((data) => {
-                setGenreList(data.result);
-            });
-
-            getFilterStations().then((data)=>{
-                setStationList(data.result);
-            });
-        }
-    }, [user]);
-
     const {
         _genre = [],
         _mood = [],
@@ -33,11 +13,13 @@ export const SearchSide: React.FC<any> = (props) => {
         _region = "",
         _station = [],
         loading = false,
-        searchGenre = "",
+        searchGenre = null,
         searchStation = "",
+        genreList = [],
+        moodList = [],
+        stationList = []
     } = props.data;
     
-
   return (
     <fieldset className="box-common search-form">
         <div className="mb-4">
@@ -52,7 +34,7 @@ export const SearchSide: React.FC<any> = (props) => {
                         disabled={loading!==""}
                         key={"genre_"+genre}
                     >
-                        {genre}
+                        {genreList.filter((g:any)=>g.id===genre)[0].title}
                         <span
                             onClick={()=>props.data.handleGenre(genre)}
                         >
@@ -66,10 +48,10 @@ export const SearchSide: React.FC<any> = (props) => {
                 <AutoComplete
                     width={"100%"}
                     items={genreList}
-                    itemKeyProperty={"title"}
+                    itemKeyProperty={"id"}
                     itemLabelProperty={"title"}
                     value={searchGenre}
-                    onChange={props.data.setSearchGenre}
+                    onChange={(item)=>{props.data.setSearchGenre(item)}}
                     disabled={loading!==""}
                     borderColor="var(--color-blue-light)"
                 />
@@ -87,7 +69,7 @@ export const SearchSide: React.FC<any> = (props) => {
                             className="mb-3 me-3 small-button"
                             disabled={loading!==""}
                             key={mood.id}
-                            onClick={props.data.handleMood}
+                            onClick={()=>props.data.handleMood(mood.id)}
                         >
                             {mood.title}
                         </DefaultButton>

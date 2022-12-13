@@ -105,7 +105,6 @@ export const AnalyseForm: React.FC<any> = (props) => {
                     <input
                         className="input-zone"
                         {...getInputProps()}
-
                     />
                     
                     <p className="dropzone-content">

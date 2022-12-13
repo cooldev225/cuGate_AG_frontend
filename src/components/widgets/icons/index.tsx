@@ -21,6 +21,8 @@ import facebook from "./svg/facebook";
 import instagram from "./svg/instagram";
 import loading from "./svg/loading";
 import close from "./svg/close";
+import arrow_up from "./svg/arrow-up";
+import arrow_down from "./svg/arrow-down";
 export const Icon: React.FC<IconProps> = ({
   name = "",
   color = "currentColor",
@@ -49,5 +51,7 @@ export const Icon: React.FC<IconProps> = ({
     name === "social"? instagram:
     name === "loading"? loading:
     name === "close"? close:
+    name === "arrow-up"? arrow_up:
+    name === "arrow-down"? arrow_down:
     SearchIcon, { color, width }) || null;
 };

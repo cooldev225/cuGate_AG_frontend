@@ -35,3 +35,23 @@ Username
 elastic
 Password
 TVnM9cpsM1Hiq4WfAxe2bGO9
+
+
+https://www.dropbox.com/sh/l5asrz83ut80buq/AABrgK9Zb4F5fOSMr31SvSGta?dl=0
+
+
+Facebook App-ID : 2686449188157392
+Google Client-ID:47280013541-48h0gjarpr2tn7tjmick9s5v6p9a3js3.apps.googleusercontent.com
+Google Client-Secret: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
+
+
+
+@Lado
+ gave access to console.cloude.google.com
+login: apps@cugate.com
+password: inL16TM2o4XM
+
+
+curadio.net
+kenny
+abcd1234

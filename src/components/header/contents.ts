@@ -99,6 +99,12 @@ export const menuUserList: {
         icon: 0,
     },
     {
+        key: "tageditor",
+        text: "Tag Editor",
+        url: "https://te.cugate.com",
+        icon: 0,
+    },
+    {
         key: "profile",
         text: "My profile",
         url: "/profile",

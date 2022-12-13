@@ -546,7 +546,7 @@ export const ProfilePage: React.FC = () => {
                     className='mt-3'
                     onSubmit={handleFavoritesSubmit}
                 >
-                    <Form.Label key={1} className="d-flex justify-content-left mb-2">
+                    <Form.Label className="d-flex justify-content-left mb-2">
                         <h3>Genres</h3>
                     </Form.Label>
                     <div className="mb-4 d-flex flex-wrap">
@@ -603,7 +603,7 @@ export const ProfilePage: React.FC = () => {
                         )}
                     </div>
 
-                    <Form.Label key={2} className="d-flex justify-content-left mb-2">
+                    <Form.Label className="d-flex justify-content-left mb-2">
                         <h3>Mood</h3>
                     </Form.Label>
                     <div className="mb-4">
@@ -634,7 +634,7 @@ export const ProfilePage: React.FC = () => {
                         ))}
                     </div>
 
-                    <Form.Label key={3} className="d-flex justify-content-left mb-2">
+                    <Form.Label className="d-flex justify-content-left mb-2">
                         <h3>Activity</h3>
                     </Form.Label>
                     <div className="mb-4">
@@ -665,7 +665,7 @@ export const ProfilePage: React.FC = () => {
                         ))}
                     </div>
 
-                    <Form.Label key={4} className="d-flex justify-content-left mb-2">
+                    <Form.Label className="d-flex justify-content-left mb-2">
                         <h3>Season</h3>
                     </Form.Label>
                     <div className="mb-4">

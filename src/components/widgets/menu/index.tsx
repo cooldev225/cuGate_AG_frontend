@@ -136,6 +136,7 @@ export const Menu: React.FC<Props> = (props) => {
         styles={position}
         maxHeight={maxHeight}
         selectedColor={selectedColor}
+        style={{minHeight:'200px'}}
       >
         {Array.isArray(menuItems)&&menuItems.length ? (
           <ul>

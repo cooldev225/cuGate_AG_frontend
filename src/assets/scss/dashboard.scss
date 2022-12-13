@@ -97,10 +97,11 @@
                         font-size: 1.5rem;
                         font-weight: bold;
                     }
-                    .description{
-                        font-size: 0.8rem;
-                        font-weight: 400;
-                        color: grey;
+                }
+                .item-album{
+                    img{
+                        width: 64px;
+                        height: 64px;
                     }
                 }
                 .portal_block{
@@ -112,6 +113,11 @@
                         width: 100%;
                         height: 100%;
                     }
+                }
+                .description{
+                    font-size: 0.8rem;
+                    font-weight: 400;
+                    color: grey;
                 }
             }
         }
