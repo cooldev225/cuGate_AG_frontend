@@ -559,11 +559,11 @@ export const DashboardPage: React.FC = () => {
                                                                     color:'black',
                                                                 }}>
                                                                     <div style={{
-                                                                        width:(100*item.max_count/trackSearch.pagination.max)+'%',
+                                                                        width:(100*item.sum_count/trackSearch.pagination.sum)+'%',
                                                                         height:'100%',
                                                                         backgroundColor: '#00cbd8',
                                                                     }}>
-                                                                        <span className="fw-bold ms-2">{item.max_count}</span>
+                                                                        <span className="fw-bold ms-2">{item.sum_count}</span>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -813,6 +813,30 @@ export const DashboardPage: React.FC = () => {
                             ):(
                                 <Fragment>
                                 {artistSearch.list.map((item:any, index:number)=>(
+                                    <Fragment>
+                                    {(formData.sort_by==="played_ranking"||formData.sort_by==="played_count")?(
+                                    <div className="row-item mb-3" key={"item_"+index}>
+                                        <div className="d-flex justify-content-between">
+                                            <div className="d-flex item-album">
+                                                <img src={`https://img.cugate.com/?o=member&i=${item.id}&s=174`} alt=""/>
+                                                <div className="ms-2 item-album-title">
+                                                    <div className="fw-bold">{item.artist}</div>
+                                                </div>
+                                            </div>
+                                            <div className="d-flex mb-2 mt-3">
+                                                <DefaultButton
+                                                    className="small-button"
+                                                    color="white"
+                                                    textColor="var(--color-blue-light)"
+                                                    borderColor="var(--color-blue-light)"
+                                                    onClick={()=>handleAlbumDetail(item.id)}
+                                                >
+                                                    View
+                                                </DefaultButton>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    ):(
                                     <div className="row-item mb-3" key={"item_"+index}>
                                         <div className="d-flex justify-content-between">
                                             <div className="d-flex item-album">
@@ -834,6 +858,8 @@ export const DashboardPage: React.FC = () => {
                                             </div>
                                         </div>
                                     </div>
+                                    )}
+                                    </Fragment>
                                 ))}
                                 {artistSearch.pagination.pages>0&&artistSearch.pagination.pages>artistSearch.pagination.page+1&&(
                                     <div
