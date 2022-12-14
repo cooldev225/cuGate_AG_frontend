@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "../../assets/scss/profile.scss";
-import { menuList } from "./contents";
+import DataTable from 'react-data-table-component';
+import { menuList, tabMenuList, trackColumnList, trackData, albumColumnList, albumData } from "./contents";
 import { useState } from "react";
 
 export const TagEditorPage: React.FC = () => {
@@ -23,10 +24,17 @@ export const TagEditorPage: React.FC = () => {
                 </ul>
             </div>
             <div className="col-9 content-wrapper">
+
                 {active === menuList[0].key ? (
-                    <></>
+                    <DataTable
+                        columns={trackColumnList}
+                        data={trackData}
+                    />
                 ) : (
-                    <></>
+                    <DataTable
+                        columns={albumColumnList}
+                        data={albumData}
+                    />
                 )}
             </div>
         </div>
