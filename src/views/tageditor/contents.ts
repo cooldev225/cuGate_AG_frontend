@@ -1,4 +1,3 @@
-import { TableColumn } from "react-data-table-component";
 export const menuList: {
     key: string;
     text?: string;
@@ -29,30 +28,12 @@ export const tabMenuList: {
         }
     ];
 
-interface TrackDataRow {
-    id: number;
-    fp: boolean;
-    title: string;
-    time: string;
-}
-export const trackColumnList: TableColumn<TrackDataRow>[] = [
-    {
-        name: 'ID',
-        selector: row => row.id,
-    },
-    {
-        name: 'FP',
-        selector: row => row.fp ? 'YES' : 'NO',
-    },
-    {
-        name: 'Time',
-        selector: row => row.time,
-    },
-    {
-        name: 'Title',
-        selector: row => row.title,
-    },
-];
+// interface TrackDataRow {
+//     id: number;
+//     fp: boolean;
+//     title: string;
+//     time: string;
+// }
 
 export const trackData = [
     {
@@ -69,25 +50,12 @@ export const trackData = [
     },
 ]
 
-interface AlbumDataRow {
-    id: number;
-    title: string;
-    time: string;
-}
-export const albumColumnList: TableColumn<AlbumDataRow>[] = [
-    {
-        name: 'ID',
-        selector: row => row.id,
-    },
-    {
-        name: 'Time',
-        selector: row => row.time,
-    },
-    {
-        name: 'Title',
-        selector: row => row.title,
-    },
-];
+// interface AlbumDataRow {
+//     id: number;
+//     title: string;
+//     time: string;
+// }
+
 
 export const albumData = [
     {
