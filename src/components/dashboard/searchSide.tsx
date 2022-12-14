@@ -19,77 +19,77 @@ export const SearchSide: React.FC<any> = (props) => {
         moodList = [],
         stationList = []
     } = props.data;
-    
-  return (
-    <fieldset className="box-common search-form">
-        <div className="mb-4">
-            <p className="h5">Genre</p>
-            <div className="">
-                {_genre.map((genre:any)=>(
-                    <DefaultButton
-                        color="var(--color-blue-light)"
-                        textColor="white"
-                        borderColor="var(--color-blue-light)"
-                        className="mb-3 me-3 small-button"
-                        disabled={loading!==""}
-                        key={"genre_"+genre}
-                    >
-                        {genreList.filter((g:any)=>g.id===genre)[0].title}
-                        <span
-                            onClick={()=>props.data.handleGenre(genre)}
-                        >
-                            <Icon
-                                name="close"
-                                color="white"
-                            />
-                        </span>
-                    </DefaultButton>
-                ))}
-                <AutoComplete
-                    width={"100%"}
-                    items={genreList}
-                    itemKeyProperty={"id"}
-                    itemLabelProperty={"title"}
-                    value={searchGenre}
-                    onChange={(item)=>{props.data.setSearchGenre(item)}}
-                    disabled={loading!==""}
-                    borderColor="var(--color-blue-light)"
-                />
-            </div>
-        </div>
-        <div className="mb-4">
-            <p className="h5">Mood</p>
-            <div className="">
-                {moodList.map((mood:any)=>(
-                    _mood.filter((g:any)=>g===mood.id).length?(
+
+    return (
+        <fieldset className="box-common search-form">
+            <div className="mb-4">
+                <p className="h5">Genre</p>
+                <div className="">
+                    {_genre.map((genre: any) => (
                         <DefaultButton
                             color="var(--color-blue-light)"
                             textColor="white"
                             borderColor="var(--color-blue-light)"
                             className="mb-3 me-3 small-button"
-                            disabled={loading!==""}
-                            key={mood.id}
-                            onClick={()=>props.data.handleMood(mood.id)}
+                            disabled={loading !== ""}
+                            key={"genre_" + genre}
                         >
-                            {mood.title}
+                            {genreList.filter((g: any) => g.id === genre)[0].title}
+                            <span
+                                onClick={() => props.data.handleGenre(genre)}
+                            >
+                                <Icon
+                                    name="close"
+                                    color="white"
+                                />
+                            </span>
                         </DefaultButton>
-                    ):(
-                        <DefaultButton
-                            color="white"
-                            textColor="var(--color-blue-light)"
-                            borderColor="var(--color-blue-light)"
-                            className="mb-3 me-3 small-button"
-                            disabled={loading!==""}
-                            key={mood.id}
-                            onClick={()=>props.data.handleMood(mood.id)}
-                        >
-                            {mood.title}
-                        </DefaultButton>
-                    )
-                ))}
+                    ))}
+                    <AutoComplete
+                        width={"100%"}
+                        items={genreList}
+                        itemKeyProperty={"id"}
+                        itemLabelProperty={"title"}
+                        value={searchGenre}
+                        onChange={(item) => { props.data.setSearchGenre(item) }}
+                        disabled={loading !== ""}
+                        borderColor="var(--color-blue-light)"
+                    />
+                </div>
             </div>
-        </div>
-        <div className="mb-4">
+            <div className="mb-4">
+                <p className="h5">Mood</p>
+                <div className="">
+                    {moodList.map((mood: any) => (
+                        _mood.filter((g: any) => g === mood.id).length ? (
+                            <DefaultButton
+                                color="var(--color-blue-light)"
+                                textColor="white"
+                                borderColor="var(--color-blue-light)"
+                                className="mb-3 me-3 small-button"
+                                disabled={loading !== ""}
+                                key={mood.id}
+                                onClick={() => props.data.handleMood(mood.id)}
+                            >
+                                {mood.title}
+                            </DefaultButton>
+                        ) : (
+                            <DefaultButton
+                                color="white"
+                                textColor="var(--color-blue-light)"
+                                borderColor="var(--color-blue-light)"
+                                className="mb-3 me-3 small-button"
+                                disabled={loading !== ""}
+                                key={mood.id}
+                                onClick={() => props.data.handleMood(mood.id)}
+                            >
+                                {mood.title}
+                            </DefaultButton>
+                        )
+                    ))}
+                </div>
+            </div>
+            {/* <div className="mb-4">
             <p className="h5">Activity</p>
             <div className="">
                 {activityList.map((activity, index)=>(
@@ -197,9 +197,9 @@ export const SearchSide: React.FC<any> = (props) => {
                 onChange={props.data.setSearchStation}
                 borderColor="var(--color-blue-light)"
             />
-        </div>
-    </fieldset>
-  );
+        </div> */}
+        </fieldset>
+    );
 };
 
 export default SearchSide;
