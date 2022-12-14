@@ -14,3 +14,4 @@ export { SubscribePage } from "./profile/subscribe";
 export { MembershipPage } from "./membership";
 export { CheckoutPage } from "./membership/checkout";
 export { DashboardPage } from "./dashboard";
+export { TagEditorPage } from "./tageditor";
