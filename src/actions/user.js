@@ -30,7 +30,7 @@ export async function registerAction(data) {
 
 export async function getUserInfo() {
   const response = await axios.post("/getUserInfo", {});
-  if (response.status === 200){
+  if (response.status === 200) {
     return response.data;
   }
   else return [];

@@ -1,8 +1,9 @@
-import React, { Fragment, useCallback, useEffect, useState } from "react";
+import React, { Fragment, useCallback } from "react";
 import ReactAudioPlayer from "react-audio-player";
 import { useDropzone } from "react-dropzone";
 import { uploadTrackToAnalyze } from "../../actions/user";
 import { DefaultButton, Icon } from "../widgets";
+import Progressbar from "../widgets/progressbar";
 export const AnalyseForm: React.FC<any> = (props) => {
     const {
         analyzeFile = null,
@@ -21,10 +22,9 @@ export const AnalyseForm: React.FC<any> = (props) => {
         acceptedFiles.map((file) => {
             const reader = new FileReader();
             reader.onload = function (e) {
-                // console.log(e.target?.result);
                 setTabMenu("analyze");
                 setLoading("analyze");
-                uploadTrackToAnalyze(file).then((data: any)=>{
+                uploadTrackToAnalyze(file).then((data: any) => {
                     setLoading("");
                     setUploadedFile(data.data);
                 });
@@ -33,7 +33,8 @@ export const AnalyseForm: React.FC<any> = (props) => {
             setAnalyzeFile(file);
             return file;
         });
-    }, []);
+    }, [setAnalyzeFile, setLoading, setTabMenu, setUploadedFile]);
+
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         accept: {
@@ -44,7 +45,7 @@ export const AnalyseForm: React.FC<any> = (props) => {
 
     return (
         <Fragment>
-            {analyzeFile?(
+            {analyzeFile ? (
                 <div
                     className={"file-upload-box text-center drag-active"}
                 >
@@ -59,14 +60,14 @@ export const AnalyseForm: React.FC<any> = (props) => {
                             className=""
                         />
                     </div>
-                    {(loading!=="analyze"||loading==="analyze"&&uploadedFile!==null)&&(
+                    {(loading !== "analyze" || (loading === "analyze" && uploadedFile !== null)) && (
                         <Fragment>
                             <DefaultButton
                                 color="var(--color-blue-light)"
                                 textColor="white"
                                 borderColor="var(--color-blue-light)"
                                 className="me-3"
-                                onClick={()=>{setAnalyzeFile(null);setUploadedFile(null);}}
+                                onClick={() => { setAnalyzeFile(null); setUploadedFile(null); }}
                             >
                                 Cancel
                             </DefaultButton>
@@ -78,37 +79,42 @@ export const AnalyseForm: React.FC<any> = (props) => {
                                 disabled={uploadedFileDiv}
                                 onClick={handleAnalyze}
                             >
-                                {loading==="analyze"?(
-                                    <Icon name='loading'/>
-                                ):(
+                                {loading === "analyze" ? (
+                                    <Icon name='loading' />
+                                ) : (
                                     "Submit"
                                 )}
                             </DefaultButton>
                         </Fragment>
+                    )}
+                    {loading === "analyze" && (
+                        <div className="progress-bar">
+                            <Progressbar />
+                        </div>
                     )}
                     <DefaultButton
                         color="var(--color-blue-light)"
                         textColor="white"
                         borderColor="var(--color-blue-light)"
                         className="close-btn"
-                        onClick={()=>setAnalyzeClose(true)}
+                        onClick={() => setAnalyzeClose(true)}
                     >
-                        <Icon name="close"/>
+                        <Icon name="close" />
                     </DefaultButton>
                 </div>
-            ):(
+            ) : (
                 <div
                     {...getRootProps({ className: "dropzone", accept: "mp3/*" })}
-                    className={"focus file-upload-box text-center" + (isDragActive?" drag-active":"")}
+                    className={"focus file-upload-box text-center" + (isDragActive ? " drag-active" : "")}
                 >
-                    <img src="upload_cloud.svg" alt="upload"/>
+                    <img src="upload_cloud.svg" alt="upload" />
                     <input
                         className="input-zone"
                         {...getInputProps()}
                     />
-                    
+
                     <p className="dropzone-content">
-                        {isDragActive?"Release to drop the files here":"Drag your file here"}
+                        {isDragActive ? "Release to drop the files here" : "Drag your file here"}
                     </p>
                     <DefaultButton
                         color="var(--color-blue-light)"
@@ -122,10 +128,10 @@ export const AnalyseForm: React.FC<any> = (props) => {
                         color="var(--color-blue-light)"
                         textColor="white"
                         borderColor="var(--color-blue-light)"
-                        onClick={()=>setAnalyzeClose(true)}
+                        onClick={() => setAnalyzeClose(true)}
                         className="close-btn"
                     >
-                        <Icon name="close"/>
+                        <Icon name="close" />
                     </DefaultButton>
                 </div>
             )}
