@@ -225,9 +225,7 @@ export const DashboardPage: React.FC = () => {
                 filter: formData
             }).then((res) => {
                 data.pagination = res.result.pagination;
-                res.result.list.map((r: any) => {
-                    data.list.push(r);
-                });
+                res.result.list.map((r: any) => data.list.push(r));
                 setTrackSearch({ ...data });
                 setMoreLoading(false);
             }).catch((err) => {
@@ -244,9 +242,7 @@ export const DashboardPage: React.FC = () => {
                 filter: formData
             }).then((res) => {
                 data.pagination = res.result.pagination;
-                res.result.list.map((r: any) => {
-                    data.list.push(r);
-                });
+                res.result.list.map((r: any) => data.list.push(r));
                 setAlbumSearch({ ...data });
                 setMoreLoading(false);
             }).catch((err) => {
@@ -263,9 +259,7 @@ export const DashboardPage: React.FC = () => {
                 filter: formData
             }).then((res) => {
                 data.pagination = res.result.pagination;
-                res.result.list.map((r: any) => {
-                    data.list.push(r);
-                });
+                res.result.list.map((r: any) => data.list.push(r));
                 setArtistSearch({ ...data });
                 setMoreLoading(false);
             }).catch((err) => {
@@ -282,9 +276,7 @@ export const DashboardPage: React.FC = () => {
                 filter: formData
             }).then((res) => {
                 data.pagination = res.result.pagination;
-                res.result.list.map((r: any) => {
-                    data.list.push(r);
-                });
+                res.result.list.map((r: any) => data.list.push(r));
                 setStationSearch({ ...data });
                 setMoreLoading(false);
             }).catch((err) => {
@@ -442,7 +434,7 @@ export const DashboardPage: React.FC = () => {
                             "handleAnalyze": handleAnalyze,
                             "setAnalyzeClose": setAnalyzeClose,
                             "setTabMenu": setTabMenu,
-                            "setLoading": setLoading,
+                            "setLoading": setLoading
                         }
                     } />
                 )}

@@ -19,40 +19,40 @@ export const CheckoutPage: React.FC = () => {
     });
     const [total, setTotal] = useState<number>(0);
     const [duration, setDuration] = useState<number>(0);
-    const monthsByLevel = [1,3,6,12,48];
+    const monthsByLevel = [1, 3, 6, 12, 48];
 
-    useEffect(()=>{
-        if(user&&user.profile&&user.profile.membership_level && plan.id && user.profile.membership_level===plan.id){
+    useEffect(() => {
+        if (user && user.profile && user.profile.membership_level && plan.id && user.profile.membership_level === plan.id) {
             navigate('/profile');
         }
-    },[user, plan]);
+    }, [user, plan, navigate]);
 
-    useEffect(()=>{
-        planList.map((p: any) => {
-            if(p.key===id){
+    useEffect(() => {
+        planList.forEach((p: any) => {
+            if (p.key === id) {
                 setPlan(p);
             }
         });
-    },[id]);
+    }, [id]);
 
-    useEffect(()=>{
-        if(plan.price){
-            if(duration===0){
+    useEffect(() => {
+        if (plan.price) {
+            if (duration === 0) {
                 setTotal((plan.price).toFixed(2));
-            }else if(duration===1){
-                let v = plan.price*0.6*3;
-               setTotal(Number(v.toFixed(2)));
-            }else if(duration===2){
-                setTotal(Number((plan.price*0.5*6).toFixed(2)));
-            }else if(duration===3){
-                setTotal(Number((plan.price*0.4*12).toFixed(2)));
-            }else if(duration===4){
-                setTotal(Number((plan.price*0.3*48).toFixed(2)));
+            } else if (duration === 1) {
+                let v = plan.price * 0.6 * 3;
+                setTotal(Number(v.toFixed(2)));
+            } else if (duration === 2) {
+                setTotal(Number((plan.price * 0.5 * 6).toFixed(2)));
+            } else if (duration === 3) {
+                setTotal(Number((plan.price * 0.4 * 12).toFixed(2)));
+            } else if (duration === 4) {
+                setTotal(Number((plan.price * 0.3 * 48).toFixed(2)));
             }
-        }else{
+        } else {
             setTotal(0);
         }
-    },[duration, plan]);
+    }, [duration, plan]);
 
     const handleMembership = () => {
         navigate('/membership');
@@ -60,12 +60,12 @@ export const CheckoutPage: React.FC = () => {
 
     const handlePayment = async () => {
         let plan_id = plan.id;
-        if(!plan_id){
-            planList.map((p: any) => {
+        if (!plan_id) {
+            planList.forEach((p: any) => {
                 plan_id = p.id;
             });
         }
-        if(plan_id){
+        if (plan_id) {
             await setUserInfo({
                 is_membership: true,
                 membership_level: plan_id,
@@ -91,7 +91,7 @@ export const CheckoutPage: React.FC = () => {
                             >
                                 <h4>{plan.title}</h4>
                                 <ul className="mb-5">
-                                    {plan?.items.map((item: any, index:number)=>(
+                                    {plan?.items.map((item: any, index: number) => (
                                         <li key={index} className="mb-4">{item}</li>
                                     ))}
                                 </ul>
@@ -106,91 +106,91 @@ export const CheckoutPage: React.FC = () => {
                                 className={"card card-duration"}
                             >
                                 <div
-                                    className={"card-item focus d-flex justify-content-between" + (duration===4?' active':'')}
-                                    onClick={()=>setDuration(4)}
+                                    className={"card-item focus d-flex justify-content-between" + (duration === 4 ? ' active' : '')}
+                                    onClick={() => setDuration(4)}
                                 >
                                     <div className="d-flex align-items-center">
                                         <input
                                             type={"radio"}
                                             name="duration_op"
-                                            checked={duration===4?true:false}
-                                            onChange={()=>{;}}
+                                            checked={duration === 4 ? true : false}
+                                            onChange={() => { ; }}
                                         />
                                         <span>48 months</span>
                                         <span className="badge">SAVE 70%</span>
                                     </div>
                                     <div>
                                         <span className="promote">${plan.price}</span>
-                                        <span>${(plan.price*0.3).toFixed(2)} / mo</span>
+                                        <span>${(plan.price * 0.3).toFixed(2)} / mo</span>
                                     </div>
                                 </div>
                                 <div
-                                    className={"card-item focus d-flex justify-content-between" + (duration===3?' active':'')}
-                                    onClick={()=>setDuration(3)}
+                                    className={"card-item focus d-flex justify-content-between" + (duration === 3 ? ' active' : '')}
+                                    onClick={() => setDuration(3)}
                                 >
                                     <div className="d-flex align-items-center">
                                         <input
                                             type={"radio"}
                                             name="duration_op"
-                                            checked={duration===3?true:false}
-                                            onChange={()=>{;}}
+                                            checked={duration === 3 ? true : false}
+                                            onChange={() => { ; }}
                                         />
                                         <span>12 months</span>
                                         <span className="badge">SAVE 60%</span>
                                     </div>
                                     <div>
                                         <span className="promote">${plan.price}</span>
-                                        <span>${(plan.price*0.4).toFixed(2)} / mo</span>
+                                        <span>${(plan.price * 0.4).toFixed(2)} / mo</span>
                                     </div>
                                 </div>
                                 <div
-                                    className={"card-item focus d-flex justify-content-between" + (duration===2?' active':'')}
-                                    onClick={()=>setDuration(2)}
+                                    className={"card-item focus d-flex justify-content-between" + (duration === 2 ? ' active' : '')}
+                                    onClick={() => setDuration(2)}
                                 >
                                     <div className="d-flex align-items-center">
                                         <input
                                             type={"radio"}
                                             name="duration_op"
-                                            checked={duration===2?true:false}
-                                            onChange={()=>{;}}
+                                            checked={duration === 2 ? true : false}
+                                            onChange={() => { ; }}
                                         />
                                         <span>6 months </span>
                                         <span className="badge">SAVE 50%</span>
                                     </div>
                                     <div>
                                         <span className="promote">${plan.price}</span>
-                                        <span>${(plan.price*0.5).toFixed(2)} / mo</span>
+                                        <span>${(plan.price * 0.5).toFixed(2)} / mo</span>
                                     </div>
                                 </div>
                                 <div
-                                    className={"card-item focus d-flex justify-content-between" + (duration===1?' active':'')}
-                                    onClick={()=>setDuration(1)}
+                                    className={"card-item focus d-flex justify-content-between" + (duration === 1 ? ' active' : '')}
+                                    onClick={() => setDuration(1)}
                                 >
                                     <div className="d-flex align-items-center">
                                         <input
                                             type={"radio"}
                                             name="duration_op"
-                                            checked={duration===1?true:false}
-                                            onChange={()=>{;}}
+                                            checked={duration === 1 ? true : false}
+                                            onChange={() => { ; }}
                                         />
                                         <span>3 months</span>
                                         <span className="badge">SAVE 40%</span>
                                     </div>
                                     <div>
                                         <span className="promote">${plan.price}</span>
-                                        <span>${(plan.price*0.6).toFixed(2)} / mo</span>
+                                        <span>${(plan.price * 0.6).toFixed(2)} / mo</span>
                                     </div>
                                 </div>
                                 <div
-                                    className={"card-item focus d-flex justify-content-between" + (duration===0?' active':'')}
-                                    onClick={()=>setDuration(0)}
+                                    className={"card-item focus d-flex justify-content-between" + (duration === 0 ? ' active' : '')}
+                                    onClick={() => setDuration(0)}
                                 >
                                     <div className="d-flex align-items-center">
                                         <input
                                             type={"radio"}
                                             name="duration_op"
-                                            checked={duration===0?true:false}
-                                            onChange={()=>{;}}
+                                            checked={duration === 0 ? true : false}
+                                            onChange={() => { ; }}
                                         />
                                         <span>1 month</span>
                                     </div>
@@ -208,7 +208,7 @@ export const CheckoutPage: React.FC = () => {
                                 <PayPalScriptProvider
                                     options={{ "client-id": PAYMENT_KEYS.PAYPAL.CLIENT_ID }}
                                 >
-                                    <PayPalButtons  onClick={()=>handlePayment()} style={{ layout: "horizontal" }} />
+                                    <PayPalButtons onClick={() => handlePayment()} style={{ layout: "horizontal" }} />
                                 </PayPalScriptProvider>
                                 <div className="d-flex justify-content-between fw-bold">
                                     <span>Total</span>
@@ -219,7 +219,7 @@ export const CheckoutPage: React.FC = () => {
                     </div>
                 </div>
             </div>
-            
+
         </div>
     );
 };

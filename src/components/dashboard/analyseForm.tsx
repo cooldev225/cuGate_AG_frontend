@@ -43,6 +43,10 @@ export const AnalyseForm: React.FC<any> = (props) => {
         }
     });
 
+    const handleCloseAnalyseForm = useCallback(() => {
+        setAnalyzeClose(true);
+        setTabMenu('tracks')
+    }, [setAnalyzeClose, setTabMenu])
     return (
         <Fragment>
             {analyzeFile ? (
@@ -128,7 +132,7 @@ export const AnalyseForm: React.FC<any> = (props) => {
                         color="var(--color-blue-light)"
                         textColor="white"
                         borderColor="var(--color-blue-light)"
-                        onClick={() => setAnalyzeClose(true)}
+                        onClick={handleCloseAnalyseForm}
                         className="close-btn"
                     >
                         <Icon name="close" />

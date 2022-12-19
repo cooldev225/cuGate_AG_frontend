@@ -3,12 +3,12 @@ import Geocode from "react-geocode";
 import { setUserInfo } from "../actions/user";
 
 const ourLocation = {
-  lat: 52.48546014466491, 
+  lat: 52.48546014466491,
   lon: 13.34604,
 };
 export function setAddress(lat: number, lng: number) {
   return new Promise(function (resolve, reject) {
-    if(lat==null||lat==undefined||lng==null||lng==undefined){
+    if (lat === null || lat === undefined || lng === null || lng === undefined) {
       lat = ourLocation.lat;
       lng = ourLocation.lon;
     }
@@ -48,7 +48,7 @@ export function setAddress(lat: number, lng: number) {
           }
         }
         console.log(["set location", data])
-        setUserInfo(data).then(()=>{
+        setUserInfo(data).then(() => {
           resolve("successful");
         });
       },
@@ -59,7 +59,7 @@ export function setAddress(lat: number, lng: number) {
           register_latitude: lat,
           register_longitude: lng,
         };
-        setUserInfo(data).then(()=>{
+        setUserInfo(data).then(() => {
           resolve("successful");
         });
       }

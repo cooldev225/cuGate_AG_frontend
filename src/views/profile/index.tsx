@@ -5,7 +5,7 @@ import { activityList, seasonList, menuList } from "./contents";
 import { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import useAuth from "../../hooks/useAuth";
-import { AutoComplete, DefaultButton, SearchInput } from "../../components/widgets";
+import { AutoComplete, DefaultButton } from "../../components/widgets";
 ////import MapPicker from 'react-google-map-picker';
 import GoogleMapReact from 'google-map-react';
 import { getGenres, getMoods, getUserInfo } from "../../actions/user";
@@ -13,7 +13,6 @@ import { GOOGLE_MAP_KEY } from "../../constants";
 import { setAddress } from "../../utils/geocode";
 import Geocode from "react-geocode";
 import { setUserInfo } from "../../actions/user";
-import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import moment from "moment";
 import { planList } from "../membership/contents";
@@ -44,7 +43,7 @@ interface formDataType {
     mobile_number: string;
     country: string;
     address: string;
-    favorites:formDataFavoritesType;
+    favorites: formDataFavoritesType;
     current_password: string;
     new_password: string;
     confirm_password: string;
@@ -61,9 +60,8 @@ export const ProfilePage: React.FC = () => {
     const [moodList, setMoodList] = useState<moodType[]>([]);
     const [showMap, setShowMap] = useState(false);
     const [validated, setValidated] = useState(false);
-    const dispatch = useDispatch();
-    const Marker = (props:markerType) => <div>
-        <svg style={{marginLeft:'-18px',marginTop:'-50px'}} width="36px" height="36px" viewBox="-4 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+    const Marker = (props: markerType) => <div>
+        <svg style={{ marginLeft: '-18px', marginTop: '-50px' }} width="36px" height="36px" viewBox="-4 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
             <title>map-marker</title>
             <desc>Created with Sketch.</desc>
             <defs></defs>
@@ -97,64 +95,66 @@ export const ProfilePage: React.FC = () => {
             activity: [],
             season: [],
         },
-        current_password:"",
-        new_password:"",
-        confirm_password:"",
+        current_password: "",
+        new_password: "",
+        confirm_password: "",
     });
-    const [location, setLocation] = useState({lat: 52.5200, lng: 13.4050});
+    const [location, setLocation] = useState({ lat: 52.5200, lng: 13.4050 });
     const [zoom, setZoom] = useState(10);
     const [loading, setLoading] = useState(false);
     const [searchGenre, setSearchGenre] = useState("");
-      
-    useEffect(()=>{
+
+    useEffect(() => {
         setTimeout(() => {
             setShowMap(true);
         }, 1000);
-        if(user&&user.profile){
-            formData.first_name = user.profile.first_name?user.profile.first_name:"";
-            formData.last_name = user.profile.last_name?user.profile.last_name:"";
+        if (user && user.profile) {
+            formData.first_name = user.profile.first_name ? user.profile.first_name : "";
+            formData.last_name = user.profile.last_name ? user.profile.last_name : "";
             formData.username = user.account;
             formData.email = user.email;
-            formData.mobile_number = user.tel?user.tel:"";
-            formData.company_name = user.company?user.company:"";
-            formData.contactor_number = user.profile.business_number?user.profile.business_number:"";
-            setLocation({lat:user.geo_info.lat, lng:user.geo_info.lon});
+            formData.mobile_number = user.tel ? user.tel : "";
+            formData.company_name = user.company ? user.company : "";
+            formData.contactor_number = user.profile.business_number ? user.profile.business_number : "";
+            setLocation({ lat: user.geo_info.lat, lng: user.geo_info.lon });
             setZoom(10);
             formData.country = user.geo_info.country;
             formData.address = user.geo_info.address;
 
             getGenres().then((data) => {
                 setGenreList(data.result);
-                if(user.profile.favorite_genres!==""){
+                if (user.profile.favorite_genres !== "") {
                     let favorites = formData.favorites;
-                    favorites.genre = user.profile.favorite_genres.split(',').map((m:string)=>Number(m));
-                    setFormData({...formData,favorites:favorites});
+                    favorites.genre = user.profile.favorite_genres.split(',').map((m: string) => Number(m));
+                    setFormData({ ...formData, favorites: favorites });
                 }
             });
 
             getMoods().then((data) => {
                 setMoodList(data.result);
-                if(user.profile.favorite_moods!==""){
+                if (user.profile.favorite_moods !== "") {
                     let favorites = formData.favorites;
-                    favorites.mood = user.profile.favorite_moods.split(',').map((m:string)=>Number(m));
-                    setFormData({...formData,favorites:favorites});
+                    favorites.mood = user.profile.favorite_moods.split(',').map((m: string) => Number(m));
+                    setFormData({ ...formData, favorites: favorites });
                 }
             });
 
             let favorites = formData.favorites;
-            if(user.profile.favorite_activities!==""){
+            if (user.profile.favorite_activities !== "") {
                 favorites.activity = user.profile.favorite_activities.split(',');
             }
-            if(user.profile.favorite_seasons!==""){
+            if (user.profile.favorite_seasons !== "") {
                 favorites.season = user.profile.favorite_seasons.split(',');
             }
-            setFormData({...formData,favorites:favorites});
+            setFormData({ ...formData, favorites: favorites });
         }
-    }, [user]);
-    useEffect(()=>{
-        let list = genreList.filter((g)=>g.id.toString()==searchGenre);
-        if(list.length)handleGenre(list[0].id);
-    },[searchGenre]);
+    }, [user, formData]);
+
+    useEffect(() => {
+        let list = genreList.filter((g) => g.id.toString() === searchGenre);
+        if (list.length) handleGenre(list[0].id);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchGenre, genreList]);
 
     const handlePersonalInformationSubmit = async (event: { currentTarget: any; preventDefault: () => void; stopPropagation: () => void; }) => {
         const form = event.currentTarget;
@@ -162,7 +162,7 @@ export const ProfilePage: React.FC = () => {
         if (form.checkValidity() === false) {
             event.stopPropagation();
             setValidated(true);
-        }else{
+        } else {
             setLoading(true);
             await setUserInfo({
                 is_profile: true,
@@ -171,10 +171,10 @@ export const ProfilePage: React.FC = () => {
                 business_number: formData.contactor_number,
             });
             await setUserInfo({
-                name: formData.first_name + (formData.last_name===''?'':' ') + formData.last_name,
+                name: formData.first_name + (formData.last_name === '' ? '' : ' ') + formData.last_name,
                 email: formData.email,
                 company: formData.company_name,
-                tel: formData.mobile_number,            
+                tel: formData.mobile_number,
             });
             await getUserInfo().then((data) => {
                 dispatchUser(data.result);
@@ -187,7 +187,7 @@ export const ProfilePage: React.FC = () => {
     };
 
     const handleFavoritesSubmit = async (event: { currentTarget: any; preventDefault: () => void; stopPropagation: () => void; }) => {
-        const form = event.currentTarget;
+        // const form = event.currentTarget;
         event.preventDefault();
         await setUserInfo({
             is_profile: true,
@@ -200,54 +200,54 @@ export const ProfilePage: React.FC = () => {
 
     const handleGenre = (genre: number) => {
         let list = [];
-        formData.favorites.genre.forEach((g)=>{
-            if(genre !== g) list.push(g);
+        formData.favorites.genre.forEach((g) => {
+            if (genre !== g) list.push(g);
         });
-        if(!formData.favorites.genre.filter((g)=>g===genre).length){
+        if (!formData.favorites.genre.filter((g) => g === genre).length) {
             list.push(genre);
         }
         let favorites = formData.favorites;
         favorites.genre = list;
-        setFormData({...formData,favorites:favorites});
+        setFormData({ ...formData, favorites: favorites });
     };
 
     const handleMood = (mood: number) => {
         let list = [];
-        formData.favorites.mood.forEach((g)=>{
-            if(mood !== g) list.push(g);
+        formData.favorites.mood.forEach((g) => {
+            if (mood !== g) list.push(g);
         });
-        if(!formData.favorites.mood.filter((g)=>g===mood).length){
+        if (!formData.favorites.mood.filter((g) => g === mood).length) {
             list.push(mood);
         }
         let favorites = formData.favorites;
         favorites.mood = list;
-        setFormData({...formData,favorites:favorites});
+        setFormData({ ...formData, favorites: favorites });
     };
 
     const handleActivity = (activity: any) => {
         let list = [];
-        formData.favorites.activity.forEach((g)=>{
-            if(activity !== g) list.push(g);
+        formData.favorites.activity.forEach((g) => {
+            if (activity !== g) list.push(g);
         });
-        if(!formData.favorites.activity.filter((g)=>g===activity).length){
+        if (!formData.favorites.activity.filter((g) => g === activity).length) {
             list.push(activity);
         }
         let favorites = formData.favorites;
         favorites.activity = list;
-        setFormData({...formData,favorites:favorites});
+        setFormData({ ...formData, favorites: favorites });
     };
 
     const handleSeason = (season: any) => {
         let list = [];
-        formData.favorites.season.forEach((g)=>{
-            if(season !== g) list.push(g);
+        formData.favorites.season.forEach((g) => {
+            if (season !== g) list.push(g);
         });
-        if(!formData.favorites.season.filter((g)=>g===season).length){
+        if (!formData.favorites.season.filter((g) => g === season).length) {
             list.push(season);
         }
         let favorites = formData.favorites;
         favorites.season = list;
-        setFormData({...formData,favorites:favorites});
+        setFormData({ ...formData, favorites: favorites });
     };
 
     const setLocationAction = async (e: GoogleMapReact.ClickEventValue) => {
@@ -265,17 +265,17 @@ export const ProfilePage: React.FC = () => {
                         }
                     }
                 }
-                setFormData({...formData,country:country,address: address});
+                setFormData({ ...formData, country: country, address: address });
                 setLocation({
-                    lat:response.results[0].geometry.location.lat,
-                    lng:response.results[0].geometry.location.lng
+                    lat: response.results[0].geometry.location.lat,
+                    lng: response.results[0].geometry.location.lng
                 });
             },
             (error) => {
                 console.error(error);
             }
         );
-        await setAddress(e.lat,e.lng);
+        await setAddress(e.lat, e.lng);
         await getUserInfo().then((data) => {
             dispatchUser(data.result);
         });
@@ -287,17 +287,17 @@ export const ProfilePage: React.FC = () => {
         if (form.checkValidity() === false) {
             event.stopPropagation();
             setValidated(true);
-        }else{
-            if(formData.new_password!==formData.confirm_password){
+        } else {
+            if (formData.new_password !== formData.confirm_password) {
                 setTimeout(() => {
                     toast("No match new password and confirm password!");
                 }, 200);
-                formData.new_password="";
-                formData.confirm_password="";
+                formData.new_password = "";
+                formData.confirm_password = "";
                 setFormData({
                     ...formData,
-                    new_password:"",
-                    confirm_password:"",
+                    new_password: "",
+                    confirm_password: "",
                 });
                 return;
             }
@@ -305,17 +305,17 @@ export const ProfilePage: React.FC = () => {
             await setUserInfo({
                 is_password: true,
                 password: formData.new_password,
-            }).then((data)=>{
-                if(data.result.code===-20000){
+            }).then((data) => {
+                if (data.result.code === -20000) {
                     setTimeout(() => {
                         toast(data.result.message);
                     }, 200);
                     setFormData({
                         ...formData,
-                        new_password:"",
-                        confirm_password:"",
+                        new_password: "",
+                        confirm_password: "",
                     });
-                }else{
+                } else {
                     setTimeout(() => {
                         toast("successful saved!");
                     }, 200);
@@ -328,187 +328,188 @@ export const ProfilePage: React.FC = () => {
     const handleMembership = () => {
         navigate("/membership");
     };
+
     return (
         <div className="page page-profile uk-container-large mt-5 row">
             <div className="col-3 left-menu">
                 <ul>
-                    {menuList.map((menu, index)=>(
+                    {menuList.map((menu, index) => (
                         <li
                             key={index}
-                            className={"mb-1 " + (menu.key === active?"active":"")}
-                            onClick={()=>setActive(menu.key)}
+                            className={"mb-1 " + (menu.key === active ? "active" : "")}
+                            onClick={() => setActive(menu.key)}
                         >
                             <Link to={""}>{menu.text}</Link>
-                        </li>    
+                        </li>
                     ))}
                 </ul>
             </div>
             <div className="col-9 content-wrapper">
-            {active===menuList[0].key?(
-                <Form
-                    noValidate
-                    className='mt-3'
-                    validated={validated}
-                    onSubmit={handlePersonalInformationSubmit}
-                >
-                    <Form.Label className="d-flex justify-content-left mb-2">
-                        <h3>General</h3>
-                    </Form.Label>
-                    <div className="row mb-4">
-                        <Form.Group className="col-6">
-                            <Form.Label>First Name</Form.Label>
-                            <Form.Control
-                                required
-                                type="text"
-                                value={formData.first_name}
-                                onChange={(e)=>setFormData({...formData,first_name:e.target.value})}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Please fill out first name.
-                            </Form.Control.Feedback>
-                        </Form.Group>
-
-                        <Form.Group className="col-6">
-                            <Form.Label>Last Name</Form.Label>
-                            <Form.Control
-                                required
-                                type="text"
-                                value={formData.last_name}
-                                onChange={(e)=>setFormData({...formData,last_name:e.target.value})}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Please fill out last name.
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                    </div>
-
-                    <div className="row mb-4">
-                        <Form.Group className="col-6">
-                            <Form.Label>Username</Form.Label>
-                            <Form.Control
-                                required
-                                disabled
-                                type="text"
-                                value={formData.username}
-                                onChange={(e)=>setFormData({...formData,username:e.target.value})}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Please fill out user name.
-                            </Form.Control.Feedback>
-                        </Form.Group>
-
-                        <Form.Group className="col-6">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control
-                                required
-                                type="email"
-                                value={formData.email}
-                                onChange={(e)=>setFormData({...formData,email:e.target.value})}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Please fill out email.
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                    </div>
-
-                    {user.is_business?(
+                {active === menuList[0].key ? (
+                    <Form
+                        noValidate
+                        className='mt-3'
+                        validated={validated}
+                        onSubmit={handlePersonalInformationSubmit}
+                    >
+                        <Form.Label className="d-flex justify-content-left mb-2">
+                            <h3>General</h3>
+                        </Form.Label>
                         <div className="row mb-4">
                             <Form.Group className="col-6">
-                                <Form.Label>Company Name</Form.Label>
+                                <Form.Label>First Name</Form.Label>
                                 <Form.Control
                                     required
                                     type="text"
-                                    value={formData.company_name}
-                                    onChange={(e)=>setFormData({...formData,company_name:e.target.value})}
+                                    value={formData.first_name}
+                                    onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
                                 />
                                 <Form.Control.Feedback type="invalid">
-                                    Please fill out company name.
+                                    Please fill out first name.
                                 </Form.Control.Feedback>
                             </Form.Group>
 
                             <Form.Group className="col-6">
-                                <Form.Label>Contactor Number</Form.Label>
+                                <Form.Label>Last Name</Form.Label>
                                 <Form.Control
                                     required
                                     type="text"
-                                    value={formData.contactor_number}
-                                    onChange={(e)=>setFormData({...formData,contactor_number:e.target.value})}
+                                    value={formData.last_name}
+                                    onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
                                 />
                                 <Form.Control.Feedback type="invalid">
-                                    Please fill out contactor number.
+                                    Please fill out last name.
                                 </Form.Control.Feedback>
                             </Form.Group>
                         </div>
-                    ):(
-                        <></>
-                    )}
 
-                    <div className="row mb-4">
-                        <Form.Group className="col-6">
-                            <Form.Label>Mobile Number</Form.Label>
-                            <Form.Control
-                                required
-                                type="text"
-                                value={formData.mobile_number}
-                                onChange={(e)=>setFormData({...formData,mobile_number:e.target.value})}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Please fill out mobile number.
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                    </div>
+                        <div className="row mb-4">
+                            <Form.Group className="col-6">
+                                <Form.Label>Username</Form.Label>
+                                <Form.Control
+                                    required
+                                    disabled
+                                    type="text"
+                                    value={formData.username}
+                                    onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    Please fill out user name.
+                                </Form.Control.Feedback>
+                            </Form.Group>
 
-                    <div className='d-flex justify-content-end'>
-                        <DefaultButton type="submit" loading={loading}>Save</DefaultButton>
-                    </div>
+                            <Form.Group className="col-6">
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control
+                                    required
+                                    type="email"
+                                    value={formData.email}
+                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    Please fill out email.
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                        </div>
 
-                    <Form.Label className="d-flex justify-content-left mb-2">
-                        <h3>Location</h3>
-                    </Form.Label>
+                        {user.is_business ? (
+                            <div className="row mb-4">
+                                <Form.Group className="col-6">
+                                    <Form.Label>Company Name</Form.Label>
+                                    <Form.Control
+                                        required
+                                        type="text"
+                                        value={formData.company_name}
+                                        onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        Please fill out company name.
+                                    </Form.Control.Feedback>
+                                </Form.Group>
 
-                    <div className="row mb-4">
-                        <Form.Group className="col-6">
-                            <Form.Label>Country</Form.Label>
-                            <Form.Control
-                                required
-                                disabled
-                                type="text"
-                                value={formData.country}
-                            />
-                        </Form.Group>
-                        <Form.Group className="col-6">
-                            <Form.Label>Address</Form.Label>
-                            <Form.Control
-                                required
-                                disabled
-                                type="text"
-                                value={formData.address}
-                            />
-                        </Form.Group>
-                    </div>
+                                <Form.Group className="col-6">
+                                    <Form.Label>Contactor Number</Form.Label>
+                                    <Form.Control
+                                        required
+                                        type="text"
+                                        value={formData.contactor_number}
+                                        onChange={(e) => setFormData({ ...formData, contactor_number: e.target.value })}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        Please fill out contactor number.
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </div>
+                        ) : (
+                            <></>
+                        )}
 
-                    <div className="row mb-4">
-                        <Form.Group className="col-6">
-                            <Form.Label>Latitute</Form.Label>
-                            <Form.Control
-                                required
-                                disabled
-                                type="text"
-                                value={location.lat}
-                            />
-                        </Form.Group>
-                        <Form.Group className="col-6">
-                            <Form.Label>Longitute</Form.Label>
-                            <Form.Control
-                                required
-                                disabled
-                                type="text"
-                                value={location.lng}
-                            />
-                        </Form.Group>
-                    </div>
+                        <div className="row mb-4">
+                            <Form.Group className="col-6">
+                                <Form.Label>Mobile Number</Form.Label>
+                                <Form.Control
+                                    required
+                                    type="text"
+                                    value={formData.mobile_number}
+                                    onChange={(e) => setFormData({ ...formData, mobile_number: e.target.value })}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    Please fill out mobile number.
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                        </div>
 
-                    {/* <MapPicker
+                        <div className='d-flex justify-content-end'>
+                            <DefaultButton type="submit" loading={loading}>Save</DefaultButton>
+                        </div>
+
+                        <Form.Label className="d-flex justify-content-left mb-2">
+                            <h3>Location</h3>
+                        </Form.Label>
+
+                        <div className="row mb-4">
+                            <Form.Group className="col-6">
+                                <Form.Label>Country</Form.Label>
+                                <Form.Control
+                                    required
+                                    disabled
+                                    type="text"
+                                    value={formData.country}
+                                />
+                            </Form.Group>
+                            <Form.Group className="col-6">
+                                <Form.Label>Address</Form.Label>
+                                <Form.Control
+                                    required
+                                    disabled
+                                    type="text"
+                                    value={formData.address}
+                                />
+                            </Form.Group>
+                        </div>
+
+                        <div className="row mb-4">
+                            <Form.Group className="col-6">
+                                <Form.Label>Latitute</Form.Label>
+                                <Form.Control
+                                    required
+                                    disabled
+                                    type="text"
+                                    value={location.lat}
+                                />
+                            </Form.Group>
+                            <Form.Group className="col-6">
+                                <Form.Label>Longitute</Form.Label>
+                                <Form.Control
+                                    required
+                                    disabled
+                                    type="text"
+                                    value={location.lng}
+                                />
+                            </Form.Group>
+                        </div>
+
+                        {/* <MapPicker
                         className="mb-5"
                         defaultLocation={{
                             lat: 10,
@@ -522,251 +523,251 @@ export const ProfilePage: React.FC = () => {
                         //apiKey="AIzaSyAkBhTU6Tc8FNdu64ZRG4rPm2bin7H7OOI"
                     /> */}
 
-                    {showMap&&(
-                        <div className="mb-5" style={{ height: '350px', width: '100%' }}>
-                            <GoogleMapReact
-                                bootstrapURLKeys={{ key: GOOGLE_MAP_KEY }}
-                                center={location}
-                                defaultCenter={location}
-                                zoom={zoom}
-                                onClick={(e)=>setLocationAction(e)}
+                        {showMap && (
+                            <div className="mb-5" style={{ height: '350px', width: '100%' }}>
+                                <GoogleMapReact
+                                    bootstrapURLKeys={{ key: GOOGLE_MAP_KEY }}
+                                    center={location}
+                                    defaultCenter={location}
+                                    zoom={zoom}
+                                    onClick={(e) => setLocationAction(e)}
                                 >
-                                <Marker
-                                    lat={location.lat}
-                                    lng={location.lng}
-                                />
-                            </GoogleMapReact>
-                        </div>
-                    )}
-                    
-                </Form>
-            ):active===menuList[1].key?(
-                <Form
-                    noValidate
-                    className='mt-3'
-                    onSubmit={handleFavoritesSubmit}
-                >
-                    <Form.Label className="d-flex justify-content-left mb-2">
-                        <h3>Genres</h3>
-                    </Form.Label>
-                    <div className="mb-4 d-flex flex-wrap">
-                        {genreList.map((genre)=>(
-                            formData.favorites.genre.filter((g)=>g===genre.id).length?(
-                                <DefaultButton
-                                    color="var(--color-blue-light)"
-                                    textColor="white"
-                                    borderColor="var(--color-blue-light)"
-                                    className="mb-3 me-3"
-                                    key={genre.id}
-                                    onClick={()=>handleGenre(genre.id)}
-                                >
-                                    {genre.title}
-                                </DefaultButton>
-                            ):genre.level === 1?(
-                                <DefaultButton
-                                    color="white"
-                                    textColor="var(--color-blue-light)"
-                                    borderColor="var(--color-blue-light)"
-                                    className="mb-3 me-3"
-                                    key={genre.id}
-                                    onClick={()=>handleGenre(genre.id)}
-                                >
-                                    {genre.title}
-                                </DefaultButton>
-                            ):(
-                                <></>
-                            )
-                        ))}
-                        {formData.favorites.genre.filter((g)=>
-                            genreList.filter((_g)=>g===_g.id&&_g.level===1).length
-                        ).length>0&&(
-                        <AutoComplete 
-                            items={genreList.filter((g)=>{
-                                if(g.level===2){
-                                    let parents = genreList.filter(
-                                        (_g)=>_g.level===1&&
-                                        formData.favorites.genre.filter((__g)=>__g===_g.id).length
-                                    );
-                                    if(parents.length&&parents.filter((p)=>p.id===g.parent_id).length>0){
-                                        return true;
-                                    }
-                                }
-                                return false;
-                            })}
-                            itemKeyProperty={"id"}
-                            itemLabelProperty={"title"}
-                            value={searchGenre}
-                            onChange={setSearchGenre}
-                            width="200px"
-                            borderColor="var(--color-blue-light)"
-                        />
+                                    <Marker
+                                        lat={location.lat}
+                                        lng={location.lng}
+                                    />
+                                </GoogleMapReact>
+                            </div>
                         )}
+
+                    </Form>
+                ) : active === menuList[1].key ? (
+                    <Form
+                        noValidate
+                        className='mt-3'
+                        onSubmit={handleFavoritesSubmit}
+                    >
+                        <Form.Label className="d-flex justify-content-left mb-2">
+                            <h3>Genres</h3>
+                        </Form.Label>
+                        <div className="mb-4 d-flex flex-wrap">
+                            {genreList.map((genre) => (
+                                formData.favorites.genre.filter((g) => g === genre.id).length ? (
+                                    <DefaultButton
+                                        color="var(--color-blue-light)"
+                                        textColor="white"
+                                        borderColor="var(--color-blue-light)"
+                                        className="mb-3 me-3"
+                                        key={genre.id}
+                                        onClick={() => handleGenre(genre.id)}
+                                    >
+                                        {genre.title}
+                                    </DefaultButton>
+                                ) : genre.level === 1 ? (
+                                    <DefaultButton
+                                        color="white"
+                                        textColor="var(--color-blue-light)"
+                                        borderColor="var(--color-blue-light)"
+                                        className="mb-3 me-3"
+                                        key={genre.id}
+                                        onClick={() => handleGenre(genre.id)}
+                                    >
+                                        {genre.title}
+                                    </DefaultButton>
+                                ) : (
+                                    <></>
+                                )
+                            ))}
+                            {formData.favorites.genre.filter((g) =>
+                                genreList.filter((_g) => g === _g.id && _g.level === 1).length
+                            ).length > 0 && (
+                                    <AutoComplete
+                                        items={genreList.filter((g) => {
+                                            if (g.level === 2) {
+                                                let parents = genreList.filter(
+                                                    (_g) => _g.level === 1 &&
+                                                        formData.favorites.genre.filter((__g) => __g === _g.id).length
+                                                );
+                                                if (parents.length && parents.filter((p) => p.id === g.parent_id).length > 0) {
+                                                    return true;
+                                                }
+                                            }
+                                            return false;
+                                        })}
+                                        itemKeyProperty={"id"}
+                                        itemLabelProperty={"title"}
+                                        value={searchGenre}
+                                        onChange={setSearchGenre}
+                                        width="200px"
+                                        borderColor="var(--color-blue-light)"
+                                    />
+                                )}
+                        </div>
+
+                        <Form.Label className="d-flex justify-content-left mb-2">
+                            <h3>Mood</h3>
+                        </Form.Label>
+                        <div className="mb-4">
+                            {moodList.map((mood) => (
+                                formData.favorites.mood.filter((g) => g === mood.id).length ? (
+                                    <DefaultButton
+                                        color="var(--color-blue-light)"
+                                        textColor="white"
+                                        borderColor="var(--color-blue-light)"
+                                        className="mb-3 me-3"
+                                        key={mood.id}
+                                        onClick={() => handleMood(mood.id)}
+                                    >
+                                        {mood.title}
+                                    </DefaultButton>
+                                ) : (
+                                    <DefaultButton
+                                        color="white"
+                                        textColor="var(--color-blue-light)"
+                                        borderColor="var(--color-blue-light)"
+                                        className="mb-3 me-3"
+                                        key={mood.id}
+                                        onClick={() => handleMood(mood.id)}
+                                    >
+                                        {mood.title}
+                                    </DefaultButton>
+                                )
+                            ))}
+                        </div>
+
+                        <Form.Label className="d-flex justify-content-left mb-2">
+                            <h3>Activity</h3>
+                        </Form.Label>
+                        <div className="mb-4">
+                            {activityList.map((activity, index) => (
+                                formData.favorites.activity.filter((g) => g === activity.key).length ? (
+                                    <DefaultButton
+                                        color="var(--color-blue-light)"
+                                        textColor="white"
+                                        borderColor="var(--color-blue-light)"
+                                        className="mb-3 me-3"
+                                        key={index}
+                                        onClick={() => handleActivity(activity.key)}
+                                    >
+                                        {activity.text}
+                                    </DefaultButton>
+                                ) : (
+                                    <DefaultButton
+                                        color="white"
+                                        textColor="var(--color-blue-light)"
+                                        borderColor="var(--color-blue-light)"
+                                        className="mb-3 me-3"
+                                        key={index}
+                                        onClick={() => handleActivity(activity.key)}
+                                    >
+                                        {activity.text}
+                                    </DefaultButton>
+                                )
+                            ))}
+                        </div>
+
+                        <Form.Label className="d-flex justify-content-left mb-2">
+                            <h3>Season</h3>
+                        </Form.Label>
+                        <div className="mb-4">
+                            {seasonList.map((season, index) => (
+                                formData.favorites.season.filter((g) => g === season.key).length ? (
+                                    <DefaultButton
+                                        color="var(--color-blue-light)"
+                                        textColor="white"
+                                        borderColor="var(--color-blue-light)"
+                                        className="mb-3 me-3"
+                                        key={index}
+                                        onClick={() => handleSeason(season.key)}
+                                    >
+                                        {season.text}
+                                    </DefaultButton>
+                                ) : (
+                                    <DefaultButton
+                                        color="white"
+                                        textColor="var(--color-blue-light)"
+                                        borderColor="var(--color-blue-light)"
+                                        className="mb-3 me-3"
+                                        key={index}
+                                        onClick={() => handleSeason(season.key)}
+                                    >
+                                        {season.text}
+                                    </DefaultButton>
+                                )
+                            ))}
+                        </div>
+
+                        <div className='d-flex justify-content-end mb-5'>
+                            <DefaultButton type="submit">Save</DefaultButton>
+                        </div>
+                    </Form>
+                ) : active === menuList[2].key ? (//password
+                    <Form
+                        noValidate
+                        className='mt-3'
+                        validated={validated}
+                        onSubmit={handlePassword}
+                    >
+                        <div className="row mb-4">
+                            <Form.Group className="col-12 mb-4">
+                                <Form.Label>Current Password</Form.Label>
+                                <Form.Control
+                                    required
+                                    type="password"
+                                    value={formData.current_password}
+                                    onChange={(e) => setFormData({ ...formData, current_password: e.target.value })}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    Please fill out current password.
+                                </Form.Control.Feedback>
+                            </Form.Group>
+
+                            <Form.Group className="col-12 mb-4">
+                                <Form.Label>New Password</Form.Label>
+                                <Form.Control
+                                    required
+                                    type="password"
+                                    value={formData.new_password}
+                                    onChange={(e) => setFormData({ ...formData, new_password: e.target.value })}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    Please fill out new password.
+                                </Form.Control.Feedback>
+                            </Form.Group>
+
+                            <Form.Group className="col-12">
+                                <Form.Label>Confirm Password</Form.Label>
+                                <Form.Control
+                                    required
+                                    type="password"
+                                    value={formData.confirm_password}
+                                    onChange={(e) => setFormData({ ...formData, confirm_password: e.target.value })}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    Please fill out confirm password.
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                        </div>
+                        <div className='d-flex justify-content-end'>
+                            <DefaultButton type="submit" loading={loading}>Save</DefaultButton>
+                        </div>
+                    </Form>
+                ) : active === menuList[3].key ? (//notifications
+                    <div>
+                        There is no data.
                     </div>
-
-                    <Form.Label className="d-flex justify-content-left mb-2">
-                        <h3>Mood</h3>
-                    </Form.Label>
-                    <div className="mb-4">
-                        {moodList.map((mood)=>(
-                            formData.favorites.mood.filter((g)=>g===mood.id).length?(
-                                <DefaultButton
-                                    color="var(--color-blue-light)"
-                                    textColor="white"
-                                    borderColor="var(--color-blue-light)"
-                                    className="mb-3 me-3"
-                                    key={mood.id}
-                                    onClick={()=>handleMood(mood.id)}
-                                >
-                                    {mood.title}
-                                </DefaultButton>
-                            ):(
-                                <DefaultButton
-                                    color="white"
-                                    textColor="var(--color-blue-light)"
-                                    borderColor="var(--color-blue-light)"
-                                    className="mb-3 me-3"
-                                    key={mood.id}
-                                    onClick={()=>handleMood(mood.id)}
-                                >
-                                    {mood.title}
-                                </DefaultButton>
-                            )
-                        ))}
+                ) : active === menuList[4].key ? (//membership
+                    <div>
+                        <p style={{ color: 'var(--color-blue-medium)' }}>
+                            Your plan is <span style={{ color: 'var(--color-blue-dark)' }}>{planList[user.profile.membership_level ? user.profile.membership_level : 0].title}</span>
+                            <span className="ms-2">Expire on </span>
+                            {user.profile.membership_expire && (<span style={{ color: 'var(--color-blue-dark)' }}>{moment(user.profile.membership_expire).format("DD/MM/YYYY")}</span>)}
+                        </p>
+                        {user.profile.membership_level < planList.length - 1 && (<DefaultButton onClick={handleMembership}>Upgrade your plan</DefaultButton>)}
                     </div>
-
-                    <Form.Label className="d-flex justify-content-left mb-2">
-                        <h3>Activity</h3>
-                    </Form.Label>
-                    <div className="mb-4">
-                        {activityList.map((activity, index)=>(
-                            formData.favorites.activity.filter((g)=>g===activity.key).length?(
-                                <DefaultButton
-                                    color="var(--color-blue-light)"
-                                    textColor="white"
-                                    borderColor="var(--color-blue-light)"
-                                    className="mb-3 me-3"
-                                    key={index}
-                                    onClick={()=>handleActivity(activity.key)}
-                                >
-                                    {activity.text}
-                                </DefaultButton>
-                            ):(
-                                <DefaultButton
-                                    color="white"
-                                    textColor="var(--color-blue-light)"
-                                    borderColor="var(--color-blue-light)"
-                                    className="mb-3 me-3"
-                                    key={index}
-                                    onClick={()=>handleActivity(activity.key)}
-                                >
-                                    {activity.text}
-                                </DefaultButton>
-                            )
-                        ))}
-                    </div>
-
-                    <Form.Label className="d-flex justify-content-left mb-2">
-                        <h3>Season</h3>
-                    </Form.Label>
-                    <div className="mb-4">
-                        {seasonList.map((season, index)=>(
-                            formData.favorites.season.filter((g)=>g===season.key).length?(
-                                <DefaultButton
-                                    color="var(--color-blue-light)"
-                                    textColor="white"
-                                    borderColor="var(--color-blue-light)"
-                                    className="mb-3 me-3"
-                                    key={index}
-                                    onClick={()=>handleSeason(season.key)}
-                                >
-                                    {season.text}
-                                </DefaultButton>
-                            ):(
-                                <DefaultButton
-                                    color="white"
-                                    textColor="var(--color-blue-light)"
-                                    borderColor="var(--color-blue-light)"
-                                    className="mb-3 me-3"
-                                    key={index}
-                                    onClick={()=>handleSeason(season.key)}
-                                >
-                                    {season.text}
-                                </DefaultButton>
-                            )
-                        ))}
-                    </div>
-
-                    <div className='d-flex justify-content-end mb-5'>
-                        <DefaultButton type="submit">Save</DefaultButton>
-                    </div>
-                </Form>
-            ):active===menuList[2].key?(//password
-            <Form
-                noValidate
-                className='mt-3'
-                validated={validated}
-                onSubmit={handlePassword}
-            >
-                <div className="row mb-4">
-                    <Form.Group className="col-12 mb-4">
-                        <Form.Label>Current Password</Form.Label>
-                        <Form.Control
-                            required
-                            type="password"
-                            value={formData.current_password}
-                            onChange={(e)=>setFormData({...formData,current_password:e.target.value})}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            Please fill out current password.
-                        </Form.Control.Feedback>
-                    </Form.Group>
-
-                    <Form.Group className="col-12 mb-4">
-                        <Form.Label>New Password</Form.Label>
-                        <Form.Control
-                            required
-                            type="password"
-                            value={formData.new_password}
-                            onChange={(e)=>setFormData({...formData,new_password:e.target.value})}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            Please fill out new password.
-                        </Form.Control.Feedback>
-                    </Form.Group>
-
-                    <Form.Group className="col-12">
-                        <Form.Label>Confirm Password</Form.Label>
-                        <Form.Control
-                            required
-                            type="password"
-                            value={formData.confirm_password}
-                            onChange={(e)=>setFormData({...formData,confirm_password:e.target.value})}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            Please fill out confirm password.
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                </div>
-                <div className='d-flex justify-content-end'>
-                    <DefaultButton type="submit" loading={loading}>Save</DefaultButton>
-                </div>
-            </Form>
-            ):active===menuList[3].key?(//notifications
-                <div>
-                    There is no data.
-                </div>
-            ):active===menuList[4].key?(//membership
-                <div>
-                    <p style={{color:'var(--color-blue-medium)'}}>
-                        Your plan is <span style={{color:'var(--color-blue-dark)'}}>{planList[user.profile.membership_level?user.profile.membership_level:0].title}</span>
-                        <span className="ms-2">Expire on </span>
-                        {user.profile.membership_expire&&(<span style={{color:'var(--color-blue-dark)'}}>{moment(user.profile.membership_expire).format("DD/MM/YYYY")}</span>)}
-                    </p>
-                    {user.profile.membership_level<planList.length-1&&(<DefaultButton onClick={handleMembership}>Upgrade your plan</DefaultButton>)}
-                </div>
-            ):(
-                <></>
-            )}
+                ) : (
+                    <></>
+                )}
             </div>
         </div>
     );

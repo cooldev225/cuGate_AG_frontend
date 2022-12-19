@@ -184,13 +184,13 @@ export const AuthPage: React.FC<{ page: number }> = (props) => {
 
     useEffect(() => {
         if (isAuthenticated) navigate(activeMenu.url);
-        menuList.map((value, index) => {
+        menuList.forEach((value, index) => {
             if (value.url.indexOf(page) > -1) {
                 setActiveMenu(value);
                 return index;
             }
         });
-        menuRightList.map((value, index) => {
+        menuRightList.forEach((value, index) => {
             if (value.url.indexOf(page) > -1) {
                 setActiveMenu(value);
                 return index;

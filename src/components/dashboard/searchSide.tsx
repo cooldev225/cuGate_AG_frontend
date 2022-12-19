@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { getFilterStations, getGenres, getMoods } from "../../actions/user";
-import useAuth from "../../hooks/useAuth";
-import { regionList } from "../../views/dashboard/contents";
-import { activityList, seasonList } from "../../views/profile/contents";
-import { AutoComplete, DefaultButton, Icon, Select } from "../widgets";
+import React from "react";
+// import { getFilterStations, getGenres, getMoods } from "../../actions/user";
+// import useAuth from "../../hooks/useAuth";
+// import { regionList } from "../../views/dashboard/contents";
+// import { activityList, seasonList } from "../../views/profile/contents";
+import { AutoComplete, DefaultButton, Icon } from "../widgets";
 export const SearchSide: React.FC<any> = (props) => {
     const {
         _genre = [],
         _mood = [],
-        _activity = [],
-        _season = [],
-        _region = "",
-        _station = [],
+        // _activity = [],
+        // _season = [],
+        // _region = "",
+        // _station = [],
         loading = false,
         searchGenre = null,
-        searchStation = "",
         genreList = [],
         moodList = [],
-        stationList = []
+        // searchStation = "",
+        // stationList = []
     } = props.data;
 
     return (

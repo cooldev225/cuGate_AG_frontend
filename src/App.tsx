@@ -6,7 +6,7 @@ import {
   CheckoutPage, DashboardPage, TagEditorPage
 } from "./views";
 import AuthRoute from "./utils/AuthRoute";
-import { BrowserRouter as Router, Routes, Route, BrowserRouter } from 'react-router-dom';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from "./contexts/JWTAuthContext";
 import { DefaultLayout } from "./components";
 import Root from "./components/Root";
