@@ -13,7 +13,6 @@ export const AnalyseForm: React.FC<any> = (props) => {
         setAnalyzeFile,
         setUploadedFile,
         handleAnalyze,
-        setAnalyzeClose,
         setTabMenu,
         setLoading,
     } = props.data;
@@ -44,9 +43,10 @@ export const AnalyseForm: React.FC<any> = (props) => {
     });
 
     const handleCloseAnalyseForm = useCallback(() => {
-        setAnalyzeClose(true);
-        setTabMenu('tracks')
-    }, [setAnalyzeClose, setTabMenu])
+        setUploadedFile(null);
+        setAnalyzeFile(null);
+    }, [setUploadedFile, setAnalyzeFile])
+
     return (
         <Fragment>
             {analyzeFile ? (
@@ -101,7 +101,7 @@ export const AnalyseForm: React.FC<any> = (props) => {
                         textColor="white"
                         borderColor="var(--color-blue-light)"
                         className="close-btn"
-                        onClick={() => setAnalyzeClose(true)}
+                        onClick={handleCloseAnalyseForm}
                     >
                         <Icon name="close" />
                     </DefaultButton>
@@ -128,7 +128,7 @@ export const AnalyseForm: React.FC<any> = (props) => {
                     >
                         Select file to upload
                     </DefaultButton>
-                    <DefaultButton
+                    {/* <DefaultButton
                         color="var(--color-blue-light)"
                         textColor="white"
                         borderColor="var(--color-blue-light)"
@@ -136,7 +136,7 @@ export const AnalyseForm: React.FC<any> = (props) => {
                         className="close-btn"
                     >
                         <Icon name="close" />
-                    </DefaultButton>
+                    </DefaultButton> */}
                 </div>
             )}
         </Fragment>
