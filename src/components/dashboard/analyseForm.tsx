@@ -9,6 +9,7 @@ export const AnalyseForm: React.FC<any> = (props) => {
         analyzeFile = null,
         uploadedFile = null,
         uploadedFileDiv = "",
+        setUploadedFileDiv,
         loading = false,
         setAnalyzeFile,
         setUploadedFile,
@@ -32,6 +33,7 @@ export const AnalyseForm: React.FC<any> = (props) => {
             setAnalyzeFile(file);
             return file;
         });
+
     }, [setAnalyzeFile, setLoading, setTabMenu, setUploadedFile]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -45,7 +47,8 @@ export const AnalyseForm: React.FC<any> = (props) => {
     const handleCloseAnalyseForm = useCallback(() => {
         setUploadedFile(null);
         setAnalyzeFile(null);
-    }, [setUploadedFile, setAnalyzeFile])
+        setUploadedFileDiv('')
+    }, [setUploadedFile, setAnalyzeFile, setUploadedFileDiv])
 
     return (
         <Fragment>
@@ -65,13 +68,13 @@ export const AnalyseForm: React.FC<any> = (props) => {
                         />
                     </div>
                     {(loading !== "analyze" || (loading === "analyze" && uploadedFile !== null)) && (
-                        <Fragment>
+                        <div className="d-flex justify-content-center mb-3">
                             <DefaultButton
                                 color="var(--color-blue-light)"
                                 textColor="white"
                                 borderColor="var(--color-blue-light)"
                                 className="me-3"
-                                onClick={() => { setAnalyzeFile(null); setUploadedFile(null); }}
+                                onClick={handleCloseAnalyseForm}
                             >
                                 Cancel
                             </DefaultButton>
@@ -79,17 +82,16 @@ export const AnalyseForm: React.FC<any> = (props) => {
                                 color="var(--color-blue-light)"
                                 textColor="white"
                                 borderColor="var(--color-blue-light)"
-                                className="mb-3"
                                 disabled={uploadedFileDiv}
                                 onClick={handleAnalyze}
                             >
                                 {loading === "analyze" ? (
                                     <Icon name='loading' />
-                                ) : (
-                                    "Submit"
+                                    ) : (
+                                        "Submit"
                                 )}
                             </DefaultButton>
-                        </Fragment>
+                        </div>
                     )}
                     {loading === "analyze" && (
                         <div className="progress-bar">

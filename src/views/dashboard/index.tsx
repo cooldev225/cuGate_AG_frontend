@@ -428,6 +428,7 @@ export const DashboardPage: React.FC = () => {
                             "analyzeFile": analyzeFile,
                             "uploadedFile": uploadedFile,
                             "uploadedFileDiv": uploadedFileDiv,
+                            "setUploadedFileDiv": setUploadedFileDiv,
                             "loading": loading,
                             "setAnalyzeFile": setAnalyzeFile,
                             "setUploadedFile": setUploadedFile,
