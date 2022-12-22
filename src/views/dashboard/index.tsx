@@ -372,7 +372,7 @@ export const DashboardPage: React.FC = () => {
     };
 
     const handleAnalyze = () => {
-        if (uploadedFile) {
+        if (uploadedFile && !uploadedFileDiv) {
             setTabMenu("analyze");
             setLoading("analyze");
             getAnalyzeTrackInfo(uploadedFile).then((data: any) => {
