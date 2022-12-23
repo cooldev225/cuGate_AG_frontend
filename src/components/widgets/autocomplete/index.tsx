@@ -61,6 +61,7 @@ export const AutoComplete: React.FC<SearchProps> = (props) => {
           menuItemKeyProperty={itemKeyProperty}
           menuItemLabelProperty={itemLabelProperty}
           selectedColor={borderColor}
+          disabled={disabled}
           activator={
             <Fragment>
               <input

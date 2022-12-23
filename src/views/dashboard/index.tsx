@@ -297,7 +297,6 @@ export const DashboardPage: React.FC = () => {
     }, [searchStation]);
 
     useEffect(() => {
-        console.log(searchGenre);
         if (loading !== "") return;
         if (searchGenre !== "" && !formData.genre.filter((g: any) => g === searchGenre).length) {
             let list = formData.genre;
@@ -307,14 +306,16 @@ export const DashboardPage: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchGenre]);
 
+
     const handleGenre = (genre: any) => {
         let list: any[] = [];
         formData.genre.forEach((g: any) => {
             if (genre !== g) list.push(g);
         });
-        if (!formData.genre.filter((g: any) => g === genre).length) {
-            list.push(genre);
-        }
+        // if (!formData.genre.filter((g: any) => g === genre).length) {
+        //     list.push(genre);
+        // }
+        setSearchGenre("")
         setFormData({ ...formData, genre: list });
     };
 

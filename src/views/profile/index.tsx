@@ -150,6 +150,7 @@ export const ProfilePage: React.FC = () => {
             setFormData({ ...formData, favorites: favorites });
         }
     }, [user]);
+    
     useEffect(() => {
         let list = genreList.filter((g) => g.id.toString() == searchGenre);
         if (list.length) handleGenre(list[0].id);
