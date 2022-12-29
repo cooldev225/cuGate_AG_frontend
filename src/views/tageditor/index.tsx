@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import moment from "moment";
 
 import { Form } from "react-bootstrap";
 import { DefaultButton, Icon } from "../../components/widgets";

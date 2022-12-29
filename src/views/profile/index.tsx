@@ -13,7 +13,6 @@ import { GOOGLE_MAP_KEY } from "../../constants";
 import { setAddress } from "../../utils/geocode";
 import Geocode from "react-geocode";
 import { setUserInfo } from "../../actions/user";
-import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import moment from "moment";
 import { planList } from "../membership/contents";
@@ -149,11 +148,13 @@ export const ProfilePage: React.FC = () => {
             }
             setFormData({ ...formData, favorites: favorites });
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
     
     useEffect(() => {
-        let list = genreList.filter((g) => g.id.toString() == searchGenre);
+        let list = genreList.filter((g) => g.id.toString() === searchGenre);
         if (list.length) handleGenre(list[0].id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchGenre]);
 
     const handlePersonalInformationSubmit = async (event: { currentTarget: any; preventDefault: () => void; stopPropagation: () => void; }) => {
@@ -187,7 +188,6 @@ export const ProfilePage: React.FC = () => {
     };
 
     const handleFavoritesSubmit = async (event: { currentTarget: any; preventDefault: () => void; stopPropagation: () => void; }) => {
-        const form = event.currentTarget;
         event.preventDefault();
         await setUserInfo({
             is_profile: true,
