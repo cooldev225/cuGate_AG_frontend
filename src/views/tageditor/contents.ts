@@ -1,30 +1,51 @@
-export const menuList: {
-    key: string;
-    text?: string;
-    icon?: number;
-}[] = [
-        {
-            key: "tracks",
-            text: "Tracks",
-            icon: 0,
-        },
-        {
-            key: "albums",
-            text: "Albums",
-            icon: 0,
-        }
-    ];
+// export const menuList: {
+//     key: string;
+//     text?: string;
+//     icon?: number;
+// }[] = [
+//         {
+//             key: "tracks",
+//             text: "Tracks",
+//             icon: 0,
+//         },
+//         {
+//             key: "albums",
+//             text: "Albums",
+//             icon: 0,
+//         }
+//     ];
+
 export const tabMenuList: {
-    key: string;
-    text?: string;
+    title: string;
+    tabs: {
+        text?: string;
+        data?: string;
+    }[]
 }[] = [
         {
-            key: "newtrack",
-            text: "New Track",
+            title: 'Tracks',
+            tabs: [
+                {
+                    text: "Show All",
+                    data: '1'
+                },
+                {
+                    text: "New Track",
+                    data: ''
+                },
+            ]
         },
         {
-            key: "showall",
-            text: "Show All",
+            title: 'Albums',
+            tabs: [
+                {
+                    text: "Show All",
+                    data: '3'
+                },
+                {
+                    text: "New Album",
+                    data: '',
+                }]
         }
     ];
 
@@ -69,3 +90,99 @@ export const albumData = [
         time: '12:00',
     },
 ]
+
+export const genreList: {
+    key: string;
+    text?: string;
+}[] = [
+    {
+        key: "blues",
+        text: "Blues",
+    },
+    {
+        key: "classical",
+        text: "Classical",
+    },
+    {
+        key: "country",
+        text: "Country",
+    },
+    {
+        key: "jazz",
+        text: "Jazz",
+    },
+    {
+        key: "dance",
+        text: "Dance",
+    },
+    {
+        key: "ethno_folk",
+        text: "Ethno/Folk",
+    },
+    {
+        key: "functional",
+        text: "Functional",
+    },
+    {
+        key: "pop",
+        text: "Pop",
+    },
+    {
+        key: "r_b",
+        text: "R&B",
+    },
+    {
+        key: "rock",
+        text: "Rock",
+    },
+    {
+        key: "other",
+        text: "Other",
+    },
+];
+
+export const moodList: {
+    key: string;
+    text?: string;
+}[] = [
+    {
+        key: "romantic",
+        text: "Romantic",
+    },
+    {
+        key: "gloomy",
+        text: "Gloomy",
+    },
+    {
+        key: "idyllic",
+        text: "Idyllic",
+    },
+    {
+        key: "calm",
+        text: "Calm",
+    },
+    {
+        key: "angry",
+        text: "Angry",
+    },
+    {
+        key: "tense",
+        text: "Tense",
+    },
+    {
+        key: "fearful",
+        text: "Fearful",
+    },
+    {
+        key: "lonely",
+        text: "Lonely",
+    },
+    {
+        key: "whimsical",
+        text: "Whimsical",
+    },
+    {
+        key: "mysterious",
+        text: "Mysterious",
+    },
+];

@@ -1,0 +1,25 @@
+.page-tageditor {
+    .content-wrapper {
+        .tab-header {
+            .tab-menu-list {
+                li {
+                    padding: 5px 10px;
+                }
+            }
+        }
+        .tab-content {
+            .row-item {
+                border: 1px solid #03799a;
+                border-radius: 10px;
+                padding: 20px; 
+                .item-album {
+                    img {
+                        width: 64px;
+                        height: 64px;
+                    }
+                }
+            }
+        }
+    }
+
+}
