@@ -69,6 +69,7 @@ export const Toolbar: React.FC = () => {
   }
   useEffect(() => {
     if (user) initialise();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
   return (
     <Container className="d-flex w-100 px-10 toolbar">

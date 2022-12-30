@@ -209,26 +209,25 @@ export const TagEditorPage: React.FC = () => {
                                 {
                                     activeMenu === 0 ? (
                                         activeTab === 0 ? (
-                                            <>
-                                                {loading === true ? (
-                                                    <div className="loading-widget">
-                                                        <div className="logo-img">
-                                                            <img src={icon} alt="loading" />
-                                                            <div className="loading-text">
-                                                                Loading ...
-                                                            </div>
+                                            loading === true ? (
+                                                <div className="loading-widget">
+                                                    <div className="logo-img">
+                                                        <img src={icon} alt="loading" />
+                                                        <div className="loading-text">
+                                                            Loading ...
                                                         </div>
                                                     </div>
-                                                ) : (
-                                                    <>
-                                                        {trackSearch.list.map((item: any, index: number) => (
-                                                            <div className="row-item mb-3" key={"item_" + index}>
-                                                                <div className="item-header d-flex justify-content-between">
-                                                                    <div className="d-flex flex-column">
-                                                                        <span className="title">{item.media}<span></span></span>
-                                                                        <span className="description">Published: {item.lastUpdated} by: {item.artist}</span>
-                                                                    </div>
-                                                                    {/* <DefaultButton
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    {trackSearch.list.map((item: any, index: number) => (
+                                                        <div className="row-item mb-3" key={"item_" + index}>
+                                                            <div className="item-header d-flex justify-content-between">
+                                                                <div className="d-flex flex-column">
+                                                                    <span className="title">{item.media}<span></span></span>
+                                                                    <span className="description">Published: {item.lastUpdated} by: {item.artist}</span>
+                                                                </div>
+                                                                {/* <DefaultButton
                                                                         className="small-button"
                                                                         color="white"
                                                                         textColor="var(--color-blue-light)"
@@ -237,84 +236,83 @@ export const TagEditorPage: React.FC = () => {
                                                                     >
                                                                         View
                                                                     </DefaultButton> */}
-                                                                </div>
-                                                                <div className="d-flex">
-                                                                    <div className="d-flex item-album w-100">
-                                                                        <img src={`https://img.cugate.com/?i=${item.albumId}&o=member`} alt="" />
-                                                                        <div className="ms-2 item-album-title w-100">
-                                                                            <div className="d-flex description mt-4">
-                                                                                <div className={item.rank + "," + item.lastRank}>
-                                                                                    <span className="me-1">Rank:</span>
-                                                                                    {item.lastRank == null || item.rank < item.lastRank ? (
-                                                                                        <span className="color-green">{item.rank}<Icon name="arrow-up" /></span>
-                                                                                    ) : (
-                                                                                        <span className="color-red">{item.rank}<Icon name="arrow-down" /></span>
-                                                                                    )}
-                                                                                </div>
-                                                                                <div className="ms-4">
-                                                                                    <span className="me-1">Type:</span>
-                                                                                    {item.file_info.f_track_type_title || 'Unkown'}
-                                                                                </div>
-                                                                                <div className="ms-4">
-                                                                                    <span className="me-1">Time:</span>
-                                                                                    {item.file_info.f_track_time / 1000 || 0}s
-                                                                                </div>
+                                                            </div>
+                                                            <div className="d-flex">
+                                                                <div className="d-flex item-album w-100">
+                                                                    <img src={`https://img.cugate.com/?i=${item.albumId}&o=member`} alt="" />
+                                                                    <div className="ms-2 item-album-title w-100">
+                                                                        <div className="d-flex description mt-4">
+                                                                            <div className={item.rank + "," + item.lastRank}>
+                                                                                <span className="me-1">Rank:</span>
+                                                                                {item.lastRank == null || item.rank < item.lastRank ? (
+                                                                                    <span className="color-green">{item.rank}<Icon name="arrow-up" /></span>
+                                                                                ) : (
+                                                                                    <span className="color-red">{item.rank}<Icon name="arrow-down" /></span>
+                                                                                )}
                                                                             </div>
-                                                                            <div className="d-flex description">
-                                                                                <div className="d-flex w-100">
-                                                                                    <span className="me-2 mt-1">Frequency:</span>
+                                                                            <div className="ms-4">
+                                                                                <span className="me-1">Type:</span>
+                                                                                {item.file_info.f_track_type_title || 'Unkown'}
+                                                                            </div>
+                                                                            <div className="ms-4">
+                                                                                <span className="me-1">Time:</span>
+                                                                                {item.file_info.f_track_time / 1000 || 0}s
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="d-flex description">
+                                                                            <div className="d-flex w-100">
+                                                                                <span className="me-2 mt-1">Frequency:</span>
+                                                                                <div style={{
+                                                                                    width: '100%',
+                                                                                    maxWidth: '400px',
+                                                                                    backgroundColor: '#dcfdff',
+                                                                                    marginTop: 4,
+                                                                                    borderRadius: 2,
+                                                                                    color: 'black',
+                                                                                }}>
                                                                                     <div style={{
-                                                                                        width: '100%',
-                                                                                        maxWidth: '400px',
-                                                                                        backgroundColor: '#dcfdff',
-                                                                                        marginTop: 4,
-                                                                                        borderRadius: 2,
-                                                                                        color: 'black',
+                                                                                        width: (100 * item.sum_count / trackSearch.pagination.sum) + '%',
+                                                                                        height: '100%',
+                                                                                        backgroundColor: '#00cbd8',
                                                                                     }}>
-                                                                                        <div style={{
-                                                                                            width: (100 * item.sum_count / trackSearch.pagination.sum) + '%',
-                                                                                            height: '100%',
-                                                                                            backgroundColor: '#00cbd8',
-                                                                                        }}>
-                                                                                            <span className="fw-bold ms-2">{item.sum_count}</span>
-                                                                                        </div>
+                                                                                        <span className="fw-bold ms-2">{item.sum_count}</span>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div className="d-flex">
-                                                                    <div className="d-flex align-items-end" style={{ color: 'grey' }}>
-                                                                        {item.played_count > 0 ? item.played_count + " played" : ""}
-                                                                    </div>
+                                                            </div>
+                                                            <div className="d-flex">
+                                                                <div className="d-flex align-items-end" style={{ color: 'grey' }}>
+                                                                    {item.played_count > 0 ? item.played_count + " played" : ""}
                                                                 </div>
                                                             </div>
-                                                        ))}
-                                                        {trackSearch.pagination.pages > 0 && trackSearch.pagination.pages > trackSearch.pagination.page + 1 && (
-                                                            <div
-                                                                className="row d-flex justify-content-center mt-4 mb-4"
-                                                            >
-                                                                <div style={{ width: '200px', textAlign: 'center' }}>
-                                                                    <DefaultButton
-                                                                        color="white"
-                                                                        textColor="var(--color-blue-light)"
-                                                                        borderColor="var(--color-blue-light)"
-                                                                        className={"mb-3 me-3"}
-                                                                        onClick={() => handleMore()}
-                                                                    >
-                                                                        {moreLoading ? (
-                                                                            <Icon name="loading" />
-                                                                        ) : (
-                                                                            "More"
-                                                                        )}
-                                                                    </DefaultButton>
-                                                                </div>
+                                                        </div>
+                                                    ))}
+                                                    {trackSearch.pagination.pages > 0 && trackSearch.pagination.pages > trackSearch.pagination.page + 1 && (
+                                                        <div
+                                                            className="row d-flex justify-content-center mt-4 mb-4"
+                                                        >
+                                                            <div style={{ width: '200px', textAlign: 'center' }}>
+                                                                <DefaultButton
+                                                                    color="white"
+                                                                    textColor="var(--color-blue-light)"
+                                                                    borderColor="var(--color-blue-light)"
+                                                                    className={"mb-3 me-3"}
+                                                                    onClick={() => handleMore()}
+                                                                >
+                                                                    {moreLoading ? (
+                                                                        <Icon name="loading" />
+                                                                    ) : (
+                                                                        "More"
+                                                                    )}
+                                                                </DefaultButton>
                                                             </div>
-                                                        )}
-                                                    </>
-                                                )}
-                                            </>
+                                                        </div>
+                                                    )}
+                                                </>
+                                            )
                                         ) : (
                                             <Form
                                                 noValidate
@@ -361,26 +359,25 @@ export const TagEditorPage: React.FC = () => {
                                         )
                                     ) : (
                                         activeTab === 0 ? (
-                                            <>
-                                                {loading === true ? (
-                                                    <div className="loading-widget">
-                                                        <div className="logo-img">
-                                                            <img src={icon} alt="loading" />
-                                                            <div className="loading-text">
-                                                                Loading ...
-                                                            </div>
+                                            loading === true ? (
+                                                <div className="loading-widget">
+                                                    <div className="logo-img">
+                                                        <img src={icon} alt="loading" />
+                                                        <div className="loading-text">
+                                                            Loading ...
                                                         </div>
                                                     </div>
-                                                ) : (
-                                                    <>
-                                                        {albumSearch.list.map((item: any, index: number) => (
-                                                            <div className="row-item mb-3" key={"item_" + index}>
-                                                                <div className="item-header d-flex justify-content-between">
-                                                                    <div className="d-flex flex-column">
-                                                                        <span className="title">{item.media}<span></span></span>
-                                                                        <span className="description">Published: {item.lastUpdated} by: {item.artist}</span>
-                                                                    </div>
-                                                                    {/* <DefaultButton
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    {albumSearch.list.map((item: any, index: number) => (
+                                                        <div className="row-item mb-3" key={"item_" + index}>
+                                                            <div className="item-header d-flex justify-content-between">
+                                                                <div className="d-flex flex-column">
+                                                                    <span className="title">{item.media}<span></span></span>
+                                                                    <span className="description">Published: {item.lastUpdated} by: {item.artist}</span>
+                                                                </div>
+                                                                {/* <DefaultButton
                                                                                 className="small-button"
                                                                                 color="white"
                                                                                 textColor="var(--color-blue-light)"
@@ -389,78 +386,77 @@ export const TagEditorPage: React.FC = () => {
                                                                             >
                                                                                 View
                                                                             </DefaultButton> */}
-                                                                </div>
-                                                                <div className="d-flex">
-                                                                    <div className="d-flex item-album w-100">
-                                                                        <img src={`https://img.cugate.com/?i=${item.albumId}&o=member`} alt="" />
-                                                                        <div className="ms-2 item-album-title w-100">
-                                                                            <div className="d-flex description mt-4">
-                                                                                <div className={item.rank + "," + item.lastRank}>
-                                                                                    <span className="me-1">Rank:</span>
-                                                                                    {item.lastRank == null || item.rank < item.lastRank ? (
-                                                                                        <span className="color-green">{item.rank}<Icon name="arrow-up" /></span>
-                                                                                    ) : (
-                                                                                        <span className="color-red">{item.rank}<Icon name="arrow-down" /></span>
-                                                                                    )}
-                                                                                </div>
+                                                            </div>
+                                                            <div className="d-flex">
+                                                                <div className="d-flex item-album w-100">
+                                                                    <img src={`https://img.cugate.com/?i=${item.albumId}&o=member`} alt="" />
+                                                                    <div className="ms-2 item-album-title w-100">
+                                                                        <div className="d-flex description mt-4">
+                                                                            <div className={item.rank + "," + item.lastRank}>
+                                                                                <span className="me-1">Rank:</span>
+                                                                                {item.lastRank == null || item.rank < item.lastRank ? (
+                                                                                    <span className="color-green">{item.rank}<Icon name="arrow-up" /></span>
+                                                                                ) : (
+                                                                                    <span className="color-red">{item.rank}<Icon name="arrow-down" /></span>
+                                                                                )}
                                                                             </div>
-                                                                            <div className="d-flex description">
-                                                                                <div className="d-flex w-100">
-                                                                                    <span className="me-2 mt-1">Frequency:</span>
+                                                                        </div>
+                                                                        <div className="d-flex description">
+                                                                            <div className="d-flex w-100">
+                                                                                <span className="me-2 mt-1">Frequency:</span>
+                                                                                <div style={{
+                                                                                    width: '100%',
+                                                                                    maxWidth: '400px',
+                                                                                    backgroundColor: '#dcfdff',
+                                                                                    marginTop: 4,
+                                                                                    borderRadius: 2,
+                                                                                    color: 'black',
+                                                                                }}>
                                                                                     <div style={{
-                                                                                        width: '100%',
-                                                                                        maxWidth: '400px',
-                                                                                        backgroundColor: '#dcfdff',
-                                                                                        marginTop: 4,
-                                                                                        borderRadius: 2,
-                                                                                        color: 'black',
+                                                                                        width: (100 * item.sum_count / albumSearch.pagination.sum) + '%',
+                                                                                        height: '100%',
+                                                                                        backgroundColor: '#00cbd8',
                                                                                     }}>
-                                                                                        <div style={{
-                                                                                            width: (100 * item.sum_count / albumSearch.pagination.sum) + '%',
-                                                                                            height: '100%',
-                                                                                            backgroundColor: '#00cbd8',
-                                                                                        }}>
-                                                                                            <span className="fw-bold ms-2">{item.sum_count}</span>
-                                                                                        </div>
+                                                                                        <span className="fw-bold ms-2">{item.sum_count}</span>
                                                                                     </div>
                                                                                 </div>
-                                                                                <div className="ms-4">
-                                                                                </div>
+                                                                            </div>
+                                                                            <div className="ms-4">
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div className="d-flex">
-                                                                    <div className="d-flex align-items-end" style={{ color: 'grey' }}>
-                                                                        {item.played_count > 0 ? item.played_count + " played" : ""}
-                                                                    </div>
+                                                            </div>
+                                                            <div className="d-flex">
+                                                                <div className="d-flex align-items-end" style={{ color: 'grey' }}>
+                                                                    {item.played_count > 0 ? item.played_count + " played" : ""}
                                                                 </div>
                                                             </div>
-                                                        ))}
-                                                        {albumSearch.pagination.pages > 0 && albumSearch.pagination.pages > albumSearch.pagination.page + 1 && (
-                                                            <div
-                                                                className="row d-flex justify-content-center mt-4 mb-4"
-                                                            >
-                                                                <div style={{ width: '200px', textAlign: 'center' }}>
-                                                                    <DefaultButton
-                                                                        color="white"
-                                                                        textColor="var(--color-blue-light)"
-                                                                        borderColor="var(--color-blue-light)"
-                                                                        className={"mb-3 me-3"}
-                                                                        onClick={() => handleMore()}
-                                                                    >
-                                                                        {moreLoading ? (
-                                                                            <Icon name="loading" />
-                                                                        ) : (
-                                                                            "More"
-                                                                        )}
-                                                                    </DefaultButton>
-                                                                </div>
+                                                        </div>
+                                                    ))}
+                                                    {albumSearch.pagination.pages > 0 && albumSearch.pagination.pages > albumSearch.pagination.page + 1 && (
+                                                        <div
+                                                            className="row d-flex justify-content-center mt-4 mb-4"
+                                                        >
+                                                            <div style={{ width: '200px', textAlign: 'center' }}>
+                                                                <DefaultButton
+                                                                    color="white"
+                                                                    textColor="var(--color-blue-light)"
+                                                                    borderColor="var(--color-blue-light)"
+                                                                    className={"mb-3 me-3"}
+                                                                    onClick={() => handleMore()}
+                                                                >
+                                                                    {moreLoading ? (
+                                                                        <Icon name="loading" />
+                                                                    ) : (
+                                                                        "More"
+                                                                    )}
+                                                                </DefaultButton>
                                                             </div>
-                                                        )}
-                                                    </>
-                                                )}
-                                            </>
+                                                        </div>
+                                                    )}
+                                                </>
+                                            )
                                         ) : (
                                             <div>New Album</div>
                                         )

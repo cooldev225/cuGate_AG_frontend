@@ -492,8 +492,7 @@ export const DashboardPage: React.FC = () => {
                             ) : (
                                 <Fragment>
                                     {trackSearch.list.map((item: any, index: number) => (
-                                        <Fragment>
-                                            {(formData.sort_by === "played_ranking" || formData.sort_by === "played_count") ? (
+                                            (formData.sort_by === "played_ranking" || formData.sort_by === "played_count") ? (
                                                 <div className="row-item mb-3" key={"item_" + index}>
                                                     <div className="item-header d-flex justify-content-between">
                                                         <div className="d-flex flex-column">
@@ -619,8 +618,7 @@ export const DashboardPage: React.FC = () => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                            )}
-                                        </Fragment>
+                                            )
                                     ))}
                                     {trackSearch.pagination.pages > 0 && trackSearch.pagination.pages > trackSearch.pagination.page + 1 && (
                                         <div
