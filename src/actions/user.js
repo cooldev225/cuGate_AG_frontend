@@ -70,6 +70,12 @@ export async function getSearchTrackList(params) {
   else return [];
 }
 
+export async function getSearchTrackTitleList(params) {
+  const response = await axios.post("/getSearchTrackTitleList", params);
+  if( response.status === 200 ) return response.data;
+  return [];
+}
+
 export async function getSearchAlbumList(params) {
   const response = await axios.post("/getSearchAlbumList", params);
   if (response.status === 200) return response.data;
@@ -123,4 +129,27 @@ export async function getGeoInfo(lat, long) {
   const response = await g_axios.get("http://api.geonames.org/countryCode", data);
   if (response.status === 200) return response.data;
   else return [];
+}
+
+export async function getSubGenre(genre){
+  const response = await axios.get("/getSubGenre");
+  if( response.status === 200 ) return response.data;
+  return [];
+}
+
+export async function getPerformerList(keyword) {
+  const response = await axios.get("/getPerformerListByKeyword");
+  if( response.status === 200 ) return response.data;
+  return [];
+}
+
+export async function createTrack(trackData) {
+  const response = await axios.post("/createTrack", trackData, {
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      "Access-Control-Allow-Origin": "*",
+    }
+  });
+  if( response.status === 200 ) return response.data;
+  return [];
 }
