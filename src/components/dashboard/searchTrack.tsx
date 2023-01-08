@@ -3,6 +3,7 @@ import { CloseCircleOutlined } from '@ant-design/icons';
 import { IconMap } from "antd/es/result";
 import React from "react";
 import { AutoComplete, DefaultButton, Icon } from "../widgets";
+import remove_icon from '../../assets/images/icon-remove.svg';
 import "./../../assets/scss/components/dashboard/searchTrack.scss";
 export const SearchTrack: React.FC<any> = (props) => {
     const {
@@ -19,7 +20,6 @@ export const SearchTrack: React.FC<any> = (props) => {
         // searchStation = "",
         // stationList = []
     } = props.data;
-    console.log(props)
     return (
         <div className="search-track-component">
             <div className="container">
@@ -36,7 +36,8 @@ export const SearchTrack: React.FC<any> = (props) => {
                         <div className="d-flex flex-row flex-wrap mt-2">
                             <div className="d-flex flex-row align-items-center me-4 mb-1 selected-search">
                                 <div className="me-2 title">Robert Williams</div>
-                                <img src="https://catalog.cugate.com/static/media/Delete.38d4ed55a74885e1b58d081520b60668.svg" alt="*" className="remove-selected" />
+                                <img alt="remove" className="remove-selected" src={remove_icon} />
+
                             </div>
                         </div>
                     </div>
@@ -51,7 +52,7 @@ export const SearchTrack: React.FC<any> = (props) => {
                         <div className="d-flex flex-row flex-wrap mt-2">
                             <div className="d-flex flex-row align-items-center me-4 mb-1 selected-search">
                                 <div className="me-2 title">Robert Williams</div>
-                                <img src="https://catalog.cugate.com/static/media/Delete.38d4ed55a74885e1b58d081520b60668.svg" alt="*" className="remove-selected" />
+                                <img alt="remove" className="remove-selected" src={remove_icon} />
                             </div>
                         </div>
                     </div>
@@ -66,7 +67,7 @@ export const SearchTrack: React.FC<any> = (props) => {
                         <div className="d-flex flex-row flex-wrap mt-2">
                             <div className="d-flex flex-row align-items-center me-4 mb-1 selected-search">
                                 <div className="me-2 title">Robert Williams</div>
-                                <img src="https://catalog.cugate.com/static/media/Delete.38d4ed55a74885e1b58d081520b60668.svg" alt="*" className="remove-selected" />
+                                <img alt="remove" className="remove-selected" src={remove_icon} />
                             </div>
                         </div>
                     </div>
@@ -76,20 +77,22 @@ export const SearchTrack: React.FC<any> = (props) => {
                             <div className="text-white count-found">found 23 of 12</div>
                         </div>
                         <div className="d-flex flex-row justify-content-between align-items-center" style={{ width: "100%" }}>
-                            <Select className="select-search" size="large" showSearch >
+                            <Select className="select-search" size="large" showSearch onChange={(item) => props.data.setSearchGenre(item)}>
                                 {
-                                    genreList.map((genre:any) => (
-                                            <option value={genre.id}>{genre.title}</option>
-                                        )
+                                    genreList.map((genre: any) => (
+                                        <option value={genre.id}>{genre.title}</option>
+                                    )
                                     )
                                 }
                             </Select>
                         </div>
                         <div className="d-flex flex-row flex-wrap mt-2">
-                            <div className="d-flex flex-row align-items-center me-4 mb-1 selected-search">
-                                <div className="me-2 title">Robert Williams</div>
-                                <img src="https://catalog.cugate.com/static/media/Delete.38d4ed55a74885e1b58d081520b60668.svg" alt="*" className="remove-selected" />
-                            </div>
+                            {_genre.map((genre: any) => (
+                                <div className="d-flex flex-row align-items-center me-4 mb-1 selected-search" key={"genre_" + genre} onClick={() => props.data.handleGenre(genre)}>
+                                    <div className="me-2 title">{genreList.filter((g: any) => g.id === genre)[0].title}</div>
+                                    <img alt="remove" className="remove-selected" src={remove_icon} />
+                                </div>
+                            ))}
                         </div>
                     </div>
                     <div className="col-md-2 search-item">
@@ -103,7 +106,7 @@ export const SearchTrack: React.FC<any> = (props) => {
                         <div className="d-flex flex-row flex-wrap mt-2">
                             <div className="d-flex flex-row align-items-center me-4 mb-1 selected-search">
                                 <div className="me-2 title">Robert Williams</div>
-                                <img src="https://catalog.cugate.com/static/media/Delete.38d4ed55a74885e1b58d081520b60668.svg" alt="*" className="remove-selected" />
+                                <img alt="remove" className="remove-selected" src={remove_icon} />
                             </div>
                         </div>
                     </div>
@@ -115,7 +118,7 @@ export const SearchTrack: React.FC<any> = (props) => {
                         </div>
                         <div className="d-flex flex-row justify-content-between align-items-center btn-filter px-4 py-2">
                             <div className="me-3 px-1 fw-semibold">Filter</div>
-                            <img src="https://catalog.cugate.com/static/media/Filter.a7f57a77a3d62334ffab6c905c11a133.svg" />
+                            <img src="https://catalog.cugate.com/static/media/Filter.a7f57a77a3d62334ffab6c905c11a133.svg" alt="filter" />
                         </div>
                     </div>
                 </div>

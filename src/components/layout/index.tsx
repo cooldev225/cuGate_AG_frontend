@@ -36,11 +36,11 @@ export const DefaultLayout: React.FC<Props> = (props) => {
   return (
     <div className={"cugate-default-layout"+(isMobile?" mobile-size uk-text-center":"")+(mobilemenu_toggle?" offcanvas-menu":"")}>
       <Header />  
-      {location.pathname.indexOf('login')>-1||location.pathname.indexOf('register')>-1||location.pathname.indexOf('cugate')>-1?(
+      {/* {location.pathname.indexOf('login')>-1||location.pathname.indexOf('register')>-1||location.pathname.indexOf('cugate')>-1?(
         <></>
       ):(
         <Toolbar />
-      )}
+      )} */}
       {props.children}
       {location.pathname.indexOf('login')>-1||location.pathname.indexOf('register')>-1?(
         <></>

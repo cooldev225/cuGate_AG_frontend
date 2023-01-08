@@ -422,7 +422,7 @@ export const DashboardPage: React.FC = () => {
                 }
             } />
             <div className="row mt-3 px-3">
-                <aside className="col-sm-12 col-md-4 left-menu">
+                {/* <aside className="col-sm-12 col-md-4 left-menu">
                     <SearchSide data={
                         {
                             "_genre": formData.genre,
@@ -447,8 +447,8 @@ export const DashboardPage: React.FC = () => {
                             "stationList": stationList
                         }
                     } />
-                </aside>
-                <div className="col-sm-12 col-md-8 content-wrapper">
+                </aside> */}
+                <div className="col-sm-12 content-wrapper">
                     {(!analyzeClose || tab_menu === "analyze") && (
                         <AnalyseForm data={
                             {

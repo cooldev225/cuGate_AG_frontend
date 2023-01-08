@@ -122,14 +122,14 @@ export const AnalyseForm: React.FC<any> = (props) => {
                     <p className="dropzone-content">
                         {isDragActive ? "Release to drop the files here" : "Drag your file here"}
                     </p>
-                    <DefaultButton
+                    {/* <DefaultButton
                         color="var(--color-blue-light)"
                         textColor="white"
                         borderColor="var(--color-blue-light)"
                         className="mb-3"
                     >
                         Select file to upload
-                    </DefaultButton>
+                    </DefaultButton> */}
                     {/* <DefaultButton
                         color="var(--color-blue-light)"
                         textColor="white"
